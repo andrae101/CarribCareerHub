@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply for Job - CarribCareerHub</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar">
+    <div class="logo">🌴 CarribCareerHub</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Application Form -->
+  <section class="featured">
+    <h2>Apply for This Job</h2>
+    <p>Please complete the form below to submit your application.</p>
+
+    <form class="application-form">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="Your full name" required>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="you@example.com" required>
+
+      <label for="resume">Upload Resume</label>
+      <input type="file" id="resume" accept=".pdf,.doc,.docx" required>
+
+      <label for="cover">Cover Letter</label>
+      <textarea id="cover" rows="6" placeholder="Write your cover letter here..." required></textarea>
+
+      <button type="submit">Submit Application</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© <span id="year"></span> CarribCareerHub. All rights reserved.</p>
+  </footer>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>
