@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CarribCareerHub - Find Your Next Job</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <title>Jobs - CarribCareerHub</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <!-- Header -->
@@ -12,50 +12,46 @@
     <div class="logo">🌴 CarribCareerHub</div>
     <nav>
       <a href="index.html">Home</a>
-      <a href="jobs.html">Jobs</a>
+      <a href="jobs.html" class="active">Jobs</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <h1>Find Your Dream Job in the Caribbean</h1>
-    <p>Connecting Caribbean Talent with Opportunity</p>
-    <form class="search-form">
-      <input type="text" placeholder="Job title or keyword">
-      <input type="text" placeholder="Location">
-      <button type="submit">Search</button>
-    </form>
-  </section>
-
-  <!-- Featured Jobs -->
+  <!-- Jobs Listing -->
   <section class="featured">
-    <h2>Featured Jobs</h2>
+    <h2>Available Jobs</h2>
     <div class="job-list">
+
       <div class="job-card">
-        <h3>Software Developer</h3>
-        <p>Kingston, Jamaica</p>
-        <a href="job-detail.html">View Job</a>
+        <h3>Software Engineer</h3>
+        <p><strong>Location:</strong> Kingston, Jamaica</p>
+        <p><strong>Company:</strong> Caribbean Tech Solutions</p>
+        <a href="job-software-engineer.html" class="btn">View Details</a>
       </div>
+
       <div class="job-card">
-        <h3>Hotel Manager</h3>
-        <p>Nassau, Bahamas</p>
-        <a href="job-detail.html">View Job</a>
+        <h3>Marketing Specialist</h3>
+        <p><strong>Location:</strong> Bridgetown, Barbados</p>
+        <p><strong>Company:</strong> Island Brands Ltd.</p>
+        <a href="job-marketing-specialist.html" class="btn">View Details</a>
       </div>
+
+      <div class="job-card">
+        <h3>Hospitality Manager</h3>
+        <p><strong>Location:</strong> Montego Bay, Jamaica</p>
+        <p><strong>Company:</strong> Caribbean Resorts Group</p>
+        <a href="job-hospitality-manager.html" class="btn">View Details</a>
+      </div>
+
       <div class="job-card">
         <h3>Accountant</h3>
-        <p>Port of Spain, Trinidad</p>
-        <a href="job-detail.html">View Job</a>
+        <p><strong>Location:</strong> Port of Spain, Trinidad</p>
+        <p><strong>Company:</strong> Caribbean Finance Group</p>
+        <a href="job-accountant.html" class="btn">View Details</a>
       </div>
-    </div>
-  </section>
 
-  <!-- Call to Action -->
-  <section class="cta">
-    <h2>Employers: Post Your Job</h2>
-    <p>Reach thousands of Caribbean professionals today.</p>
-    <a href="employers.html" class="btn">Post a Job</a>
+    </div>
   </section>
 
   <!-- Footer -->
@@ -63,6 +59,6 @@
     <p>© <span id="year"></span> CarribCareerHub. All rights reserved.</p>
   </footer>
 
-  <script src="assets/js/script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
