@@ -1,0 +1,26 @@
+name: Unzip & Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  unzip-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Unzip backend.zip
+        run: |
+          unzip -o backend.zip -d .
+
+      - name: Upload site files
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
