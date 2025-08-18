@@ -1,0 +1,45 @@
+name: Unzip & Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  unzip-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Unzip backend.zip
+        run: |
+          unzip -o backend.zip -d .
+          echo "📂 Files after unzip:"
+          ls -R .
+
+          # Check common build folders for index.html
+          if [ -f index.html ]; then
+            echo "✅ index.html found in root."
+          elif [ -f dist/index.html ]; then
+            echo "✅ index.html found in dist/."
+            mv dist/* .
+          elif [ -f build/index.html ]; then
+            echo "✅ index.html found in build/."
+            mv build/* .
+          else
+            echo "❌ index.html not found! Please include it in backend.zip"
+            exit 1
+          fi
+
+          echo "📂 Final structure:"
+          ls -R .
+
+      - name: Upload site files
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
