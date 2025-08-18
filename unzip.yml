@@ -1,0 +1,26 @@
+name: Unzip Backend
+
+on:
+  push:
+    paths:
+      - "backend.zip"
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Unzip backend.zip
+        run: |
+          unzip -o backend.zip -d .
+          rm backend.zip
+
+      - name: Commit unzipped files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Unzipped backend.zip"
+          git push
