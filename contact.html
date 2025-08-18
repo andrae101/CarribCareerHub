@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us - CarribCareerHub</title>
+  <title>Contact - CarribCareerHub</title>
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-  <!-- Header -->
   <header class="navbar">
     <div class="logo">🌴 CarribCareerHub</div>
     <nav>
@@ -18,26 +17,22 @@
     </nav>
   </header>
 
-  <!-- Contact Form -->
   <section class="featured">
     <h2>Contact Us</h2>
-    <p>We’d love to hear from you! Fill out the form below and our team will get back to you.</p>
+    <form action="https://formspree.io/f/{form_id}" method="POST" class="contact-form">
+      <label for="name">Your Name</label>
+      <input type="text" name="Name" id="name" required>
 
-    <form action="https://formspree.io/f/abcd1234" method="POST" class="application-form">
-      <label for="name">Full Name</label>
-      <input type="text" id="name" name="Name" placeholder="Your full name" required>
+      <label for="email">Your Email</label>
+      <input type="email" name="Email" id="email" required>
 
-      <label for="email">Email Address</label>
-      <input type="email" id="email" name="Email" placeholder="you@example.com" required>
+      <label for="message">Your Message</label>
+      <textarea name="Message" id="message" required></textarea>
 
-      <label for="message">Message</label>
-      <textarea id="message" name="Message" rows="6" placeholder="Write your message here..." required></textarea>
-
-      <button type="submit">Send Message</button>
+      <button type="submit" class="btn">Send</button>
     </form>
   </section>
 
-  <!-- Footer -->
   <footer>
     <p>© <span id="year"></span> CarribCareerHub. All rights reserved.</p>
   </footer>
