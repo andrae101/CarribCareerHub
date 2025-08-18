@@ -1,0 +1,42 @@
+name: Unzip & Deploy
+
+on:
+  push:
+    paths:
+      - "backend.zip"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  unzip-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Unzip backend.zip
+        run: |
+          unzip -o backend.zip -d .
+          rm backend.zip
+
+      - name: Commit unzipped files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "Unzipped backend.zip" || echo "No changes to commit"
+          git push
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v2
