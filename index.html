@@ -3,56 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CarribCareerHub Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>CarribCareerHub</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <button class="menu-btn">☰</button>
-      <span class="brand">Dashboard</span>
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <img src="assets/logo.png" alt="CarribCareerHub Logo">
+      <h1>CarribCareerHub</h1>
     </div>
-    <div class="nav-right">
-      <button class="icon-btn">🔍</button>
-      <button class="icon-btn">📂</button>
-      <div class="profile-circle">AC</div>
+    <div class="signin">
+      <a href="#">Sign In</a>
     </div>
-  </nav>
+  </header>
 
-  <!-- Page Wrapper -->
-  <div class="page">
+  <!-- Search Section -->
+  <section class="search-section">
+    <input type="text" placeholder="Job title, skill or company">
+    <input type="text" placeholder="Location (e.g. Jamaica, Barbados, Trinidad)">
+    <button>Search</button>
+  </section>
 
-    <!-- Left Sidebar -->
-    <aside class="sidebar">
-      <h3>Home</h3>
-      <ul>
-        <li>Copilot</li>
-        <li>Get started</li>
-        <li>Learn to code</li>
-      </ul>
-    </aside>
+  <!-- Employer/Employee Section -->
+  <section class="roles">
+    <div class="role-card">
+      <h2>For Job Seekers</h2>
+      <p>Find your dream job across the Caribbean.</p>
+      <a href="#">Browse Jobs</a>
+    </div>
+    <div class="role-card">
+      <h2>For Employers</h2>
+      <p>Post your vacancies and reach the right talent.</p>
+      <a href="#">Post a Job</a>
+    </div>
+  </section>
 
-    <!-- Main Content -->
-    <main class="content">
-      <h2>Top Repositories</h2>
+  <!-- Features -->
+  <section class="features">
+    <h2>Explore Opportunities Across the Caribbean</h2>
+    <div class="locations">
+      <span>Jamaica</span>
+      <span>Barbados</span>
+      <span>Trinidad</span>
+      <span>Bahamas</span>
+      <span>St. Lucia</span>
+      <span>More...</span>
+    </div>
+  </section>
 
-      <div class="search-box">
-        <input type="text" placeholder="Find a repository...">
-      </div>
-
-      <ul class="repo-list">
-        <li>CarribCareerHub</li>
-        <li>Simnation-carribbean</li>
-        <li>Carribbean</li>
-      </ul>
-
-      <div class="banner">
-        <p>Big Promo or Info Section (like GitHub video)</p>
-      </div>
-    </main>
-  </div>
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <p>&copy; 2025 CarribCareerHub. All Rights Reserved.</p>
+  </footer>
 
 </body>
 </html>
