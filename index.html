@@ -16,8 +16,8 @@
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
     </nav>
-    <!-- Night Mode Toggle Button -->
-    <button id="toggleMode">🌙 Night Mode</button>
+    <!-- Night Mode Toggle -->
+    <button id="toggleMode" class="night-toggle">🌙 Night Mode</button>
   </header>
 
   <!-- Hero -->
@@ -42,7 +42,61 @@
     <p>© <span id="year"></span> CarribCareerHub. All rights reserved.</p>
   </footer>
 
-  <!-- Scripts -->
-  <script src="assets/js/script.js"></script>
+  <!-- Firebase + Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBDSczuK0WbVwrR6TYFsThS9Ip6zC892uo",
+      authDomain: "carribcareerhub.firebaseapp.com",
+      projectId: "carribcareerhub",
+      storageBucket: "carribcareerhub.appspot.com",
+      messagingSenderId: "227691529661",
+      appId: "1:227691529661:web:c66798ab1c62c3a8113ed4",
+      measurementId: "G-MDS33JJ2C9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Auto update year in footer
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Load jobs (replace with backend URL when ready)
+      const jobList = document.getElementById("job-list");
+      if (jobList) {
+        fetch("http://localhost:5000/api/jobs")
+          .then(res => res.json())
+          .then(data => {
+            jobList.innerHTML = "";
+            data.forEach(job => {
+              const card = document.createElement("div");
+              card.className = "job-card";
+              card.innerHTML = `<h3>${job.title}</h3>
+                <p>${job.location}</p>
+                <p><strong>${job.company}</strong></p>
+                <a href="apply.html">Apply Now</a>`;
+              jobList.appendChild(card);
+            });
+          })
+          .catch(() => {
+            jobList.innerHTML = "<p>Could not load jobs.</p>";
+          });
+      }
+
+      // Night mode toggle
+      const toggle = document.getElementById("toggleMode");
+      toggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        toggle.textContent = document.body.classList.contains("dark-mode")
+          ? "☀️ Light Mode"
+          : "🌙 Night Mode";
+      });
+    });
+  </script>
 </body>
 </html>
