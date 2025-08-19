@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+  <!-- Navbar -->
   <header class="navbar">
     <div class="logo">🌴 CarribCareerHub</div>
     <nav>
@@ -17,15 +18,36 @@
     </nav>
   </header>
 
-  <section class="featured">
-    <h2>Available Jobs</h2>
+  <!-- Jobs Section -->
+  <section class="content">
+    <h1>Job Listings</h1>
+    <p>Browse the latest job opportunities in the Caribbean.</p>
     <div id="job-list" class="job-list"></div>
   </section>
 
+  <!-- Footer -->
   <footer>
     <p>© <span id="year"></span> CarribCareerHub. All rights reserved.</p>
   </footer>
 
+  <!-- Scripts -->
   <script src="assets/js/script.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBDSczuK0WbVwrR6TYFsThS9Ip6zC892uo",
+      authDomain: "carribcareerhub.firebaseapp.com",
+      projectId: "carribcareerhub",
+      storageBucket: "carribcareerhub.appspot.com",
+      messagingSenderId: "227691529661",
+      appId: "1:227691529661:web:c66798ab1c62c3a8113ed4",
+      measurementId: "G-MDS33JJ2C9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
 </body>
 </html>
