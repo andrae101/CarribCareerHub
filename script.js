@@ -22,3 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 });
+<script src="assets/js/script.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("toggleMode");
+    toggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
