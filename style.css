@@ -20,13 +20,15 @@ body{
   overflow-x: hidden;
 }
 
-/* Header */
+/* ======================
+   Header
+====================== */
 .header{
   max-width:1100px;
   margin:24px auto 0;
   padding:0 20px;
   display:flex;
-  justify-content:flex-start;
+  justify-content:space-between;
   align-items:center;
 }
 .brand{display:flex; gap:12px; align-items:center}
@@ -36,8 +38,15 @@ body{
   font-size: 22px;
   letter-spacing:.4px;
 }
+.nav .btn-link{
+  font-weight:600;
+  color:var(--brand);
+  text-decoration:none;
+}
 
-/* Panel */
+/* ======================
+   Panel / Hero
+====================== */
 .panel{
   max-width:1100px;
   margin:16px auto 40px;
@@ -49,7 +58,11 @@ body{
   position:relative;
   overflow:hidden;
 }
-.panel-content{display:grid; grid-template-columns:1.1fr .9fr; gap:24px}
+.panel-content{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:24px;
+}
 
 /* Hero headline & subtext */
 .hero-title {
@@ -67,20 +80,59 @@ body{
   max-width: 640px;
 }
 
-/* Search bar */
-.search-row{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
-.input{
-  flex:1; min-width:210px; display:flex; align-items:center; gap:10px;
-  background:#fff; border:1px solid #E4ECFF; border-radius:12px; padding:12px 14px;
-}
-.input input{border:none; outline:none; width:100%; font-size:16px; background:transparent}
-.search-btn{
-  border:none; padding:12px 22px; border-radius:12px; font-weight:800; color:#fff;
-  background:linear-gradient(90deg,var(--brand),var(--brand-2));
-  box-shadow:var(--shadow); cursor:pointer;
+/* Callout for employers */
+.employer-callout {
+  margin-top: 22px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #fff6e9;
+  border: 1px solid #ffd9a8;
+  font-size: 16px;
+  font-weight: 600;
+  color: #b56a00;
 }
 
-/* Auth action (Login button below search) */
+/* ======================
+   Search bar
+====================== */
+.search-row{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.input{
+  flex:1;
+  min-width:210px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#fff;
+  border:1px solid #E4ECFF;
+  border-radius:12px;
+  padding:12px 14px;
+}
+.input input{
+  border:none;
+  outline:none;
+  width:100%;
+  font-size:16px;
+  background:transparent;
+}
+.search-btn{
+  border:none;
+  padding:12px 22px;
+  border-radius:12px;
+  font-weight:800;
+  color:#fff;
+  background:linear-gradient(90deg,var(--brand),var(--brand-2));
+  box-shadow:var(--shadow);
+  cursor:pointer;
+}
+
+/* ======================
+   Auth action
+====================== */
 .auth-action {
   margin-top: 20px;
 }
@@ -100,42 +152,105 @@ body{
   background: var(--brand-2);
 }
 
-/* Action buttons */
-.actions{display:flex; gap:16px; margin-top:22px; flex-wrap:wrap}
-.btn{
-  border:none; border-radius:12px; padding:14px 22px; font-weight:800; cursor:pointer;
+/* ======================
+   Buttons
+====================== */
+.actions{
+  display:flex;
+  gap:16px;
+  margin-top:22px;
+  flex-wrap:wrap;
 }
-.btn-primary{background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow)}
-.btn-secondary{background:linear-gradient(90deg,#FFB44D,#FF8A00); color:#fff; box-shadow:var(--shadow)}
+.btn{
+  border:none;
+  border-radius:12px;
+  padding:14px 22px;
+  font-weight:800;
+  cursor:pointer;
+}
+.btn-primary{
+  background:linear-gradient(90deg,var(--brand),var(--brand-2));
+  color:#fff;
+  box-shadow:var(--shadow);
+}
+.btn-secondary{
+  background:linear-gradient(90deg,#FFB44D,#FF8A00);
+  color:#fff;
+  box-shadow:var(--shadow);
+}
 
-/* Map side */
-.map-wrap{position:relative; min-height:280px}
-.map-wrap img{position:absolute; right:-14px; bottom:-10px; width:88%; max-width:520px; opacity:.7}
+/* ======================
+   Map side
+====================== */
+.map-wrap{
+  position:relative;
+  min-height:280px;
+}
+.map-wrap img{
+  position:absolute;
+  right:-14px;
+  bottom:-10px;
+  width:88%;
+  max-width:520px;
+  opacity:.7;
+}
 
-/* Footer */
+/* ======================
+   Footer
+====================== */
 .footer{
   max-width:1100px;
   margin:10px auto 40px;
   padding:0 20px;
-  display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
 }
-.footer .links{display:flex; gap:18px; flex-wrap:wrap}
-.footer a{color:var(--muted); text-decoration:none; font-weight:600}
+.footer .links{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.footer a{
+  color:var(--muted);
+  text-decoration:none;
+  font-weight:600;
+}
 .copy{color:var(--muted)}
 
-/* Auth card styles (login/signup) */
+/* ======================
+   Auth card styles
+====================== */
 .center{
-  max-width:480px; margin:40px auto; padding:32px;
-  background:rgba(255,255,255,.9); border-radius:16px; box-shadow:var(--shadow);
+  max-width:480px;
+  margin:40px auto;
+  padding:32px;
+  background:rgba(255,255,255,.9);
+  border-radius:16px;
+  box-shadow:var(--shadow);
 }
 .center h2{margin:0 0 6px}
 .center p{color:var(--muted); margin:0 0 18px}
-.field{display:flex; flex-direction:column; gap:6px; margin:12px 0}
-.field input{padding:12px 14px; border:1px solid #E4ECFF; border-radius:10px; font-size:16px}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin:12px 0;
+}
+.field input{
+  padding:12px 14px;
+  border:1px solid #E4ECFF;
+  border-radius:10px;
+  font-size:16px;
+}
 .center .actions{margin-top:12px}
 .note{color:var(--muted); font-size:14px}
 
-/* Dashboard */
+/* ======================
+   Dashboard
+====================== */
 .dashboard {
   display: flex;
   min-height: 100vh;
@@ -151,3 +266,25 @@ body{
   gap: 20px;
 }
 .sidebar h3 { margin: 0 0 10px; font-weight:700; }
+
+/* ======================
+   Responsive
+====================== */
+@media (max-width: 768px) {
+  .panel-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .map-wrap img {
+    position:static;
+    width:100%;
+    margin-top:20px;
+  }
+  .actions {
+    justify-content:center;
+  }
+  .search-row {
+    flex-direction:column;
+    align-items:stretch;
+  }
+}
