@@ -62,38 +62,25 @@ h1{font-size:clamp(28px,5vw,44px); margin:10px 0 16px}
   box-shadow:var(--shadow); cursor:pointer;
 }
 
-/* Auth actions (moved below search) */
-.auth-actions {
-  display: flex;
-  gap: 16px;
+/* Auth action (Login button below search) */
+.auth-action {
   margin-top: 20px;
-  flex-wrap: wrap;
 }
-.auth-actions .signin {
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  border:1px solid rgba(30,108,255,.2);
-  padding:10px 14px;
-  border-radius:999px;
-  text-decoration:none;
-  font-weight:600;
-  color: var(--ink);
-  opacity:.85;
-  transition: 0.2s;
+.auth-action .login-btn {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 20px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transition: background 0.2s ease;
 }
-.auth-actions .signin:hover { background: rgba(30,108,255,0.08); }
-.auth-actions .cta {
-  background:linear-gradient(90deg,var(--brand),var(--brand-2));
-  color:#fff;
-  padding:10px 16px;
-  border-radius:12px;
-  text-decoration:none;
-  font-weight:700;
-  box-shadow:var(--shadow);
-  transition: 0.2s;
+.auth-action .login-btn:hover {
+  background: var(--brand-2);
 }
-.auth-actions .cta:hover { opacity: 0.9; }
 
 /* Action buttons */
 .actions{display:flex; gap:16px; margin-top:22px; flex-wrap:wrap}
