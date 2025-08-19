@@ -1,4 +1,3 @@
-
 :root{
   --bg: #F3F8FF;
   --panel: #ffffff;
@@ -29,9 +28,7 @@ body{
   justify-content:space-between;
   align-items:center;
 }
-.brand{
-  display:flex; gap:12px; align-items:center;
-}
+.brand{display:flex; gap:12px; align-items:center}
 .brand img{height:44px; width:auto}
 .brand .name{font-weight:800; letter-spacing:.2px}
 .nav{display:flex; gap:20px; align-items:center}
@@ -106,3 +103,78 @@ h1{font-size:clamp(28px,5vw,44px); margin:10px 0 16px}
 .field input{padding:12px 14px; border:1px solid #E4ECFF; border-radius:10px; font-size:16px}
 .center .actions{margin-top:12px}
 .note{color:var(--muted); font-size:14px}
+
+/* ======================
+   Responsive fixes
+====================== */
+
+/* Tablet adjustments */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .nav .signin,
+  .nav .cta {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .panel-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .map-wrap img {
+    position: static;
+    width: 100%;
+    max-width: 360px;
+    margin: 20px auto 0;
+    display: block;
+  }
+}
+
+/* Small phone adjustments */
+@media (max-width: 480px) {
+  .nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav .signin,
+  .nav .cta {
+    width: 100%;
+    text-align: center;
+  }
+
+  .panel {
+    padding: 20px;
+  }
+
+  h1 { font-size: 22px; }
+
+  /* Search + buttons shrink */
+  .input {
+    padding: 10px 12px;
+  }
+  .input input {
+    font-size: 14px;
+  }
+  .search-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+  .btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    flex: 1; /* makes them stretch evenly */
+  }
+}
