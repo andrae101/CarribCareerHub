@@ -100,3 +100,26 @@
   </script>
 </body>
 </html>
+  <!-- Firebase (module must stay inline) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBDSczuK0WbVwrR6TYFsThS9Ip6zC892uo",
+      authDomain: "carribcareerhub.firebaseapp.com",
+      projectId: "carribcareerhub",
+      storageBucket: "carribcareerhub.appspot.com",
+      messagingSenderId: "227691529661",
+      appId: "1:227691529661:web:c66798ab1c62c3a8113ed4",
+      measurementId: "G-MDS33JJ2C9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+
+  <!-- Your site’s main script -->
+  <script src="script.js"></script>
+</body>
+</html>
