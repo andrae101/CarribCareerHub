@@ -1,121 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CarribCareerHub • Find Caribbean Jobs</title>
-  <link rel="preload" href="assets/img/bg-water.svg" as="image">
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarribCareerHub</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="container bar">
-      <a class="brand" href="index.html">
-        <img src="assets/img/logo.svg" alt="CarribCareerHub logo" />
-        <span class="name">CarribCareerHub</span>
-      </a>
-      <nav class="links">
-        <a href="jobs.html">Jobs</a>
-        <a href="employers.html" class="hide-mobile">Employers</a>
-        <a href="about.html" class="hide-mobile">About</a>
-        <a href="contact.html" class="hide-mobile">Contact</a>
-        <button class="sign-cta" title="Sign In / Join">S</button>
-      </nav>
+  <header>
+    <div class="logo">
+      <img src="assets/images/logo.png" alt="CarribCareerHub Logo">
+      <h1>CarribCareerHub</h1>
     </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="pages/about.html">About</a>
+      <a href="pages/jobs.html">Jobs</a>
+      <a href="pages/employers.html">Employers</a>
+      <a href="pages/contact.html">Contact</a>
+    </nav>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container">
-      <div class="lead">
-        <span class="kicker">Caribbean Careers</span>
-        <h1>Find your next role across the islands</h1>
-        <p class="sub">Search roles by title or skill, then refine by location. Design-ready today—data wiring comes later.</p>
-      </div>
+  <main>
+    <section class="hero">
+      <h2>Find Your Next Career in the Caribbean</h2>
+      <form class="search-bar">
+        <input type="text" placeholder="Keywords">
+        <input type="text" placeholder="Location">
+        <button type="submit">Search</button>
+      </form>
+    </section>
+  </main>
 
-      <div class="search-card">
-        <form action="#" method="get">
-          <div class="search-row">
-            <div class="input-wrap">
-              <label class="label" for="kw">Keywords</label>
-              <div class="input">
-                <i>🔎</i>
-                <input id="kw" name="q" type="text" placeholder="e.g. Software Engineer, Nurse, Sales" autocomplete="off" />
-              </div>
-            </div>
-
-            <div class="input-wrap">
-              <label class="label" for="loc">Location</label>
-              <div class="input">
-                <i>📍</i>
-                <input id="loc" name="loc" type="text" placeholder="e.g. Jamaica, Barbados, Trinidad" autocomplete="off" />
-              </div>
-            </div>
-
-            <div class="search-actions">
-              <button class="btn btn-primary" data-js="search">Search Jobs</button>
-              <button class="btn btn-ghost" type="button">Advanced</button>
-            </div>
-          </div>
-
-          <div class="quick-filters">
-            <span class="pill">Remote</span>
-            <span class="pill">Full‑time</span>
-            <span class="pill">Part‑time</span>
-            <span class="pill">Graduate</span>
-            <span class="pill">Hospitality</span>
-            <span class="pill">IT</span>
-            <span class="pill">Healthcare</span>
-          </div>
-        </form>
-      </div>
-
-      <div class="region-block">
-        <div class="region-grid">
-          <div class="region-card"><span>Jamaica</span><small>Kingston · Montego Bay</small></div>
-          <div class="region-card"><span>Barbados</span><small>Bridgetown · St. James</small></div>
-          <div class="region-card"><span>Trinidad & Tobago</span><small>Port of Spain · San Fernando</small></div>
-          <div class="region-card"><span>Bahamas</span><small>Nassau · Freeport</small></div>
-          <div class="region-card"><span>Dominican Rep.</span><small>Santo Domingo · Punta Cana</small></div>
-          <div class="region-card"><span>Puerto Rico</span><small>San Juan · Ponce</small></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="grid">
-        <div>
-          <h4>About</h4>
-          <p>CarribCareerHub connects talent with opportunity across the Caribbean. We’re design‑ready today; functionality arrives next.</p>
-        </div>
-        <div>
-          <h4>For Candidates</h4>
-          <p><a href="jobs.html">Browse Jobs</a></p>
-          <p><a href="#">Create Profile</a></p>
-          <p><a href="#">Job Alerts</a></p>
-        </div>
-        <div>
-          <h4>For Employers</h4>
-          <p><a href="employers.html">Post a Job</a></p>
-          <p><a href="#">Pricing</a></p>
-          <p><a href="contact.html">Contact Sales</a></p>
-        </div>
-      </div>
-      <div class="bottom">
-        <small>© <span id="year"></span> CarribCareerHub</small>
-        <div class="mini-links">
-          <a href="terms.html">Terms</a>
-          <a href="privacy.html">Privacy</a>
-          <a href="contact.html">Contact</a>
-        </div>
-      </div>
-    </div>
+  <footer>
+    <p>&copy; 2025 CarribCareerHub. All Rights Reserved.</p>
+    <a href="pages/terms.html">Terms of Service</a> |
+    <a href="pages/privacy.html">Privacy Policy</a>
   </footer>
-
-  <script src="assets/js/script.js"></script>
 </body>
 </html>
