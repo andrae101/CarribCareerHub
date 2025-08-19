@@ -177,4 +177,10 @@ h1{font-size:clamp(28px,5vw,44px); margin:10px 0 16px}
     font-size: 14px;
     flex: 1; /* makes them stretch evenly */
   }
+
+  /* Center search + actions on mobile */
+  .search-row, 
+  .actions {
+    justify-content: center;
+  }
 }
