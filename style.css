@@ -105,82 +105,26 @@ h1{font-size:clamp(28px,5vw,44px); margin:10px 0 16px}
 .note{color:var(--muted); font-size:14px}
 
 /* ======================
-   Responsive fixes
+   Dashboard Styles
 ====================== */
 
-/* Tablet adjustments */
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: center;
-  }
-
-  .nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
-
-  .nav .signin,
-  .nav .cta {
-    padding: 8px 12px;
-    font-size: 14px;
-  }
-
-  .panel-content {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .map-wrap img {
-    position: static;
-    width: 100%;
-    max-width: 360px;
-    margin: 20px auto 0;
-    display: block;
-  }
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
 }
 
-/* Small phone adjustments */
-@media (max-width: 480px) {
-  .nav {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .nav .signin,
-  .nav .cta {
-    width: 100%;
-    text-align: center;
-  }
-
-  .panel {
-    padding: 20px;
-  }
-
-  h1 { font-size: 22px; }
-
-  /* Search + buttons shrink */
-  .input {
-    padding: 10px 12px;
-  }
-  .input input {
-    font-size: 14px;
-  }
-  .search-btn {
-    padding: 10px 16px;
-    font-size: 14px;
-  }
-  .btn {
-    padding: 10px 16px;
-    font-size: 14px;
-    flex: 1; /* makes them stretch evenly */
-  }
-
-  /* Center search + actions on mobile */
-  .search-row, 
-  .actions {
-    justify-content: center;
-  }
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  background: #fff;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
+
+.sidebar h3 {
+  margin: 0 0 10px;
+  font
