@@ -1,0 +1,108 @@
+
+:root{
+  --bg: #F3F8FF;
+  --panel: #ffffff;
+  --ink: #0A2458;
+  --muted: #6B7A99;
+  --brand: #1E6CFF;
+  --brand-2: #3FA2FF;
+  --accent: #FFA03B;
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(16,40,120,0.12);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+  color:var(--ink);
+  background: url('./assets/bg-water.svg') no-repeat top/cover fixed, var(--bg);
+}
+
+/* Header */
+.header{
+  max-width:1100px;
+  margin:24px auto 0;
+  padding:0 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{
+  display:flex; gap:12px; align-items:center;
+}
+.brand img{height:44px; width:auto}
+.brand .name{font-weight:800; letter-spacing:.2px}
+.nav{display:flex; gap:20px; align-items:center}
+.nav a{
+  text-decoration:none; color:var(--ink); font-weight:600;
+  opacity:.85;
+}
+.nav .signin{
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid rgba(30,108,255,.2);
+  padding:10px 14px; border-radius:999px;
+}
+.nav .cta{
+  background:linear-gradient(90deg,var(--brand),var(--brand-2));
+  color:#fff; padding:10px 16px; border-radius:12px; text-decoration:none; font-weight:700;
+  box-shadow:var(--shadow);
+}
+
+/* Panel */
+.panel{
+  max-width:1100px; margin:16px auto 40px; padding:32px;
+  background:rgba(255,255,255,.82); backdrop-filter: blur(10px);
+  border-radius:var(--radius); box-shadow:var(--shadow);
+  position:relative; overflow:hidden;
+}
+.panel-content{display:grid; grid-template-columns:1.1fr .9fr; gap:24px}
+h1{font-size:clamp(28px,5vw,44px); margin:10px 0 16px}
+.lede{color:var(--muted); margin-bottom:18px}
+
+/* Search bar */
+.search-row{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+.input{
+  flex:1; min-width:210px; display:flex; align-items:center; gap:10px;
+  background:#fff; border:1px solid #E4ECFF; border-radius:12px; padding:12px 14px;
+}
+.input input{border:none; outline:none; width:100%; font-size:16px; background:transparent}
+.search-btn{
+  border:none; padding:12px 22px; border-radius:12px; font-weight:800; color:#fff;
+  background:linear-gradient(90deg,var(--brand),var(--brand-2));
+  box-shadow:var(--shadow); cursor:pointer;
+}
+
+/* Action buttons */
+.actions{display:flex; gap:16px; margin-top:22px; flex-wrap:wrap}
+.btn{
+  border:none; border-radius:12px; padding:14px 22px; font-weight:800; cursor:pointer;
+}
+.btn-primary{background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow)}
+.btn-secondary{background:linear-gradient(90deg,#FFB44D,#FF8A00); color:#fff; box-shadow:var(--shadow)}
+
+/* Map side */
+.map-wrap{position:relative; min-height:280px}
+.map-wrap img{position:absolute; right:-14px; bottom:-10px; width:88%; max-width:520px; opacity:.7}
+
+/* Footer */
+.footer{
+  max-width:1100px; margin:10px auto 40px; padding:0 20px;
+  display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.footer .links{display:flex; gap:18px; flex-wrap:wrap}
+.footer a{color:var(--muted); text-decoration:none; font-weight:600}
+.copy{color:var(--muted)}
+
+/* Auth card styles (login/signup) */
+.center{
+  max-width:480px; margin:40px auto; padding:32px;
+  background:rgba(255,255,255,.9); border-radius:16px; box-shadow:var(--shadow);
+}
+.center h2{margin:0 0 6px}
+.center p{color:var(--muted); margin:0 0 18px}
+.field{display:flex; flex-direction:column; gap:6px; margin:12px 0}
+.field input{padding:12px 14px; border:1px solid #E4ECFF; border-radius:10px; font-size:16px}
+.center .actions{margin-top:12px}
+.note{color:var(--muted); font-size:14px}
