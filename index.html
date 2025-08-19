@@ -5,73 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CarribCareerHub</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* --- Quick Fixes for layout issues --- */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow-x: hidden; /* stop sideways scroll */
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.8rem 1rem;
-      background: #fff;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .brand .name {
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-    .nav {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-    .nav a {
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .panel {
-      flex: 1; /* fills space without adding extra scroll */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
-    }
-    .panel-content {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-      max-width: 1200px;
-      width: 100%;
-    }
-    .panel-content section {
-      flex: 1 1 350px;
-    }
-    .map-wrap img {
-      max-width: 100%;
-      height: auto;
-    }
-    .footer {
-      text-align: center;
-      padding: 1rem;
-      background: #f9f9f9;
-    }
-  </style>
 </head>
 <body>
   
@@ -81,8 +14,8 @@
     <div class="name">CarribCareerHub</div>
   </div>
   <nav class="nav">
-    <a class="signin" href="login.html">Sign In</a>
-    <a class="cta" href="signup.html">Sign Up</a>
+    <a href="login.html" class="btn-link">Sign In</a>
+    <a href="signup.html" class="btn-link highlight">Sign Up</a>
   </nav>
 </header>
 
