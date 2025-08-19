@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About - CarribCareerHub</title>
+  <title>About – CarribCareerHub</title>
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+  <!-- Navbar -->
   <header class="navbar">
     <div class="logo">🌴 CarribCareerHub</div>
     <nav>
@@ -17,13 +18,21 @@
     </nav>
   </header>
 
+  <!-- About Section -->
   <section class="featured">
     <h2>About Us</h2>
-    <p>CarribCareerHub connects job seekers with opportunities across the Caribbean.</p>
+    <p>CarribCareerHub connects job seekers with employers across the Caribbean. 🌴</p>
+    <p>Our mission is to make it easy for professionals to find work opportunities while helping companies discover the best talent.</p>
   </section>
 
+  <!-- Footer -->
   <footer>
     <p>© <span id="year"></span> CarribCareerHub. All rights reserved.</p>
   </footer>
+
+  <!-- Script for year -->
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
