@@ -50,12 +50,22 @@ body{
   justify-content:space-between;
   align-items:center;
 }
-.brand{display:flex; gap:12px; align-items:center}
-.brand img{height:44px; width:auto}
-.brand .name{
-  font-weight:800;
-  font-size: 22px;
-  letter-spacing:.4px;
+
+/* Center logo more */
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:1;   /* pushes logo more toward center */
+}
+.brand img{
+  height:56px; /* bigger logo */
+  width:auto;
+}
+
+/* Login stays right */
+.nav{
+  margin-left:auto;
 }
 .nav .btn-link{
   font-weight:600;
