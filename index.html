@@ -3,65 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CarribCareerHub</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <title>CarribCareerHub Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
   <!-- Navbar -->
-  <header class="navbar">
-    <div class="logo">🌴 CarribCareerHub</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="jobs.html">Jobs</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-    <!-- Night Mode Toggle -->
-    <button id="toggleMode" class="night-toggle">🌙 Night Mode</button>
-  </header>
+  <nav class="navbar">
+    <div class="nav-left">
+      <button class="menu-btn">☰</button>
+      <span class="brand">Dashboard</span>
+    </div>
+    <div class="nav-right">
+      <button class="icon-btn">🔍</button>
+      <button class="icon-btn">📂</button>
+      <div class="profile-circle">AC</div>
+    </div>
+  </nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <h1>Find Your Dream Job in the Caribbean</h1>
-    <p>Search thousands of jobs across the islands 🌴</p>
-    <form class="search-form">
-      <input type="text" placeholder="Job title or keyword">
-      <input type="text" placeholder="Location">
-      <button type="submit">Search</button>
-    </form>
-  </section>
+  <!-- Page Wrapper -->
+  <div class="page">
 
-  <!-- Featured Jobs -->
-  <section class="featured">
-    <h2>Featured Jobs</h2>
-    <div id="job-list" class="job-list"></div>
-  </section>
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <h3>Home</h3>
+      <ul>
+        <li>Copilot</li>
+        <li>Get started</li>
+        <li>Learn to code</li>
+      </ul>
+    </aside>
 
-  <!-- Footer -->
-  <footer>
-    <p>© <span id="year"></span> CarribCareerHub. All rights reserved.</p>
-  </footer>
+    <!-- Main Content -->
+    <main class="content">
+      <h2>Top Repositories</h2>
 
-  <!-- Firebase (module must stay inline) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+      <div class="search-box">
+        <input type="text" placeholder="Find a repository...">
+      </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBDSczuK0WbVwrR6TYFsThS9Ip6zC892uo",
-      authDomain: "carribcareerhub.firebaseapp.com",
-      projectId: "carribcareerhub",
-      storageBucket: "carribcareerhub.appspot.com",
-      messagingSenderId: "227691529661",
-      appId: "1:227691529661:web:c66798ab1c62c3a8113ed4",
-      measurementId: "G-MDS33JJ2C9"
-    };
+      <ul class="repo-list">
+        <li>CarribCareerHub</li>
+        <li>Simnation-carribbean</li>
+        <li>Carribbean</li>
+      </ul>
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  </script>
+      <div class="banner">
+        <p>Big Promo or Info Section (like GitHub video)</p>
+      </div>
+    </main>
+  </div>
 
-  <!-- Your site’s main script -->
-  <script src="script.js"></script>
 </body>
 </html>
