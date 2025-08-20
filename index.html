@@ -56,6 +56,22 @@
       font-style: italic;
       color: #0077b6;
     }
+    .load-more {
+      display: block;
+      margin: 1rem auto;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      background: #0077b6;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .load-more:hover {
+      background: #0096c7;
+    }
   </style>
 </head>
 <body>
@@ -118,6 +134,7 @@
       <div class="jobs-list" id="jobsList">
         <h2>Latest Jobs</h2>
         <div id="jobsContainer">Loading jobs...</div>
+        <button id="loadMoreBtn" class="load-more" style="display:none;">Load More</button>
       </div>
     </section>
 
@@ -148,19 +165,28 @@
   const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
   const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-  // ✅ Fake login state (replace with Supabase Auth later)
-  let isLoggedIn = false;
+  let isLoggedIn = false; // fake login
+  let currentPage = 0;
+  const pageSize = 5;
 
-  // 🔎 Fetch jobs from Supabase
-  async function loadJobs() {
-    const jobsContainer = document.getElementById('jobsContainer');
-    jobsContainer.innerHTML = "Loading jobs...";
+  const jobsContainer = document.getElementById('jobsContainer');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+  // 🔎 Fetch jobs with pagination
+  async function loadJobs(reset = false) {
+    if (reset) {
+      currentPage = 0;
+      jobsContainer.innerHTML = "Loading jobs...";
+    }
+
+    const from = currentPage * pageSize;
+    const to = from + pageSize - 1;
 
     const { data, error } = await supabaseClient
       .from('jobs')
       .select('*')
       .order('created_at', { ascending: false })
-      .limit(5);
+      .range(from, to);
 
     if (error) {
       console.error(error);
@@ -168,12 +194,14 @@
       return;
     }
 
-    if (data.length === 0) {
+    if (reset) jobsContainer.innerHTML = "";
+
+    if (data.length === 0 && reset) {
       jobsContainer.innerHTML = "No jobs available yet.";
+      loadMoreBtn.style.display = "none";
       return;
     }
 
-    jobsContainer.innerHTML = "";
     data.forEach(job => {
       const card = document.createElement('div');
       card.className = "job-card";
@@ -185,16 +213,24 @@
       `;
       jobsContainer.appendChild(card);
     });
+
+    // Show "Load More" only if there might be more jobs
+    loadMoreBtn.style.display = data.length === pageSize ? "block" : "none";
   }
 
-  loadJobs();
+  loadJobs(true);
 
-  // ✅ Realtime listener: auto-update when new jobs are added
+  // 📌 Load More button
+  loadMoreBtn.addEventListener('click', () => {
+    currentPage++;
+    loadJobs();
+  });
+
+  // ✅ Realtime listener: refresh list when jobs change
   supabaseClient
     .channel('jobs-changes')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'jobs' }, (payload) => {
-      console.log('New job:', payload.new);
-      loadJobs(); // refresh job list
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs' }, () => {
+      loadJobs(true); // refresh from start
     })
     .subscribe();
 
