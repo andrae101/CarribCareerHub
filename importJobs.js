@@ -1,10 +1,9 @@
-
 import fetch from "node-fetch";
 import { createClient } from "@supabase/supabase-js";
 
-// 🔑 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk
+// ✅ Use environment variables for security
 const supabaseUrl = "https://fpytvfhynleaivkvuedt.supabase.co";
-const supabaseKey = "YOUR_SUPABASE_ANON_KEY"; 
+const supabaseKey = process.env.SUPABASE_KEY;  // <-- pulled from GitHub Actions secret
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Example API: Remotive (free job API)
