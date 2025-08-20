@@ -3,32 +3,131 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jobs • CaribCareerHub</title>
+  <title>Jobs - CarribCareerHub</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .jobs-list { margin-top: 2rem; }
+    .job-card {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      transition: box-shadow 0.2s;
+    }
+    .job-card:hover { box-shadow: 0px 3px 8px rgba(0,0,0,0.1); }
+    .job-title { font-size: 1.2rem; font-weight: bold; }
+    .job-company { color: #555; }
+    .job-location { font-style: italic; color: #0077b6; }
+    .filters { margin: 1rem 0; }
+    .filters input { padding: 0.5rem; margin-right: 0.5rem; }
+    .load-more { padding: 0.8rem 1.2rem; cursor: pointer; background:#0077b6; color:#fff; border:none; border-radius:5px; }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Available Jobs</h1>
+    <a href="index.html">⬅ Back to Home</a>
+  </header>
 
-<header class="header">
-  <div class="brand">
-    <img src="./assets/logo.svg" alt="CaribCareerHub logo" />
-    <div class="brand-name">CaribCareerHub</div>
-  </div>
-  <nav class="nav">
-    <a href="index.html">Home</a>
-  </nav>
-</header>
+  <main>
+    <div class="filters">
+      <input id="filterTitle" placeholder="Filter by job title" />
+      <input id="filterLocation" placeholder="Filter by location" />
+      <button id="applyFilters">Apply Filters</button>
+    </div>
 
-<main>
-  <div class="login-panel">
-    <h2>Job Search Results</h2>
-    <p class="lede">Your search results will appear here in the future.</p>
-    <p class="note">For now, this is just a placeholder page.</p>
-  </div>
-</main>
+    <div class="jobs-list" id="jobsList">
+      <h2>Job Results</h2>
+      <div id="jobsContainer">Loading jobs...</div>
+    </div>
 
-<footer class="footer">
-  <div class="copy">© 2025 CaribCareerHub</div>
-</footer>
+    <button id="loadMoreBtn" class="load-more" style="display:none;">Load More</button>
+  </main>
 
+  <footer>
+    <p>© 2025 CarribCareerHub</p>
+  </footer>
+
+  <!-- Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = "https://fpytvfhynleaivkvuedt.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+    let page = 0;
+    const pageSize = 5;
+
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        title: params.get("title") || "",
+        location: params.get("location") || ""
+      };
+    }
+
+    async function loadJobs(reset=false) {
+      const jobsContainer = document.getElementById("jobsContainer");
+      if (reset) {
+        jobsContainer.innerHTML = "Loading jobs...";
+        page = 0;
+      }
+
+      let query = supabaseClient.from("jobs").select("*").order("created_at", { ascending: false }).range(page*pageSize, (page+1)*pageSize - 1);
+
+      const { title, location } = getQueryParams();
+
+      if (title) query = query.ilike("title", `%${title}%`);
+      if (location) query = query.ilike("location", `%${location}%`);
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error(error);
+        jobsContainer.innerHTML = "❌ Failed to load jobs.";
+        return;
+      }
+
+      if (reset) jobsContainer.innerHTML = "";
+
+      if (data.length === 0 && page === 0) {
+        jobsContainer.innerHTML = "No jobs found.";
+        return;
+      }
+
+      data.forEach(job => {
+        const card = document.createElement("div");
+        card.className = "job-card";
+        card.innerHTML = `
+          <div class="job-title">${job.title}</div>
+          <div class="job-company">${job.company}</div>
+          <div class="job-location">${job.location}</div>
+          <p>${job.description || ""}</p>
+        `;
+        jobsContainer.appendChild(card);
+      });
+
+      if (data.length === pageSize) {
+        document.getElementById("loadMoreBtn").style.display = "block";
+      } else {
+        document.getElementById("loadMoreBtn").style.display = "none";
+      }
+
+      page++;
+    }
+
+    // Load first jobs
+    loadJobs(true);
+
+    // Load more button
+    document.getElementById("loadMoreBtn").addEventListener("click", () => loadJobs());
+
+    // Apply filters
+    document.getElementById("applyFilters").addEventListener("click", () => {
+      const title = document.getElementById("filterTitle").value;
+      const location = document.getElementById("filterLocation").value;
+      window.location.href = `jobs.html?title=${encodeURIComponent(title)}&location=${encodeURIComponent(location)}`;
+    });
+  </script>
 </body>
 </html>
