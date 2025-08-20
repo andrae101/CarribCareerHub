@@ -1,44 +1,121 @@
+<!-- /login.html — Mobile-fixed, tabs for Sign In / Create Account, Supabase v2 integrated -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sign In • CaribCareerHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Sign In • CarribCareerHub</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    /* Layout tightening for mobile; keep your theme colors */
+    html, body { height: 100%; }
+    body { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+
+    /* Centered brand row under top margin (match index look) */
+    .header {
+      max-width: 1100px; margin: 16px auto 0; padding: 0 20px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand img { width: 96px; height: 96px; border-radius: 14px; object-fit: cover; box-shadow: var(--shadow); }
+    .brand-name { font-size: 26px; font-weight: 900; letter-spacing: 5px; }
+    .nav { display: none; } /* keep page focused */
+
+    /* Login panel enhancements */
+    .login-panel { max-width: 520px; }
+    .tabbar {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;
+      background: #f3f6ff; border-radius: 12px; padding: 6px;
+    }
+    .tabbar button {
+      border: none; padding: 12px 10px; border-radius: 10px; font-weight: 800; cursor: pointer;
+      background: transparent; color: var(--ink);
+    }
+    .tabbar button.active {
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      color: #fff; box-shadow: var(--shadow);
+    }
+
+    .actions-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+    .link { color: var(--brand); font-weight: 600; text-decoration: none; }
+    .link:hover { text-decoration: underline; }
+
+    .btn-primary[disabled] { opacity: .7; cursor: not-allowed; }
+    .msg { margin-top: 10px; font-size: 14px; min-height: 20px; }
+    .msg.error { color: #d12; }
+    .msg.ok { color: #0a8a2a; }
+
+    @media (max-width: 768px){
+      .brand img { width: 110px; height: 110px; }
+      .brand-name { font-size: 24px; letter-spacing: 4px; }
+    }
+  </style>
 </head>
 <body>
-  
+
 <header class="header">
   <div class="brand">
-    <img src="./assets/logo.svg" alt="CarribCareerHub logo" />
-    <div class="brand-name">CarribCareerHub</div>
+    <picture>
+      <source srcset="./assets/logo.svg" type="image/svg+xml">
+      <img src="./assets/logo.png" alt="CarribCareerHub logo" />
+    </picture>
+    <div class="brand-name">CARRIB CAREERHUB</div>
   </div>
-  <nav class="nav">
-    <a class="home-btn" href="index.html">Home</a>
-  </nav>
 </header>
 
 <main>
   <div class="login-panel">
-    <h2>Welcome back</h2>
-    <p class="lede">Sign in to continue</p>
-    <form id="login-form">
-      <div class="field">
-        <label>Email</label>
-        <input id="email" type="email" placeholder="you@example.com" required>
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <input id="password" type="password" placeholder="••••••••" required>
-      </div>
-      <button type="submit" class="btn btn-primary" style="width:100%">Sign In</button>
-    </form>
-    <p class="note">No account? <a href="register.html">Create one</a></p>
-    <p id="message" style="color:red;"></p>
+    <div class="tabbar" role="tablist">
+      <button id="tab-signin" class="active" role="tab" aria-controls="pane-signin" aria-selected="true">Sign In</button>
+      <button id="tab-signup" role="tab" aria-controls="pane-signup" aria-selected="false">Create Account</button>
+    </div>
+
+    <!-- Sign In -->
+    <section id="pane-signin" role="tabpanel" aria-labelledby="tab-signin">
+      <h2>Welcome back</h2>
+      <p class="lede">Sign in to continue</p>
+      <form id="login-form">
+        <div class="field">
+          <label>Email</label>
+          <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+        <button id="login-btn" type="submit" class="btn btn-primary" style="width:100%">Sign In</button>
+        <div class="actions-row">
+          <span></span>
+          <a href="#" id="forgotLink" class="link">Forgot password?</a>
+        </div>
+        <p id="login-msg" class="msg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- Sign Up -->
+    <section id="pane-signup" role="tabpanel" aria-labelledby="tab-signup" style="display:none">
+      <h2>Create your account</h2>
+      <p class="lede">We’ll send a confirmation email</p>
+      <form id="signup-form">
+        <div class="field">
+          <label>Email</label>
+          <input id="su-email" type="email" placeholder="you@example.com" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input id="su-password" type="password" placeholder="Minimum 6 characters" autocomplete="new-password" required />
+        </div>
+        <button id="signup-btn" type="submit" class="btn btn-primary" style="width:100%">Create Account</button>
+        <p id="signup-msg" class="msg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <p class="note">Prefer to browse first? <a href="index.html">Go back home</a></p>
   </div>
 </main>
-  
+
 <footer class="footer">
   <div class="links">
     <a href="about.html">About</a>
@@ -50,36 +127,114 @@
 </footer>
 
 <script>
-  // Your Supabase credentials (hardcoded for now)
+  // Supabase init
   const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // Routes
+  const DASHBOARD_URL = "dashboard.html";
+  const EMAIL_REDIRECT = `${window.location.origin}/${DASHBOARD_URL}`;
 
-  const form = document.getElementById("login-form");
-  const message = document.getElementById("message");
+  // Tab logic
+  const tabSignin = document.getElementById('tab-signin');
+  const tabSignup = document.getElementById('tab-signup');
+  const paneSignin = document.getElementById('pane-signin');
+  const paneSignup = document.getElementById('pane-signup');
+  function setTab(which){
+    const signinActive = which === 'in';
+    tabSignin.classList.toggle('active', signinActive);
+    tabSignup.classList.toggle('active', !signinActive);
+    tabSignin.setAttribute('aria-selected', signinActive);
+    tabSignup.setAttribute('aria-selected', !signinActive);
+    paneSignin.style.display = signinActive ? '' : 'none';
+    paneSignup.style.display = signinActive ? 'none' : '';
+  }
+  tabSignin.addEventListener('click', () => setTab('in'));
+  tabSignup.addEventListener('click', () => setTab('up'));
 
-  form.addEventListener("submit", async (e) => {
+  // Auto-redirect if authenticated
+  (async () => {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) window.location.href = DASHBOARD_URL;
+  })();
+
+  // Sign In
+  const loginForm = document.getElementById('login-form');
+  const loginBtn  = document.getElementById('login-btn');
+  const loginMsg  = document.getElementById('login-msg');
+
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    loginMsg.textContent = "";
+    loginBtn.disabled = true;
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email = (document.getElementById('email').value || "").trim();
+    const password = document.getElementById('password').value;
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      loginMsg.textContent = "❌ " + (error.message || "Sign in failed");
+      loginMsg.className = "msg error";
+      loginBtn.disabled = false;
+      return;
+    }
+    loginMsg.textContent = "✅ Signed in — redirecting…";
+    loginMsg.className = "msg ok";
+    window.location.href = DASHBOARD_URL;
+  });
+
+  // Forgot password
+  document.getElementById('forgotLink').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = (document.getElementById('email').value || "").trim();
+    if (!email) {
+      loginMsg.textContent = "ℹ️ Enter your email above, then click Forgot password.";
+      loginMsg.className = "msg";
+      return;
+    }
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: EMAIL_REDIRECT
+    });
+    if (error) {
+      loginMsg.textContent = "❌ " + error.message;
+      loginMsg.className = "msg error";
+      return;
+    }
+    loginMsg.textContent = "📧 Password reset email sent. Check your inbox.";
+    loginMsg.className = "msg ok";
+  });
+
+  // Sign Up
+  const signupForm = document.getElementById('signup-form');
+  const signupBtn  = document.getElementById('signup-btn');
+  const signupMsg  = document.getElementById('signup-msg');
+
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    signupMsg.textContent = "";
+    signupBtn.disabled = true;
+
+    const email = (document.getElementById('su-email').value || "").trim();
+    const password = document.getElementById('su-password').value;
+
+    const { error } = await supabaseClient.auth.signUp({
+      email, password,
+      options: { emailRedirectTo: EMAIL_REDIRECT }
     });
 
     if (error) {
-      message.textContent = "❌ " + error.message;
-    } else {
-      message.style.color = "green";
-      message.textContent = "✅ Logged in!";
-      // redirect to homepage after login
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 1000);
+      signupMsg.textContent = "❌ " + (error.message || "Sign up failed");
+      signupMsg.className = "msg error";
+      signupBtn.disabled = false;
+      return;
     }
+
+    signupMsg.textContent = "✅ Check your email to confirm. You’ll be redirected after confirmation.";
+    signupMsg.className = "msg ok";
+    signupBtn.disabled = false;
+    setTab('in');
   });
 </script>
 
