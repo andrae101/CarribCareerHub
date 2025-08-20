@@ -2,149 +2,268 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Login • CarribCareerHub</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    /* Header: logo + single-word brand side by side */
-    .header {
-      max-width: 1100px; margin: 16px auto; padding: 0 20px;
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-    }
-    .brand { display: flex; align-items: center; gap: 14px; }
-    .brand .logo { width: 96px; height: 96px; object-fit: contain; }
-    .brand-name {
-      font-size: 26px; font-weight: 900; letter-spacing: 4px;
-      white-space: nowrap;
-    }
-    .nav { margin-left: auto; }
-    .nav a { font-weight: 700; text-decoration: none; padding: 8px 14px; }
 
-    /* Login panel */
-    .login-panel {
-      max-width: 420px; margin: 60px auto; padding: 40px 32px;
-      background: #fff; border-radius: 18px; box-shadow: 0 10px 30px rgba(16,40,120,.12);
-      text-align: center;
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.75);
+      --glass-stroke: rgba(255,255,255,0.55);
+      --glass-shadow: 0 10px 30px rgba(16,40,120,0.18);
+      --glass-blur: 16px;
     }
-    .login-panel h2 { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
-    .tab-switch { display: flex; justify-content: center; gap: 16px; margin-bottom: 20px; }
-    .tab-switch button {
-      flex: 1; padding: 10px; border: none; cursor: pointer; font-weight: 700;
-      border-radius: 8px; background: #f1f5ff;
+    body.dark{
+      --glass-bg: rgba(20,26,40,0.70);
+      --glass-stroke: rgba(200,220,255,0.16);
+      --glass-shadow: 0 14px 40px rgba(0,0,0,0.45);
     }
-    .tab-switch button.active {
-      background: linear-gradient(90deg,#1E6CFF,#3FA2FF);
-      color: #fff;
+
+    /* Header: logo + one-word brand */
+    .header{
+      max-width:1100px;margin:16px auto 0;padding:0 20px;
+      display:flex;align-items:center;justify-content:center;gap:14px;
     }
-    .field { text-align: left; margin-bottom: 18px; }
-    .field label { font-weight: 600; font-size: 14px; margin-bottom: 6px; display: block; }
-    .field input {
-      width: 100%; padding: 12px 14px; border: 1px solid #E4ECFF; border-radius: 12px;
-      font-size: 16px;
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand .logo{width:96px;height:96px;border-radius:14px;object-fit:cover;box-shadow:var(--shadow)}
+    .brand-name{font-size:26px;font-weight:900;letter-spacing:4px;white-space:nowrap}
+    .nav{margin-left:auto;display:flex;gap:10px}
+    .nav a{padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700;border:1px solid #e4ecff}
+    body.dark .nav a{border-color: rgba(255,255,255,0.14)}
+
+    /* Backdrop + modal */
+    .backdrop{
+      position:fixed; inset:0; background:rgba(10,20,60,0.35);
+      display:flex; align-items:center; justify-content:center; padding:16px;
+      z-index: 1000;
     }
-    .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
-    .btn-primary { background: linear-gradient(90deg,#1E6CFF,#3FA2FF); color: #fff; }
-    .note { margin-top: 18px; font-size: 14px; color: #6B7A99; }
-    .note a { color: #1E6CFF; font-weight: 600; text-decoration: none; }
-    #message { margin-top: 12px; font-size: 14px; }
+    .auth-modal{
+      width:min(92vw, 440px);
+      border-radius:18px;
+      background:var(--glass-bg);
+      border:1px solid var(--glass-stroke);
+      box-shadow:var(--glass-shadow);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      padding:18px 18px 20px;
+      position:relative;
+    }
+    .auth-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .auth-title{font-size:18px;font-weight:900;margin:0}
+    .auth-close{
+      position:absolute; top:10px; right:10px; width:36px; height:36px; border-radius:10px;
+      border:1px solid var(--glass-stroke); background:transparent; cursor:pointer; font-size:18px;
+    }
+
+    /* Tabs */
+    .tabbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#f3f6ff;border-radius:12px;padding:6px;margin:8px 0 14px}
+    body.dark .tabbar{background:rgba(255,255,255,0.06)}
+    .tabbar button{border:none;padding:10px;border-radius:10px;font-weight:800;cursor:pointer;background:transparent}
+    .tabbar button.active{background:linear-gradient(90deg,var(--brand),var(--brand-2));color:#fff;box-shadow:var(--shadow)}
+
+    /* Form */
+    .field{margin-bottom:14px}
+    .field label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px}
+    .field input{
+      width:100%;padding:12px 14px;border-radius:12px;border:1px solid #E4ECFF;background:#fff;font-size:16px;
+    }
+    body.dark .field input{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.14);color:#fff}
+    .btn{width:100%;padding:14px;border:none;border-radius:12px;font-weight:800;cursor:pointer}
+    .btn-primary{color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-2));box-shadow:var(--shadow)}
+    .actions-inline{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+    .link{color:var(--brand);font-weight:700;text-decoration:none}
+    .link:hover{text-decoration:underline}
+    .msg{min-height:18px;font-size:14px;margin-top:10px}
+    .msg.error{color:#d32} .msg.ok{color:#0a8a2a}
+
+    @media (max-width:420px){
+      .brand .logo{width:84px;height:84px}
+      .brand-name{font-size:22px;letter-spacing:3px}
+    }
   </style>
 </head>
 <body>
-
-<header class="header">
-  <div class="brand">
-    <img src="./assets/logo.svg" alt="CarribCareerHub logo" class="logo" />
-    <span class="brand-name">CARRIBCAREERHUB</span>
-  </div>
-  <nav class="nav">
-    <a href="index.html">Home</a>
-  </nav>
-</header>
-
-<main>
-  <div class="login-panel">
-    <div class="tab-switch">
-      <button id="tab-login" class="active">Sign In</button>
-      <button id="tab-register">Create Account</button>
+  <!-- Brand header -->
+  <header class="header" aria-hidden="true">
+    <div class="brand">
+      <picture>
+        <source srcset="./assets/logo.svg" type="image/svg+xml">
+        <img src="./assets/logo.png" alt="CarribCareerHub logo" class="logo" />
+      </picture>
+      <div class="brand-name">CARRIBCAREERHUB</div>
     </div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+    </nav>
+  </header>
 
-    <!-- Sign In -->
-    <form id="login-form">
-      <div class="field">
-        <label>Email</label>
-        <input id="login-email" type="email" placeholder="you@example.com" required />
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <input id="login-password" type="password" placeholder="••••••••" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Sign In</button>
-    </form>
+  <!-- Compact Auth Modal -->
+  <div class="backdrop" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="auth-modal" id="authModal">
+      <button class="auth-close" id="closeBtn" aria-label="Close and go back">×</button>
 
-    <!-- Register -->
-    <form id="register-form" style="display:none;">
-      <div class="field">
-        <label>Email</label>
-        <input id="register-email" type="email" placeholder="you@example.com" required />
+      <div class="auth-header">
+        <h2 class="auth-title" id="authTitle">Welcome</h2>
       </div>
-      <div class="field">
-        <label>Password</label>
-        <input id="register-password" type="password" placeholder="Choose a password" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Create Account</button>
-    </form>
 
-    <p id="message"></p>
+      <div class="tabbar" role="tablist">
+        <button id="tabSignIn" class="active" role="tab" aria-controls="paneSignIn" aria-selected="true">Sign In</button>
+        <button id="tabSignUp" role="tab" aria-controls="paneSignUp" aria-selected="false">Create Account</button>
+      </div>
+
+      <!-- Sign In -->
+      <section id="paneSignIn" role="tabpanel" aria-labelledby="tabSignIn">
+        <form id="formSignIn" novalidate>
+          <div class="field">
+            <label for="siEmail">Email</label>
+            <input id="siEmail" type="email" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="siPass">Password</label>
+            <input id="siPass" type="password" placeholder="••••••••" autocomplete="current-password" required />
+          </div>
+          <button id="btnSignIn" class="btn btn-primary" type="submit">Sign In</button>
+          <div class="actions-inline">
+            <span></span>
+            <a href="#" id="forgotLink" class="link">Forgot password?</a>
+          </div>
+          <p id="msgIn" class="msg" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <!-- Sign Up -->
+      <section id="paneSignUp" role="tabpanel" aria-labelledby="tabSignUp" style="display:none">
+        <form id="formSignUp" novalidate>
+          <div class="field">
+            <label for="suEmail">Email</label>
+            <input id="suEmail" type="email" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="suPass">Password</label>
+            <input id="suPass" type="password" placeholder="Minimum 6 characters" autocomplete="new-password" required />
+          </div>
+          <button id="btnSignUp" class="btn btn-primary" type="submit">Create Account</button>
+          <p id="msgUp" class="msg" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </div>
   </div>
-</main>
 
-<footer class="footer">
-  <div class="copy" style="text-align:center; margin-top:30px; color:#6B7A99;">
-    © 2025 CarribCareerHub
-  </div>
-</footer>
+  <script>
+    // Persist dark preference
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
 
-<script>
-  const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // Supabase init
+    const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const tabLogin = document.getElementById('tab-login');
-  const tabRegister = document.getElementById('tab-register');
-  const loginForm = document.getElementById('login-form');
-  const registerForm = document.getElementById('register-form');
-  const message = document.getElementById('message');
+    const DASHBOARD_URL = "dashboard.html";
+    const RETURN_HOME = "index.html";
+    const EMAIL_REDIRECT = `${location.origin}/${DASHBOARD_URL}`;
 
-  tabLogin.addEventListener('click', () => {
-    tabLogin.classList.add('active'); tabRegister.classList.remove('active');
-    loginForm.style.display = 'block'; registerForm.style.display = 'none';
-    message.textContent = '';
-  });
+    // Tabs
+    const tabSignIn = document.getElementById('tabSignIn');
+    const tabSignUp = document.getElementById('tabSignUp');
+    const paneSignIn = document.getElementById('paneSignIn');
+    const paneSignUp = document.getElementById('paneSignUp');
+    function setTab(inMode){
+      const isIn = inMode === true;
+      tabSignIn.classList.toggle('active', isIn);
+      tabSignUp.classList.toggle('active', !isIn);
+      tabSignIn.setAttribute('aria-selected', isIn);
+      tabSignUp.setAttribute('aria-selected', !isIn);
+      paneSignIn.style.display = isIn ? '' : 'none';
+      paneSignUp.style.display = isIn ? 'none' : '';
+      document.getElementById('authTitle').textContent = isIn ? 'Welcome back' : 'Create your account';
+      (isIn ? document.getElementById('siEmail') : document.getElementById('suEmail')).focus();
+    }
+    tabSignIn.addEventListener('click', ()=>setTab(true));
+    tabSignUp.addEventListener('click', ()=>setTab(false));
 
-  tabRegister.addEventListener('click', () => {
-    tabRegister.classList.add('active'); tabLogin.classList.remove('active');
-    registerForm.style.display = 'block'; loginForm.style.display = 'none';
-    message.textContent = '';
-  });
+    // Close modal → back to homepage
+    document.getElementById('closeBtn').addEventListener('click', ()=>{ window.location.href = RETURN_HOME; });
+    window.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') window.location.href = RETURN_HOME; });
 
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) { message.style.color = "red"; message.textContent = "❌ " + error.message; }
-    else { message.style.color = "green"; message.textContent = "✅ Logged in!"; setTimeout(() => window.location.href="dashboard.html", 1000); }
-  });
+    // If already logged in → go dashboard
+    (async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) location.href = DASHBOARD_URL;
+      else document.getElementById('siEmail').focus();
+    })();
 
-  registerForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('register-email').value;
-    const password = document.getElementById('register-password').value;
-    const { error } = await supabase.auth.signUp({ email, password });
-    if (error) { message.style.color = "red"; message.textContent = "❌ " + error.message; }
-    else { message.style.color = "green"; message.textContent = "✅ Check your email to confirm account."; }
-  });
-</script>
+    // Sign In
+    const formSignIn = document.getElementById('formSignIn');
+    const btnSignIn  = document.getElementById('btnSignIn');
+    const msgIn      = document.getElementById('msgIn');
+
+    formSignIn.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      msgIn.textContent = ""; btnSignIn.disabled = true;
+
+      const email = document.getElementById('siEmail').value.trim();
+      const password = document.getElementById('siPass').value;
+
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error){
+        msgIn.textContent = "❌ " + (error.message || "Sign in failed");
+        msgIn.className = "msg error";
+        btnSignIn.disabled = false;
+        return;
+      }
+      msgIn.textContent = "✅ Signed in — redirecting…";
+      msgIn.className = "msg ok";
+      location.href = DASHBOARD_URL;
+    });
+
+    // Forgot password
+    document.getElementById('forgotLink').addEventListener('click', async (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('siEmail').value.trim();
+      if (!email){ msgIn.textContent = "ℹ️ Enter your email above first."; msgIn.className = "msg"; return; }
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: EMAIL_REDIRECT });
+      if (error){ msgIn.textContent = "❌ " + error.message; msgIn.className = "msg error"; return; }
+      msgIn.textContent = "📧 Password reset email sent."; msgIn.className = "msg ok";
+    });
+
+    // Sign Up
+    const formSignUp = document.getElementById('formSignUp');
+    const btnSignUp  = document.getElementById('btnSignUp');
+    const msgUp      = document.getElementById('msgUp');
+
+    formSignUp.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      msgUp.textContent = ""; btnSignUp.disabled = true;
+
+      const email = document.getElementById('suEmail').value.trim();
+      const password = document.getElementById('suPass').value;
+
+      const { error } = await supabaseClient.auth.signUp({
+        email, password, options: { emailRedirectTo: EMAIL_REDIRECT }
+      });
+
+      if (error){
+        msgUp.textContent = "❌ " + (error.message || "Sign up failed");
+        msgUp.className = "msg error";
+        btnSignUp.disabled = false;
+        return;
+      }
+      msgUp.textContent = "✅ Check your email to confirm your account.";
+      msgUp.className = "msg ok";
+      btnSignUp.disabled = false;
+      setTab(true);
+    });
+
+    // Basic focus trap inside modal
+    const modal = document.getElementById('authModal');
+    document.addEventListener('keydown', (e)=>{
+      if (e.key !== 'Tab') return;
+      const focusables = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first){ last.focus(); e.preventDefault(); }
+      else if (!e.shiftKey && document.activeElement === last){ first.focus(); e.preventDefault(); }
+    });
+  </script>
 </body>
 </html>
