@@ -56,15 +56,16 @@ body{
   flex:1;
 }
 .brand img{
-  height:56px;
+  height:64px;
   width:auto;
 }
 .brand-name {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 32px;
+  font-weight: 900;
   margin-left: 12px;
   color: var(--ink);
-  white-space: nowrap;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 /* ======================
@@ -81,7 +82,7 @@ body{
   font-weight:700;
   text-decoration:none;
   color:#fff;
-  background:linear-gradient(90deg,#FFB44D,#FF8A00); /* Post a Job style */
+  background:linear-gradient(90deg,#FFB44D,#FF8A00);
   box-shadow:var(--shadow);
   transition:opacity 0.2s ease;
 }
