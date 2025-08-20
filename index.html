@@ -12,7 +12,7 @@
   <style>
     /* 🎨 Highlight Banner Styling */
     .highlight-banner {
-      background: linear-gradient(90deg, #0077b6, #00b4d8); /* fresh Caribbean blue */
+      background: linear-gradient(90deg, #0077b6, #00b4d8);
       color: #fff;
       text-align: center;
       padding: 0.8rem 1rem;
@@ -22,14 +22,10 @@
       border-bottom: 2px solid rgba(255,255,255,0.3);
       transition: background 0.6s ease-in-out, text-shadow 0.3s;
     }
-
-    /* ✨ Fade-in animation */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    /* 🌈 Hover shimmer */
     .highlight-banner:hover {
       background: linear-gradient(90deg, #0096c7, #48cae4);
       text-shadow: 0px 0px 6px rgba(255,255,255,0.7);
@@ -65,9 +61,6 @@
         At <strong>CarribCareerHub</strong>, your career journey truly matters.  
         Whether you’re starting out, changing paths, or chasing new ambitions,  
         we’re here to guide you toward the opportunities that fit your unique goals.  
-        <br><br>
-        Our mission is simple: to make job searching <em>easier, faster, and more personal</em>.  
-        Every step you take with us is a step closer to building the future you deserve.  
       </p>
 
       <p class="employer-callout">
@@ -115,11 +108,18 @@
   <div class="copy">© 2025 CarribCareerHub</div>
 </footer>
 
+<!-- ✅ Supabase client -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
-  // Fake login state (change later when backend exists)
-  const isLoggedIn = false;
+  // 🔑 Connect to Supabase
+  const supabaseUrl = "https://fpytvfhynleaivkvuedt.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-  // ✅ Handle Find Jobs button
+  // ✅ Fake login state (replace with Supabase Auth later)
+  let isLoggedIn = false;
+
+  // 🔎 Handle Find Jobs button
   document.getElementById('findJobsBtn').addEventListener('click', () => {
     if (!isLoggedIn) {
       alert('You must be signed in to find jobs.');
@@ -131,7 +131,7 @@
     }
   });
 
-  // ✅ Handle Post Job button
+  // 📝 Handle Post Job button
   document.getElementById('postJobBtn').addEventListener('click', () => {
     if (!isLoggedIn) {
       alert('You must be signed in to post a job.');
@@ -141,7 +141,7 @@
     }
   });
 
-  // ✅ Handle search form submit (works same as Find Jobs)
+  // 🔎 Handle search form submit
   document.getElementById('searchForm').addEventListener('submit', (e) => {
     e.preventDefault();
     if (!isLoggedIn) {
