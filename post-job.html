@@ -10,7 +10,7 @@
 
 <header class="header">
   <div class="brand">
-    <img src="./assets/logo.svg" alt="CaribCareerHub logo" />
+    <img src="./assets/logo.svg" alt="CarribCareerHub logo" />
     <div class="brand-name">CaribCareerHub</div>
   </div>
   <nav class="nav">
@@ -21,43 +21,39 @@
 <main>
   <div class="login-panel">
     <h2>Post a Job</h2>
-    <p class="lede">Fill out the form below to create your job listing.</p>
+    <p class="lede">Fill out the details below</p>
 
-    <form>
+    <form id="postJobForm">
       <div class="field">
         <label>Job Title</label>
-        <input type="text" placeholder="e.g. Software Engineer" required>
+        <input type="text" placeholder="Software Engineer" required>
       </div>
       <div class="field">
         <label>Company Name</label>
-        <input type="text" placeholder="e.g. CaribCareerHub Ltd" required>
+        <input type="text" placeholder="Your Company Ltd" required>
       </div>
       <div class="field">
         <label>Job Description</label>
-        <textarea placeholder="Write a detailed description of the role..." rows="6" required></textarea>
+        <textarea placeholder="Describe the role and responsibilities..." required></textarea>
       </div>
       <div class="field">
-        <label>Employment Type</label>
+        <label>Compensation</label>
+        <input type="text" placeholder="e.g. $25/hr or $50,000/year" required>
+      </div>
+      <div class="field">
+        <label>Job Type</label>
         <select required>
-          <option value="">Select type</option>
-          <option>Full-Time (Permanent)</option>
+          <option value="">Select...</option>
+          <option>Full-Time</option>
           <option>Part-Time</option>
           <option>Contract</option>
           <option>Internship</option>
         </select>
       </div>
-      <div class="field">
-        <label>Salary / Hourly Rate</label>
-        <input type="text" placeholder="e.g. $25/hr or $50,000/year">
-      </div>
-      <div class="field">
-        <label>Location</label>
-        <input type="text" placeholder="e.g. Kingston, Jamaica">
-      </div>
       <button type="submit" class="btn btn-primary">Submit Job</button>
     </form>
 
-    <p class="note">You must <a href="register.html">create an account</a> to post jobs.</p>
+    <p class="note">You must <a href="login.html">sign in</a> or <a href="register.html">create an account</a> before posting a job.</p>
   </div>
 </main>
 
@@ -70,6 +66,22 @@
   </div>
   <div class="copy">© 2025 CaribCareerHub</div>
 </footer>
+
+<script>
+  // 🔒 Fake login check
+  const isLoggedIn = false; // change to true if "logged in"
+
+  const form = document.getElementById('postJobForm');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!isLoggedIn) {
+      alert('You must be signed in to post a job.');
+      window.location.href = "login.html";
+    } else {
+      alert('Job submitted successfully! ✅');
+    }
+  });
+</script>
 
 </body>
 </html>
