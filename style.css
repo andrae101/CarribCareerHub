@@ -1,375 +1,532 @@
-:root{
-  --bg: #F3F8FF;
-  --panel: #ffffff;
-  --ink: #0A2458;
-  --muted: #6B7A99;
-  --brand: #1E6CFF;
-  --brand-2: #3FA2FF;
-  --accent: #FFA03B;
-  --radius: 18px;
-  --shadow: 0 10px 30px rgba(16,40,120,0.12);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
 
-  /* 🔄 Easy swap paths — supports SVG first, PNG fallback */
-  --logo-img: url('./assets/logo.svg'), url('./assets/logo.png');
-  --map-img: url('./assets/map.svg'), url('./assets/map.png');
-  --bg-img: url('./assets/bg-water.svg'), url('./assets/bg-water.png');
-}
-
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-  color:var(--ink);
-  background: var(--bg-img) no-repeat top/cover fixed, var(--bg);
-  overflow-x: hidden;
-}
-
-/* ======================
-   Highlight Banner
-====================== */
-.highlight-banner {
-  background: linear-gradient(90deg, var(--brand), var(--brand-2));
-  color: #fff;
-  text-align: center;
-  font-weight: 700;
-  padding: 10px 16px;
-  font-size: 15px;
-  letter-spacing: 0.4px;
-  box-shadow: var(--shadow);
-
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-/* ======================
-   Header
-====================== */
-.header{
-  max-width:1100px;
-  margin:24px auto 0;
-  padding:0 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap: wrap;   /* ✅ allows wrapping on small screens */
-  gap: 12px;         /* ✅ spacing so logo/home don’t collide */
-}
-.brand{
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  flex-shrink:0;
-}
-.brand img{
-  height:64px;
-  width:auto;
-  content: var(--logo-img);
-}
-.brand-name {
-  font-size: 32px;
-  font-weight: 900;
-  margin-left: 14px;
-  color: var(--ink);
-  letter-spacing: 6px;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-}
-
-/* ======================
-   Navigation
-====================== */
-.nav {
-  margin-left: auto;
-}
-.nav a {
-  display:inline-block;
-  padding:8px 16px;
-  border-radius:12px;
-  font-size:14px;
-  font-weight:700;
-  text-decoration:none;
-  color:#fff;
-  background:linear-gradient(90deg,var(--brand),var(--brand-2));
-  box-shadow:var(--shadow);
-  transition:opacity 0.2s ease;
-}
-.nav a:hover {
-  opacity:0.9;
-}
-/* Special style for Post Job link */
-.nav a.post-job {
-  background: linear-gradient(90deg, #FFB44D, #FF8A00);
-  color: #fff;
-}
-
-/* ======================
-   Panel / Hero
-====================== */
-.panel{
-  max-width:1100px;
-  margin:16px auto 40px;
-  padding:32px;
-  background:rgba(255,255,255,.82);
-  backdrop-filter: blur(10px);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  position:relative;
-  overflow:hidden;
-}
-.panel-content{
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  gap:24px;
-}
-
-/* Hero headline & subtext */
-.hero-title {
-  font-size: clamp(34px, 6vw, 54px);
-  font-weight: 800;
-  line-height: 1.3;
-  margin: 20px 0 26px;
-  letter-spacing: 0.5px;
-}
-.lede {
-  font-size: 18px;
-  line-height: 1.7;
-  color: var(--muted);
-  margin-bottom: 28px;
-  max-width: 640px;
-}
-
-/* Callout for employers */
-.employer-callout {
-  margin-top: 22px;
-  padding: 14px 18px;
-  border-radius: 12px;
-  background: #fff6e9;
-  border: 1px solid #ffd9a8;
-  font-size: 16px;
-  font-weight: 600;
-  color: #b56a00;
-}
-
-/* ======================
-   Search bar
-====================== */
-.search-row{
-  display:flex;
-  gap:14px;
-  align-items:center;
-  flex-wrap:wrap;
-}
-.input{
-  flex:1;
-  min-width:210px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:#fff;
-  border:1px solid #E4ECFF;
-  border-radius:12px;
-  padding:12px 14px;
-}
-.input input{
-  border:none;
-  outline:none;
-  width:100%;
-  font-size:16px;
-  background:transparent;
-}
-.search-btn{
-  border:none;
-  padding:12px 22px;
-  border-radius:12px;
-  font-weight:800;
-  color:#fff;
-  background:linear-gradient(90deg,var(--brand),var(--brand-2));
-  box-shadow:var(--shadow);
-  cursor:pointer;
-}
-
-/* ======================
-   Buttons
-====================== */
-.actions{
-  display:flex;
-  gap:16px;
-  margin-top:22px;
-  flex-wrap:wrap;
-}
-.btn{
-  border:none;
-  border-radius:12px;
-  padding:14px 22px;
-  font-weight:800;
-  cursor:pointer;
-}
-.btn-primary{
-  background:linear-gradient(90deg,var(--brand),var(--brand-2));
-  color:#fff;
-  box-shadow:var(--shadow);
-}
-.btn-secondary{
-  background:linear-gradient(90deg,#FFB44D,#FF8A00);
-  color:#fff;
-  box-shadow:var(--shadow);
-}
-
-/* ======================
-   Map side
-====================== */
-.map-wrap{
-  position:relative;
-  min-height:280px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.map-wrap img{
-  width:90%;
-  max-width:520px;
-  height:auto;
-  opacity:.75;
-  object-fit:contain;
-  content: var(--map-img);
-}
-
-/* ======================
-   Footer
-====================== */
-.footer{
-  max-width:1100px;
-  margin:10px auto 40px;
-  padding:0 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.footer .links{
-  display:flex;
-  gap:18px;
-  flex-wrap:wrap;
-}
-.footer a{
-  color:var(--muted);
-  text-decoration:none;
-  font-weight:600;
-}
-.copy{color:var(--muted)}
-
-/* ======================
-   Responsive
-====================== */
-@media (max-width: 768px) {
-  .panel-content {
-    grid-template-columns: 1fr;
-    text-align: center;
+  <style>
+  :root {
+    --bg: #F3F8FF;
+    --panel: #ffffff;
+    --ink: #0A2458;
+    --muted: #6B7A99;
+    --brand: #1E6CFF;
+    --brand-2: #3FA2FF;
+    --accent: #FFA03B;
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(16,40,120,0.12);
   }
-  .map-wrap img {
-    position:static;
-    width:100%;
-    margin-top:20px;
+
+  /* 🌙 Dark mode variables */
+  body.dark {
+    --bg: #0e1424;
+    --panel: #1c2333;
+    --ink: #f4f6fb;
+    --muted: #aab3cc;
+    --brand: #3FA2FF;
+    --brand-2: #1E6CFF;
+    --accent: #ffb44d;
+    --shadow: 0 10px 30px rgba(0,0,0,0.6);
   }
-  .actions {
-    justify-content:center;
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+    color:var(--ink);
+    background: var(--bg);
+    overflow-x: hidden;
+    transition: background 0.3s, color 0.3s;
   }
-  .search-row {
-    flex-direction:column;
-    align-items:stretch;
+
+  /* ======================
+     Dashboard Layout
+  ====================== */
+  .dashboard {
+    display: flex;
+    max-width: 1200px;
+    margin: 30px auto;
+    gap: 24px;
+    padding: 0 20px;
   }
-  .brand {
+
+  /* Sidebar */
+  .sidebar {
+    flex: 0 0 240px;
+    background: var(--panel);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 20px;
+    display: flex;
     flex-direction: column;
+    gap: 16px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+    transition: background 0.3s;
   }
-  .brand-name {
-    margin-left: 0;
-    margin-top: 10px;
-    text-align: center;
-    letter-spacing: 4px;
+
+  .sidebar a {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    text-decoration: none;
+    transition: all 0.2s ease;
   }
-  .nav {
-    margin-left: 0;
+
+  .sidebar a:hover {
+    background: rgba(30, 108, 255, 0.08);
+    color: var(--brand);
+  }
+
+  .sidebar a.active {
+    background: linear-gradient(90deg, var(--brand), var(--brand-2));
+    color: #fff;
+    box-shadow: var(--shadow);
+  }
+
+  /* Toggle button */
+  .toggle-theme {
+    margin-top: 20px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    background: var(--accent);
+    color: #fff;
+    box-shadow: var(--shadow);
+    transition: opacity 0.2s ease;
+  }
+
+  .toggle-theme:hover {
+    opacity: 0.9;
+  }
+
+  /* Content area */
+  .dashboard-content {
+    flex: 1;
+    background: var(--panel);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px;
+    min-height: 500px;
+    transition: background 0.3s;
+  }
+
+  .dashboard-content section {
+    display: none;
+  }
+
+  .dashboard-content section.active {
+    display: block;
+  }
+
+  /* ======================
+     Profile Section
+  ====================== */
+  .profile-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-bottom: 32px;
+  }
+
+  .field {
+    text-align: left;
+    margin-bottom: 18px;
+  }
+
+  .field label {
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 14px;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .field input {
     width: 100%;
-    text-align: center;
+    padding: 12px 14px;
+    border: 1px solid #E4ECFF;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.2s ease;
+    background: var(--panel);
+    color: var(--ink);
   }
-}
 
-/* ======================
-   Login Page
-====================== */
-.login-panel {
-  max-width: 420px;
-  margin: 60px auto;
-  padding: 40px 32px;
-  background: #fff;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  text-align: center;
-}
+  .field input:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(30, 108, 255, 0.1);
+  }
 
-.login-panel h2 {
-  font-size: 28px;
-  font-weight: 800;
-  margin-bottom: 10px;
-  color: var(--ink);
-}
+  .upload-area {
+    background: #f9fbff;
+    border: 2px dashed #c8d9ff;
+    border-radius: 14px;
+    text-align: center;
+    padding: 30px 20px;
+    cursor: pointer;
+    transition: border 0.2s ease;
+    margin-bottom: 24px;
+  }
 
-.login-panel .lede {
-  color: var(--muted);
-  margin-bottom: 26px;
-  font-size: 16px;
-}
+  body.dark .upload-area {
+    background: #222a3b;
+    border-color: #445077;
+  }
 
-.field {
-  text-align: left;
-  margin-bottom: 18px;
-}
+  .upload-area:hover {
+    border-color: var(--brand);
+  }
 
-.field label {
-  font-weight: 600;
-  color: var(--muted);
-  font-size: 14px;
-  display: block;
-  margin-bottom: 6px;
-}
+  .applied-jobs {
+    margin-top: 30px;
+  }
 
-.field input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #E4ECFF;
-  border-radius: 12px;
-  font-size: 16px;
-  outline: none;
-  transition: border 0.2s ease;
-}
+  .applied-jobs h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
 
-.field input:focus {
-  border-color: var(--brand);
-  box-shadow: 0 0 0 3px rgba(30, 108, 255, 0.1);
-}
+  .applied-jobs li {
+    background: #f7faff;
+    border: 1px solid #e4ecff;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+  }
 
-.login-panel .btn-primary {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-}
+  body.dark .applied-jobs li {
+    background: #1f283d;
+    border-color: #3a4767;
+  }
 
-.note {
-  margin-top: 18px;
-  font-size: 14px;
-  color: var(--muted);
-}
+  /* ======================
+     Jobs Section
+  ====================== */
+  .job-search {
+    margin-bottom: 24px;
+  }
 
-.note a {
-  color: var(--brand);
-  text-decoration: none;
-  font-weight: 600;
-}
+  .search-row {
+    display:flex;
+    gap:14px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
 
-.note a:hover {
-  text-decoration: underline;
-}
+  .input {
+    flex:1;
+    min-width:210px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--panel);
+    border:1px solid #E4ECFF;
+    border-radius:12px;
+    padding:12px 14px;
+  }
+
+  .input input{
+    border:none;
+    outline:none;
+    width:100%;
+    font-size:16px;
+    background:transparent;
+    color: var(--ink);
+  }
+
+  .search-btn{
+    border:none;
+    padding:12px 22px;
+    border-radius:12px;
+    font-weight:800;
+    color:#fff;
+    background:linear-gradient(90deg,var(--brand),var(--brand-2));
+    box-shadow:var(--shadow);
+    cursor:pointer;
+  }
+
+  .job-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0;
+  }
+
+  .job-categories button {
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    background: #f2f6ff;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .job-categories button.active,
+  .job-categories button:hover {
+    background: linear-gradient(90deg, var(--brand), var(--brand-2));
+    color: #fff;
+    box-shadow: var(--shadow);
+  }
+
+  .job-list {
+    display: grid;
+    gap: 16px;
+  }
+
+  .job-card {
+    border: 1px solid #e4ecff;
+    border-radius: 14px;
+    padding: 18px 20px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .job-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .job-card h4 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .job-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .save-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: transform 0.2s;
+  }
+  .save-btn.saved {
+    color: var(--accent);
+    transform: scale(1.2);
+  }
+
+  /* ======================
+     Responsive Dashboard
+  ====================== */
+  @media (max-width: 992px) {
+    .dashboard {
+      flex-direction: column;
+    }
+    .sidebar {
+      flex-direction: row;
+      justify-content: center;
+      position: static;
+      flex-wrap: wrap;
+    }
+    .sidebar a, .toggle-theme {
+      flex: 1;
+      text-align: center;
+    }
+    .profile-info {
+      grid-template-columns: 1fr;
+    }
+  }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <a href="#" class="active" data-target="profile-section">Profile</a>
+      <a href="#" data-target="jobs-section">Jobs</a>
+      <a href="#" data-target="saved-section">Saved Jobs ⭐</a>
+      <button class="toggle-theme">🌙 Toggle Dark Mode</button>
+    </div>
+
+    <!-- Main content -->
+    <div class="dashboard-content">
+      <!-- Profile -->
+      <section id="profile-section" class="active">
+        <h2>My Profile</h2>
+        <div class="profile-info">
+          <div class="field">
+            <label>Name</label>
+            <input type="text" placeholder="Your name" />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" placeholder="Your email" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" placeholder="New password" />
+          </div>
+        </div>
+
+        <div class="upload-area">Click or drag file to upload your CV</div>
+        <div class="upload-area">Click or drag file to upload profile picture</div>
+
+        <div class="applied-jobs">
+          <h3>Applied Jobs</h3>
+          <ul>
+            <li>Frontend Developer @ TechCorp</li>
+            <li>Backend Engineer @ CodeBase</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Jobs -->
+      <section id="jobs-section">
+        <h2>Jobs</h2>
+        <div class="job-search">
+          <div class="search-row">
+            <div class="input">
+              <input type="text" placeholder="Search jobs..." />
+            </div>
+            <button class="search-btn">Search</button>
+          </div>
+        </div>
+
+        <div class="job-categories">
+          <button class="active">All</button>
+          <button>Full-time</button>
+          <button>Part-time</button>
+          <button>Remote</button>
+          <button>On-site</button>
+        </div>
+
+        <div class="job-list">
+          <div class="job-card" data-id="1">
+            <div>
+              <h4>UI Designer</h4>
+              <p>Remote · Design Department</p>
+            </div>
+            <button class="save-btn">⭐</button>
+          </div>
+          <div class="job-card" data-id="2">
+            <div>
+              <h4>Software Engineer</h4>
+              <p>Full-time · Development Team</p>
+            </div>
+            <button class="save-btn">⭐</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Saved Jobs -->
+      <section id="saved-section">
+        <h2>Saved Jobs</h2>
+        <div class="job-list saved-jobs"></div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const links = document.querySelectorAll(".sidebar a");
+    const sections = document.querySelectorAll(".dashboard-content section");
+    const themeToggle = document.querySelector(".toggle-theme");
+    const saveButtons = document.querySelectorAll(".save-btn");
+    const savedList = document.querySelector(".saved-jobs");
+
+    // restore last active tab
+    const savedTab = localStorage.getItem("activeTab");
+    if (savedTab) {
+      links.forEach(l => l.classList.remove("active"));
+      sections.forEach(s => s.classList.remove("active"));
+      document.querySelector(`.sidebar a[data-target="${savedTab}"]`)?.classList.add("active");
+      document.getElementById(savedTab)?.classList.add("active");
+    }
+
+    // restore theme
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark");
+    }
+
+    // restore saved jobs
+    let savedJobs = JSON.parse(localStorage.getItem("savedJobs") || "[]");
+    function renderSaved() {
+      savedList.innerHTML = savedJobs.map(job => `
+        <div class="job-card">
+          <div>
+            <h4>${job.title}</h4>
+            <p>${job.details}</p>
+          </div>
+        </div>
+      `).join("");
+      document.querySelectorAll(".job-card").forEach(card => {
+        const id = card.dataset.id;
+        const btn = card.querySelector(".save-btn");
+        if (id && savedJobs.find(j => j.id === id)) {
+          btn.classList.add("saved");
+        }
+      });
+    }
+    renderSaved();
+
+    // tab switching
+    links.forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        links.forEach(l => l.classList.remove("active"));
+        sections.forEach(s => s.classList.remove("active"));
+
+        link.classList.add("active");
+        const targetId = link.getAttribute("data-target");
+        document.getElementById(targetId).classList.add("active");
+        localStorage.setItem("activeTab", targetId);
+      });
+    });
+
+    // theme toggle
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+    });
+
+    // save job
+    saveButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const card = btn.closest(".job-card");
+        const jobId = card.dataset.id;
+        const title = card.querySelector("h4").innerText;
+        const details = card.querySelector("p").innerText;
+
+        if (btn.classList.contains("saved")) {
+          savedJobs = savedJobs.filter(j => j.id !== jobId);
+          btn.classList.remove("saved");
+        } else {
+          savedJobs.push({ id: jobId, title, details });
+          btn.classList.add("saved");
+        }
+        localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
+        renderSaved();
+      });
+    });
+  });
+  </script>
+
+</body>
+</html>
