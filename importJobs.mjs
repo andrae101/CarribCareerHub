@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import { createClient } from "@supabase/supabase-js";
 
-// ✅ Use secrets (set in GitHub Actions)
+// ✅ Use secrets (both URL + KEY from GitHub)
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -15,26 +15,20 @@ async function importJobs() {
     const response = await fetch(API_URL);
     const data = await response.json();
 
-    if (!data.jobs || data.jobs.length === 0) {
-      console.log("⚠️ No jobs found from API");
-      return;
-    }
+    const jobs = data.jobs.slice(0, 10); // take top 10 for test
+    console.log("📋 Jobs fetched from API:", jobs); // <-- DEBUG LOG
 
-    const jobs = data.jobs.slice(0, 10); // Take top 10 for testing
-    console.log(`📦 Fetched ${jobs.length} jobs`);
-
-    // ✅ Format jobs to match Supabase column names
+    // ✅ Bulk insert instead of one-by-one
     const formattedJobs = jobs.map(job => ({
-      Title: job.title,
-      Company: job.company_name,
-      Location: job.candidate_required_location,
-      Description: job.description
-      // Created_at is auto-generated in Supabase
+      title: job.title,
+      company: job.company_name,
+      location: job.candidate_required_location,
+      description: job.description
     }));
 
     console.log("🚀 Inserting jobs into Supabase...");
     const { data: inserted, error } = await supabase
-      .from("Jobs") // ⚠️ Capital J to match your table
+      .from("jobs")
       .insert(formattedJobs);
 
     if (error) {
