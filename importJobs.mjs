@@ -1,12 +1,10 @@
 import fetch from "node-fetch";
 import { createClient } from "@supabase/supabase-js";
 
-// ✅ Use secrets (both URL + KEY from GitHub)
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Example API: Remotive jobs
 const API_URL = "https://remotive.com/api/remote-jobs";
 
 async function importJobs() {
@@ -18,12 +16,12 @@ async function importJobs() {
     const jobs = data.jobs.slice(0, 10); // take top 10 for test
     console.log(`📦 Fetched ${jobs.length} jobs`);
 
-    // ✅ Bulk insert instead of one-by-one
     const formattedJobs = jobs.map(job => ({
-      title: job.title,
-      company: job.company_name,
-      location: job.candidate_required_location,
-      description: job.description
+      Title: job.title,
+      Company: job.company_name,
+      Location: job.candidate_required_location,
+      Description: job.description,
+      Created_at: new Date().toISOString() // Supabase expects timestamp
     }));
 
     console.log("🚀 Inserting jobs into Supabase...");
@@ -32,7 +30,7 @@ async function importJobs() {
       .insert(formattedJobs);
 
     if (error) {
-      console.error("❌ Error inserting jobs:", error);
+      console.error("❌ Error inserting jobs:", JSON.stringify(error, null, 2));
     } else {
       console.log(`✅ Successfully inserted ${inserted.length} jobs`);
     }
