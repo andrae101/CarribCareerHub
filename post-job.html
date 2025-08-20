@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Post a Job • CaribCareerHub</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">
+    <img src="./assets/logo.svg" alt="CaribCareerHub logo" />
+    <div class="brand-name">CaribCareerHub</div>
+  </div>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+  </nav>
+</header>
+
+<main>
+  <div class="login-panel">
+    <h2>Post a Job</h2>
+    <p class="lede">Fill out the form below to create your job listing.</p>
+
+    <form>
+      <div class="field">
+        <label>Job Title</label>
+        <input type="text" placeholder="e.g. Software Engineer" required>
+      </div>
+      <div class="field">
+        <label>Company Name</label>
+        <input type="text" placeholder="e.g. CaribCareerHub Ltd" required>
+      </div>
+      <div class="field">
+        <label>Job Description</label>
+        <textarea placeholder="Write a detailed description of the role..." rows="6" required></textarea>
+      </div>
+      <div class="field">
+        <label>Employment Type</label>
+        <select required>
+          <option value="">Select type</option>
+          <option>Full-Time (Permanent)</option>
+          <option>Part-Time</option>
+          <option>Contract</option>
+          <option>Internship</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Salary / Hourly Rate</label>
+        <input type="text" placeholder="e.g. $25/hr or $50,000/year">
+      </div>
+      <div class="field">
+        <label>Location</label>
+        <input type="text" placeholder="e.g. Kingston, Jamaica">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit Job</button>
+    </form>
+
+    <p class="note">You must <a href="register.html">create an account</a> to post jobs.</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="links">
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+  </div>
+  <div class="copy">© 2025 CaribCareerHub</div>
+</footer>
+
+</body>
+</html>
