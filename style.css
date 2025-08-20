@@ -53,12 +53,14 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  flex-wrap: wrap;   /* ✅ allows wrapping on small screens */
+  gap: 12px;         /* ✅ spacing so logo/home don’t collide */
 }
 .brand{
   display:flex;
   align-items:center;
-  justify-content:center;
-  flex:1;
+  justify-content:flex-start;
+  flex-shrink:0;
 }
 .brand img{
   height:64px;
@@ -75,26 +77,22 @@ body{
   display: flex;
   align-items: center;
 }
-
-/* ======================
-   Login Button
-====================== */
 .nav {
-  margin-left:auto;
+  margin-left: auto;
 }
-.login-btn {
+.nav a {
   display:inline-block;
-  padding:8px 18px;
-  border-radius:20px;
+  padding:8px 16px;
+  border-radius:12px;
   font-size:14px;
   font-weight:700;
   text-decoration:none;
   color:#fff;
-  background:linear-gradient(90deg,#FFB44D,#FF8A00);
+  background:linear-gradient(90deg,var(--brand),var(--brand-2));
   box-shadow:var(--shadow);
   transition:opacity 0.2s ease;
 }
-.login-btn:hover {
+.nav a:hover {
   opacity:0.9;
 }
 
@@ -283,6 +281,11 @@ body{
     margin-top: 10px;
     text-align: center;
     letter-spacing: 4px;
+  }
+  .nav {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
   }
 }
 
