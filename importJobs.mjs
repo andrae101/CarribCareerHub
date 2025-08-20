@@ -13,8 +13,8 @@ async function importJobs() {
     const response = await fetch(API_URL);
     const data = await response.json();
 
-    const jobs = data.jobs.slice(0, 10);
-    console.log("Jobs fetched from API:", jobs);
+    const jobs = data.jobs.slice(0, 10); // limit for testing
+    console.log("📥 Jobs fetched from API:", jobs);
 
     const formattedJobs = jobs.map(job => ({
       Title: job.title,
@@ -25,17 +25,20 @@ async function importJobs() {
 
     console.log("🚀 Inserting jobs into Supabase...");
     const { data: inserted, error } = await supabase
-      .from("Jobs")   // match table name too
+      .from("Jobs")   // 👈 must match your table name exactly
       .insert(formattedJobs);
 
     if (error) {
       console.error("❌ Error inserting jobs:", error);
+      console.log("📦 Data we tried to insert:", formattedJobs);
     } else {
       console.log(`✅ Successfully inserted ${inserted.length} jobs`);
+      console.log("Inserted records:", inserted);
     }
   } catch (err) {
-    console.error("💥 Unexpected error:", err);
+    console.error("⚠️ Unexpected error:", err);
   }
 }
 
 importJobs();
+
