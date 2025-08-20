@@ -15,6 +15,8 @@
   </div>
   <nav class="nav">
     <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="login.html" class="post-job">Post Job</a>
   </nav>
 </header>
 
@@ -67,7 +69,7 @@
       <button type="submit" class="btn btn-primary">Submit Job</button>
     </form>
 
-    <p class="note">You must <a href="login.html">sign in</a> or <a href="register.html">create an account</a> before posting a job.</p>
+    <p class="note">🔒 You must <a href="login.html">sign in</a> or <a href="register.html">create an account</a> before posting a job.</p>
   </div>
 </main>
 
@@ -82,18 +84,18 @@
 </footer>
 
 <script>
-  // 🔒 Fake login check
+  // 🔒 Fake login check (front-end only)
   const isLoggedIn = false; // set true if logged in
 
   const form = document.getElementById('postJobForm');
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     if (!isLoggedIn) {
-      alert('You must be signed in to post a job.');
+      alert('⚠️ You must be signed in to post a job.');
       window.location.href = "login.html";
     } else {
-      alert('Job submitted successfully! ✅');
-      // Future: send job data to backend here
+      alert('✅ Job submitted successfully!');
+      // TODO: send job data to backend
     }
   });
 </script>
