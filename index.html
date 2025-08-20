@@ -6,7 +6,7 @@
   <title>CarribCareerHub</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- ✅ Canonical tag to avoid duplicate www/non-www issues -->
+  <!-- ✅ Canonical tag -->
   <link rel="canonical" href="https://carribcareerhub.site/">
 </head>
 <body>
@@ -18,7 +18,6 @@
   
 <header class="header">
   <div class="brand">
-    <!-- 🔄 Logo with SVG + PNG fallback -->
     <picture>
       <source srcset="./assets/logo.svg" type="image/svg+xml">
       <img src="./assets/logo.png" alt="CarribCareerHub logo" class="logo" />
@@ -33,10 +32,8 @@
 <main class="panel">
   <div class="panel-content">
     <section>
-      <!-- 🎯 Main Hero Title -->
       <h1 class="hero-title">Find Your Dream Job</h1>
       
-      <!-- 👤 Employee-focused text -->
       <p class="lede">
         At <strong>CarribCareerHub</strong>, your career journey truly matters.  
         Whether you’re starting out, changing paths, or chasing new ambitions,  
@@ -46,7 +43,6 @@
         Every step you take with us is a step closer to building the future you deserve.  
       </p>
 
-      <!-- 🏢 Employer-focused callout -->
       <p class="employer-callout">
         <strong>Employers:</strong> Need the right people for your business?  
         Post your job today and let us connect you with skilled talent across Jamaica,  
@@ -54,26 +50,25 @@
       </p>
 
       <!-- 🔎 Search form -->
-      <form class="search-row" onsubmit="return false">
+      <form id="searchForm" class="search-row">
         <label class="input">
           <span>🔎</span>
-          <input placeholder="Job title or keyword" />
+          <input id="jobTitle" placeholder="Job title or keyword" />
         </label>
         <label class="input">
           <span>📍</span>
-          <input placeholder="Location (e.g. Jamaica, Barbados)" />
+          <input id="location" placeholder="Location (e.g. Jamaica, Barbados)" />
         </label>
-        <button class="search-btn">Search</button>
+        <button type="submit" class="search-btn">Search</button>
       </form>
 
       <!-- 🚀 Main Actions -->
       <div class="actions">
-        <button class="btn btn-primary">Find Jobs</button>
-        <button class="btn btn-secondary">Post a Job</button>
+        <button id="findJobsBtn" class="btn btn-primary">Find Jobs</button>
+        <button id="postJobBtn" class="btn btn-secondary">Post a Job</button>
       </div>
     </section>
 
-    <!-- 🗺️ Map with SVG + PNG fallback -->
     <aside class="map-wrap">
       <picture>
         <source srcset="./assets/map.svg" type="image/svg+xml">
@@ -93,7 +88,44 @@
   <div class="copy">© 2025 CarribCareerHub</div>
 </footer>
 
-<!-- 🔧 Script file -->
-<script src="script.js"></script>
+<script>
+  // Fake login state (change later when backend exists)
+  const isLoggedIn = false;
+
+  // ✅ Handle Find Jobs button
+  document.getElementById('findJobsBtn').addEventListener('click', () => {
+    if (!isLoggedIn) {
+      alert('You must be signed in to find jobs.');
+      window.location.href = "login.html";
+    } else {
+      const title = document.getElementById('jobTitle').value;
+      const location = document.getElementById('location').value;
+      window.location.href = `jobs.html?title=${encodeURIComponent(title)}&location=${encodeURIComponent(location)}`;
+    }
+  });
+
+  // ✅ Handle Post Job button
+  document.getElementById('postJobBtn').addEventListener('click', () => {
+    if (!isLoggedIn) {
+      alert('You must be signed in to post a job.');
+      window.location.href = "login.html";
+    } else {
+      window.location.href = "post.html";
+    }
+  });
+
+  // ✅ Handle search form submit (works same as Find Jobs)
+  document.getElementById('searchForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!isLoggedIn) {
+      alert('You must be signed in to search jobs.');
+      window.location.href = "login.html";
+    } else {
+      const title = document.getElementById('jobTitle').value;
+      const location = document.getElementById('location').value;
+      window.location.href = `jobs.html?title=${encodeURIComponent(title)}&location=${encodeURIComponent(location)}`;
+    }
+  });
+</script>
 </body>
 </html>
