@@ -2,7 +2,7 @@
 import fetch from "node-fetch";
 import { createClient } from "@supabase/supabase-js";
 
-// 🔑 Supabase credentials
+// 🔑 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk
 const supabaseUrl = "https://fpytvfhynleaivkvuedt.supabase.co";
 const supabaseKey = "YOUR_SUPABASE_ANON_KEY"; 
 const supabase = createClient(supabaseUrl, supabaseKey);
