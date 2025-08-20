@@ -15,8 +15,11 @@
   
 <header class="header">
   <div class="brand">
-    <!-- 🔄 Replace this logo image in ./assets/logo.svg -->
-    <img src="./assets/logo.svg" alt="CarribCareerHub logo" class="logo" />
+    <!-- 🔄 Logo with SVG + PNG fallback -->
+    <picture>
+      <source srcset="./assets/logo.svg" type="image/svg+xml">
+      <img src="./assets/logo.png" alt="CarribCareerHub logo" class="logo" />
+    </picture>
     <span class="brand-name">CARRIB CAREERHUB</span>
   </div>
   <nav class="nav">
@@ -67,9 +70,12 @@
       </div>
     </section>
 
-    <!-- 🗺️ Map (replace ./assets/map.svg to update) -->
+    <!-- 🗺️ Map with SVG + PNG fallback -->
     <aside class="map-wrap">
-      <img src="./assets/map.svg" alt="Caribbean map"/>
+      <picture>
+        <source srcset="./assets/map.svg" type="image/svg+xml">
+        <img src="./assets/map.png" alt="Caribbean map"/>
+      </picture>
     </aside>
   </div>
 </main>
