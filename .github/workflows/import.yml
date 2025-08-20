@@ -1,9 +1,7 @@
 name: Import Jobs to Supabase
 
 on:
-  schedule:
-    - cron: "0 * * * *" # runs every hour
-  workflow_dispatch: # lets you run manually
+  workflow_dispatch:
 
 jobs:
   import:
@@ -19,10 +17,9 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install node-fetch @supabase/supabase-js
+        run: npm install
 
       - name: Run import script
+        run: node importJobs.mjs
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: node importJobs.js
