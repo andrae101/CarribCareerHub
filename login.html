@@ -1,4 +1,4 @@
-<!-- /login.html — Mobile-fixed, tabs for Sign In / Create Account, Supabase v2 integrated -->
+<!-- /login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,61 +7,37 @@
   <title>Sign In • CarribCareerHub</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
-    /* Layout tightening for mobile; keep your theme colors */
-    html, body { height: 100%; }
-    body { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+    html, body { height: 100%; } body { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+    /* Header: logo + single-word brand in one row */
+    .header { max-width:1100px; margin:16px auto 0; padding:0 20px; display:flex; align-items:center; justify-content:center; gap:14px; }
+    .brand { display:flex; align-items:center; gap:14px; flex-wrap:nowrap; }
+    .brand img { width:96px; height:96px; border-radius:14px; object-fit:cover; box-shadow: var(--shadow); }
+    .brand-name { font-size:26px; font-weight:900; letter-spacing:4px; white-space:nowrap; }
+    .nav { display:none; }
 
-    /* Centered brand row under top margin (match index look) */
-    .header {
-      max-width: 1100px; margin: 16px auto 0; padding: 0 20px;
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-    }
-    .brand { display: flex; align-items: center; gap: 14px; }
-    .brand img { width: 96px; height: 96px; border-radius: 14px; object-fit: cover; box-shadow: var(--shadow); }
-    .brand-name { font-size: 26px; font-weight: 900; letter-spacing: 5px; }
-    .nav { display: none; } /* keep page focused */
+    /* Login panel + tabs */
+    .login-panel { max-width:520px; }
+    .tabbar { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; background:#f3f6ff; border-radius:12px; padding:6px; }
+    .tabbar button { border:none; padding:12px 10px; border-radius:10px; font-weight:800; cursor:pointer; background:transparent; color:var(--ink); }
+    .tabbar button.active { background: linear-gradient(90deg, var(--brand), var(--brand-2)); color:#fff; box-shadow: var(--shadow); }
 
-    /* Login panel enhancements */
-    .login-panel { max-width: 520px; }
-    .tabbar {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;
-      background: #f3f6ff; border-radius: 12px; padding: 6px;
-    }
-    .tabbar button {
-      border: none; padding: 12px 10px; border-radius: 10px; font-weight: 800; cursor: pointer;
-      background: transparent; color: var(--ink);
-    }
-    .tabbar button.active {
-      background: linear-gradient(90deg, var(--brand), var(--brand-2));
-      color: #fff; box-shadow: var(--shadow);
-    }
+    .actions-row{ display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+    .link{ color:var(--brand); font-weight:600; text-decoration:none; } .link:hover{ text-decoration:underline; }
+    .btn-primary[disabled]{ opacity:.7; cursor:not-allowed; }
+    .msg{ margin-top:10px; font-size:14px; min-height:20px; } .msg.error{ color:#d12; } .msg.ok{ color:#0a8a2a; }
 
-    .actions-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-    .link { color: var(--brand); font-weight: 600; text-decoration: none; }
-    .link:hover { text-decoration: underline; }
-
-    .btn-primary[disabled] { opacity: .7; cursor: not-allowed; }
-    .msg { margin-top: 10px; font-size: 14px; min-height: 20px; }
-    .msg.error { color: #d12; }
-    .msg.ok { color: #0a8a2a; }
-
-    @media (max-width: 768px){
-      .brand img { width: 110px; height: 110px; }
-      .brand-name { font-size: 24px; letter-spacing: 4px; }
-    }
+    @media (max-width:768px){ .brand img{width:110px;height:110px} .brand-name{font-size:24px;letter-spacing:3px} }
   </style>
 </head>
 <body>
-
 <header class="header">
   <div class="brand">
     <picture>
       <source srcset="./assets/logo.svg" type="image/svg+xml">
       <img src="./assets/logo.png" alt="CarribCareerHub logo" />
     </picture>
-    <div class="brand-name">CARRIB CAREERHUB</div>
+    <div class="brand-name">CARRIBCAREERHUB</div>
   </div>
 </header>
 
@@ -132,28 +108,22 @@
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // Routes
   const DASHBOARD_URL = "dashboard.html";
   const EMAIL_REDIRECT = `${window.location.origin}/${DASHBOARD_URL}`;
 
-  // Tab logic
+  // Tabs
   const tabSignin = document.getElementById('tab-signin');
   const tabSignup = document.getElementById('tab-signup');
   const paneSignin = document.getElementById('pane-signin');
   const paneSignup = document.getElementById('pane-signup');
-  function setTab(which){
-    const signinActive = which === 'in';
-    tabSignin.classList.toggle('active', signinActive);
-    tabSignup.classList.toggle('active', !signinActive);
-    tabSignin.setAttribute('aria-selected', signinActive);
-    tabSignup.setAttribute('aria-selected', !signinActive);
-    paneSignin.style.display = signinActive ? '' : 'none';
-    paneSignup.style.display = signinActive ? 'none' : '';
-  }
-  tabSignin.addEventListener('click', () => setTab('in'));
-  tabSignup.addEventListener('click', () => setTab('up'));
+  function setTab(which){ const si = which==='in';
+    tabSignin.classList.toggle('active', si); tabSignup.classList.toggle('active', !si);
+    tabSignin.setAttribute('aria-selected', si); tabSignup.setAttribute('aria-selected', !si);
+    paneSignin.style.display = si ? '' : 'none'; paneSignup.style.display = si ? 'none' : ''; }
+  tabSignin.addEventListener('click', ()=>setTab('in'));
+  tabSignup.addEventListener('click', ()=>setTab('up'));
 
-  // Auto-redirect if authenticated
+  // Auto redirect if already signed in
   (async () => {
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) window.location.href = DASHBOARD_URL;
@@ -163,80 +133,340 @@
   const loginForm = document.getElementById('login-form');
   const loginBtn  = document.getElementById('login-btn');
   const loginMsg  = document.getElementById('login-msg');
-
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    loginMsg.textContent = "";
-    loginBtn.disabled = true;
-
-    const email = (document.getElementById('email').value || "").trim();
-    const password = document.getElementById('password').value;
-
+  loginForm.addEventListener('submit', async (e)=>{
+    e.preventDefault(); loginMsg.textContent=""; loginBtn.disabled=true;
+    const email=(document.getElementById('email').value||"").trim();
+    const password=document.getElementById('password').value;
     const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      loginMsg.textContent = "❌ " + (error.message || "Sign in failed");
-      loginMsg.className = "msg error";
-      loginBtn.disabled = false;
-      return;
-    }
-    loginMsg.textContent = "✅ Signed in — redirecting…";
-    loginMsg.className = "msg ok";
+    if (error){ loginMsg.textContent="❌ "+(error.message||"Sign in failed"); loginMsg.className="msg error"; loginBtn.disabled=false; return; }
+    loginMsg.textContent="✅ Signed in — redirecting…"; loginMsg.className="msg ok";
     window.location.href = DASHBOARD_URL;
   });
 
   // Forgot password
-  document.getElementById('forgotLink').addEventListener('click', async (e) => {
+  document.getElementById('forgotLink').addEventListener('click', async (e)=>{
     e.preventDefault();
-    const email = (document.getElementById('email').value || "").trim();
-    if (!email) {
-      loginMsg.textContent = "ℹ️ Enter your email above, then click Forgot password.";
-      loginMsg.className = "msg";
-      return;
-    }
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo: EMAIL_REDIRECT
-    });
-    if (error) {
-      loginMsg.textContent = "❌ " + error.message;
-      loginMsg.className = "msg error";
-      return;
-    }
-    loginMsg.textContent = "📧 Password reset email sent. Check your inbox.";
-    loginMsg.className = "msg ok";
+    const email=(document.getElementById('email').value||"").trim();
+    if(!email){ loginMsg.textContent="ℹ️ Enter your email above, then click Forgot password."; loginMsg.className="msg"; return; }
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email,{ redirectTo: EMAIL_REDIRECT });
+    if (error){ loginMsg.textContent="❌ "+error.message; loginMsg.className="msg error"; return; }
+    loginMsg.textContent="📧 Password reset email sent."; loginMsg.className="msg ok";
   });
 
   // Sign Up
-  const signupForm = document.getElementById('signup-form');
-  const signupBtn  = document.getElementById('signup-btn');
-  const signupMsg  = document.getElementById('signup-msg');
-
-  signupForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    signupMsg.textContent = "";
-    signupBtn.disabled = true;
-
-    const email = (document.getElementById('su-email').value || "").trim();
-    const password = document.getElementById('su-password').value;
-
-    const { error } = await supabaseClient.auth.signUp({
-      email, password,
-      options: { emailRedirectTo: EMAIL_REDIRECT }
-    });
-
-    if (error) {
-      signupMsg.textContent = "❌ " + (error.message || "Sign up failed");
-      signupMsg.className = "msg error";
-      signupBtn.disabled = false;
-      return;
-    }
-
-    signupMsg.textContent = "✅ Check your email to confirm. You’ll be redirected after confirmation.";
-    signupMsg.className = "msg ok";
-    signupBtn.disabled = false;
-    setTab('in');
+  const signupForm=document.getElementById('signup-form');
+  const signupBtn=document.getElementById('signup-btn');
+  const signupMsg=document.getElementById('signup-msg');
+  signupForm.addEventListener('submit', async (e)=>{
+    e.preventDefault(); signupMsg.textContent=""; signupBtn.disabled=true;
+    const email=(document.getElementById('su-email').value||"").trim();
+    const password=document.getElementById('su-password').value;
+    const { error } = await supabaseClient.auth.signUp({ email, password, options:{ emailRedirectTo: EMAIL_REDIRECT } });
+    if (error){ signupMsg.textContent="❌ "+(error.message||"Sign up failed"); signupMsg.className="msg error"; signupBtn.disabled=false; return; }
+    signupMsg.textContent="✅ Check your email to confirm."; signupMsg.className="msg ok"; signupBtn.disabled=false; setTab('in');
   });
 </script>
+</body>
+</html>
 
+<!-- /dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>User Dashboard - CarribCareerHub</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* Header: logo + single-word brand */
+    .header{ max-width:1100px; margin:16px auto 0; padding:0 20px; display:flex; align-items:center; justify-content:center; gap:14px; }
+    .brand{ display:flex; align-items:center; gap:14px; flex-wrap:nowrap; }
+    .brand .logo{ width:96px; height:96px; border-radius:14px; object-fit:cover; box-shadow:var(--shadow); }
+    .brand-name{ font-size:26px; font-weight:900; letter-spacing:4px; white-space:nowrap; }
+
+    /* Additive dashboard tweaks */
+    .topbar{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; }
+    .user-menu{ display:flex; align-items:center; gap:10px; font-weight:700 }
+    .user-menu img{ width:40px; height:40px; border-radius:50% }
+    .main{ flex:1; background:var(--panel); border-radius:var(--radius); box-shadow:var(--shadow); padding:28px }
+    .sidebar h2{ margin:0 0 8px 0; font-size:18px }
+    .sidebar nav ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px }
+    .sidebar nav a{ display:block; padding:12px 14px; border-radius:12px; text-decoration:none; font-weight:700; color:var(--ink) }
+    .sidebar nav a.active{ background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow) }
+    .tab-content{ display:none } .tab-content.active{ display:block }
+    .card{ background:#fff; border:1px solid #e4ecff; border-radius:14px; padding:18px 20px; box-shadow:var(--shadow); margin-bottom:16px }
+    .jobs-list{ display:grid; gap:16px }
+    .job-card{ background:var(--panel); border:1px solid #e4ecff; border-radius:14px; padding:18px 20px; box-shadow:var(--shadow); display:flex; justify-content:space-between; align-items:center; gap:12px }
+    .job-card h4{ margin:0 0 6px } .meta{ color:var(--muted); font-size:14px; margin:0 }
+    .save-btn{ background:none; border:none; font-size:20px; cursor:pointer; color:var(--muted); transition:transform .15s }
+    .save-btn.saved{ color:var(--accent); transform:scale(1.12) }
+    .toggle-theme{ margin-top:8px; padding:10px 14px; border-radius:12px; border:none; font-weight:700; background:var(--accent); color:#fff; box-shadow:var(--shadow); cursor:pointer }
+    @media (max-width:992px){ .dashboard{ flex-direction:column } .sidebar{ position:static; flex-direction:row; gap:10px } .sidebar nav ul{ flex-direction:row; flex-wrap:wrap } }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="brand">
+      <img src="./assets/logo.svg" alt="CarribCareerHub logo" class="logo" />
+      <div class="brand-name">CARRIBCAREERHUB</div>
+    </div>
+    <nav class="nav" style="margin-left:auto; display:flex; gap:10px;">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="#" id="logoutLink">Log Out</a>
+    </nav>
+  </header>
+
+  <main class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Dashboard</h2>
+      <nav>
+        <ul>
+          <li><a href="#" class="tab-link active" data-tab="profile">👤 Profile</a></li>
+          <li><a href="#" class="tab-link" data-tab="jobs">💼 Jobs</a></li>
+          <li><a href="#" class="tab-link" data-tab="saved">⭐ Saved Jobs</a></li>
+        </ul>
+      </nav>
+      <button class="toggle-theme" id="toggleTheme">🌙 Dark Mode</button>
+    </aside>
+
+    <!-- Main content -->
+    <div class="main">
+      <header class="topbar">
+        <h1 id="tab-title">Profile</h1>
+        <div class="user-menu">
+          <span class="username" id="username">Loading…</span>
+          <img id="avatar" src="https://via.placeholder.com/80" alt="User Avatar">
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- Profile -->
+        <section id="profile" class="tab-content active">
+          <div class="card" style="display:flex; align-items:center; gap:14px;">
+            <img id="profilePic" src="https://via.placeholder.com/100" alt="Profile Picture" style="width:100px;height:100px;border-radius:50%;object-fit:cover">
+            <div>
+              <h3 id="profileName">Your Name</h3>
+              <p id="profileEmail" class="meta">Email: loading…</p>
+              <div style="display:flex; gap:10px; margin-top:8px;">
+                <button class="btn btn-primary" id="btnUpdatePic">Update Picture</button>
+                <button class="btn btn-secondary" id="btnUploadCV">Upload CV</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Applied Jobs</h3>
+            <ul id="appliedList" style="padding-left:18px;margin:8px 0 0 0">
+              <li>Sample application — replace with real data</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Account Settings</h3>
+            <form id="accountForm">
+              <label>Name <input id="acctName" type="text" placeholder="Your Name"></label>
+              <label>Email <input id="acctEmail" type="email" placeholder="you@example.com"></label>
+              <label>Password <input id="acctPassword" type="password" placeholder="••••••••"></label>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+              <p id="accountMsg" class="meta" style="margin-top:8px"></p>
+            </form>
+          </div>
+        </section>
+
+        <!-- Jobs -->
+        <section id="jobs" class="tab-content">
+          <div class="card">
+            <h3>Find Jobs</h3>
+            <div class="search-row">
+              <div class="input"><input id="jobQuery" type="text" placeholder="Job title or keyword"></div>
+              <div class="input"><input id="jobLocation" type="text" placeholder="Location"></div>
+              <button class="search-btn" id="btnSearch">Search</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Categories</h3>
+            <div class="job-categories">
+              <button class="active" data-cat="">All</button>
+              <button data-cat="Full-time">Full-time</button>
+              <button data-cat="Part-time">Part-time</button>
+              <button data-cat="Remote">Remote</button>
+              <button data-cat="On-site">On-site</button>
+            </div>
+          </div>
+
+          <div class="jobs-list" id="jobsList"></div>
+          <div style="text-align:center;margin-top:10px"><button class="btn btn-secondary" id="btnMore" style="display:none">Load More</button></div>
+        </section>
+
+        <!-- Saved -->
+        <section id="saved" class="tab-content">
+          <div class="card">
+            <h3>Saved Jobs</h3>
+            <div class="jobs-list" id="savedList"></div>
+            <p id="savedEmpty" class="meta" style="display:none">No saved jobs yet.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="links">
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <div class="copy">© 2025 CarribCareerHub</div>
+  </footer>
+
+  <script>
+    // ===== Supabase Init =====
+    const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const LOGIN_PAGE = "login.html";
+
+    // ===== Session Guard =====
+    (async () => {
+      const { data:{ session } } = await supabaseClient.auth.getSession();
+      if (!session) window.location.href = LOGIN_PAGE;
+      if (session?.user) {
+        const user = session.user;
+        document.getElementById('username').textContent = user.user_metadata?.full_name || user.email;
+        document.getElementById('profileName').textContent = user.user_metadata?.full_name || "Your Name";
+        document.getElementById('profileEmail').textContent = "Email: " + (user.email || "");
+        document.getElementById('acctEmail').value = user.email || "";
+        document.getElementById('acctName').value = user.user_metadata?.full_name || "";
+      }
+    })();
+
+    // Redirect to login on sign-out events
+    supabaseClient.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") window.location.href = LOGIN_PAGE;
+    });
+
+    // Logout
+    document.getElementById('logoutLink').addEventListener('click', async (e) => {
+      e.preventDefault(); await supabaseClient.auth.signOut();
+    });
+
+    // ===== Tabs (SPA) + Persistence =====
+    const links = Array.from(document.querySelectorAll('.tab-link'));
+    const contents = document.querySelectorAll('.tab-content');
+    const title = document.getElementById('tab-title');
+    function setTab(tab){
+      links.forEach(l=>l.classList.toggle('active', l.dataset.tab===tab));
+      contents.forEach(c=>c.classList.toggle('active', c.id===tab));
+      const activeLink = links.find(l=>l.dataset.tab===tab);
+      title.textContent = activeLink ? activeLink.textContent.replace(/^[^\w]+/,'') : "Dashboard";
+      localStorage.setItem('dashTab', tab);
+    }
+    links.forEach(link=>link.addEventListener('click', (e)=>{ e.preventDefault(); setTab(link.dataset.tab); }));
+    setTab(localStorage.getItem('dashTab') || 'profile');
+
+    // ===== Dark Mode Toggle (persist) =====
+    const toggleTheme = document.getElementById('toggleTheme');
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+    toggleTheme.addEventListener('click', ()=>{
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // ===== Jobs: Fetch + Render + Save ⭐ =====
+    const jobsList = document.getElementById('jobsList');
+    const savedList = document.getElementById('savedList');
+    const savedEmpty = document.getElementById('savedEmpty');
+    const btnMore = document.getElementById('btnMore');
+    const btnSearch = document.getElementById('btnSearch');
+    const jobQuery = document.getElementById('jobQuery');
+    const jobLocation = document.getElementById('jobLocation');
+
+    let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || "[]");
+    let page = 0; const pageSize = 8; let currentCat = "";
+
+    function renderSaved(){
+      savedList.innerHTML = "";
+      if (!savedJobs.length){ savedEmpty.style.display = "block"; return; }
+      savedEmpty.style.display = "none";
+      savedJobs.forEach(job=>{
+        const el = document.createElement('div');
+        el.className = "job-card";
+        el.innerHTML = `
+          <div><h4>${job.title}</h4><p class="meta">${job.company || ""} ${job.location ? "• " + job.location : ""}</p></div>
+          <button class="save-btn saved" data-id="${job.id}" aria-label="Unsave job">⭐</button>`;
+        el.querySelector('.save-btn').addEventListener('click',()=>toggleSave(job));
+        savedList.appendChild(el);
+      });
+    }
+    function isSaved(id){ return savedJobs.some(j=>j.id===id); }
+    function toggleSave(job){
+      const idx = savedJobs.findIndex(j=>j.id===job.id);
+      if (idx >= 0) savedJobs.splice(idx,1); else savedJobs.push(job);
+      localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+      document.querySelectorAll(`.save-btn[data-id="${job.id}"]`).forEach(btn=>btn.classList.toggle('saved', isSaved(job.id)));
+      renderSaved();
+    }
+    function makeJobCard(job){
+      const el = document.createElement('div'); el.className = "job-card";
+      const id = String(job.id ?? job.uuid ?? job.slug ?? `${job.title}-${job.created_at}`);
+      el.innerHTML = `
+        <div><h4>${job.title || "Untitled role"}</h4>
+        <p class="meta">${job.company || ""} ${job.location ? "• " + job.location : ""} ${job.type ? "• " + job.type : ""}</p></div>
+        <button class="save-btn ${isSaved(id) ? "saved":""}" data-id="${id}" aria-label="Save job">⭐</button>`;
+      el.querySelector('.save-btn').addEventListener('click', ()=>{
+        toggleSave({ id, title: job.title || "Untitled role", company: job.company || "", location: job.location || "" });
+      });
+      return el;
+    }
+    async function loadJobs(reset=false){
+      if (reset){ page = 0; jobsList.innerHTML = ""; }
+      const from = page * pageSize; const to = from + pageSize - 1;
+      let query = supabaseClient.from('jobs').select('*').order('created_at', { ascending: false }).range(from, to);
+      const q = (jobQuery.value || "").trim(); const loc = (jobLocation.value || "").trim();
+      if (currentCat) query = query.eq('type', currentCat);
+      const { data, error } = await query;
+      if (error){ console.error(error); jobsList.innerHTML = `<p class="meta">❌ Failed to load jobs.</p>`; btnMore.style.display = "none"; return; }
+      let rows = data || [];
+      if (q) rows = rows.filter(r => (r.title||"").toLowerCase().includes(q.toLowerCase()) || (r.description||"").toLowerCase().includes(q.toLowerCase()));
+      if (loc) rows = rows.filter(r => (r.location||"").toLowerCase().includes(loc.toLowerCase()));
+      rows.forEach(job => jobsList.appendChild(makeJobCard(job)));
+      btnMore.style.display = rows.length === pageSize ? "inline-block" : "none";
+    }
+    document.querySelectorAll('.job-categories button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.job-categories button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active'); currentCat = btn.dataset.cat || ""; loadJobs(true);
+      });
+    });
+    btnSearch.addEventListener('click', ()=>loadJobs(true));
+    document.getElementById('btnMore').addEventListener('click', ()=>{ page++; loadJobs(false); });
+    supabaseClient.channel('jobs-updates').on('postgres_changes', { event:'*', schema:'public', table:'jobs' }, () => loadJobs(true)).subscribe();
+
+    renderSaved(); loadJobs(true);
+
+    // Account form demo
+    document.getElementById('accountForm').addEventListener('submit', async (e)=>{
+      e.preventDefault(); const msg = document.getElementById('accountMsg'); msg.textContent = "Saving…";
+      const full_name = (document.getElementById('acctName').value || "").trim();
+      const newEmail = (document.getElementById('acctEmail').value || "").trim();
+      const newPass  = document.getElementById('acctPassword').value;
+      try{
+        if (full_name){ const { error } = await supabaseClient.auth.updateUser({ data:{ full_name } }); if (error) throw error; }
+        if (newEmail){ const { error } = await supabaseClient.auth.updateUser({ email: newEmail }); if (error) throw error; }
+        if (newPass){ const { error } = await supabaseClient.auth.updateUser({ password: newPass }); if (error) throw error; }
+        msg.textContent = "✅ Saved.";
+      }catch(err){ console.error(err); msg.textContent = "❌ " + (err.message || "Update failed."); }
+    });
+
+    // Placeholder upload actions
+    document.getElementById('btnUpdatePic').addEventListener('click', ()=>alert('Profile photo upload not yet wired.'));
+    document.getElementById('btnUploadCV').addEventListener('click', ()=>alert('CV upload not yet wired.'));
+  </script>
 </body>
 </html>
