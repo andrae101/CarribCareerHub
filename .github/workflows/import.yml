@@ -1,14 +1,16 @@
-name: Import Jobs to Supabase
+name: Import Jobs
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:   # lets you trigger manually
+  schedule:
+    - cron: "0 * * * *"   # runs every hour (optional)
 
 jobs:
   import:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -19,8 +21,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run import script
-        run: npm start
+      - name: Run import jobs script
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: node importJobs.mjs
