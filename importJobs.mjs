@@ -1,12 +1,12 @@
 import fetch from "node-fetch";
 import { createClient } from "@supabase/supabase-js";
 
-// ✅ Use environment variables for security
+// ✅ Use environment variable for your Supabase key
 const supabaseUrl = "https://fpytvfhynleaivkvuedt.supabase.co";
-const supabaseKey = process.env.SUPABASE_KEY;  // <-- pulled from GitHub Actions secret
+const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Example API: Remotive (free job API)
+// Example API: Remotive jobs
 const API_URL = "https://remotive.com/api/remote-jobs?category=software-dev";
 
 async function importJobs() {
@@ -14,7 +14,7 @@ async function importJobs() {
     const response = await fetch(API_URL);
     const data = await response.json();
 
-    const jobs = data.jobs.slice(0, 10); // get top 10 jobs only
+    const jobs = data.jobs.slice(0, 10); // top 10 jobs
 
     for (let job of jobs) {
       const { error } = await supabase.from("jobs").insert({
