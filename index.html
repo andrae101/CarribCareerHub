@@ -1,273 +1,283 @@
+<!-- /index.html — Mobile-fixed landing; centered logo; big login CTA; latest jobs kept; map responsive with fallback -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>CarribCareerHub</title>
+
+  <!-- Base site CSS (your unified theme with dashboard styles) -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- ✅ Canonical tag -->
+  <!-- Canonical -->
   <link rel="canonical" href="https://carribcareerhub.site/">
 
+  <!-- Perf: preconnect for Supabase + font smoothing -->
+  <link rel="preconnect" href="https://fpytvfhynleaivkvuedt.supabase.co" crossorigin>
+  <meta name="theme-color" content="#1E6CFF">
   <style>
-    /* 🎨 Highlight Banner Styling */
+    /* ---- Mobile & overflow fixes ---- */
+    html, body { height: 100%; }
+    body { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+
+    /* ---- Banner (kept) ---- */
     .highlight-banner {
       background: linear-gradient(90deg, #0077b6, #00b4d8);
-      color: #fff;
-      text-align: center;
-      padding: 0.8rem 1rem;
-      font-weight: 600;
-      font-size: 1rem;
-      animation: fadeIn 1.2s ease-in-out;
-      border-bottom: 2px solid rgba(255,255,255,0.3);
-      transition: background 0.6s ease-in-out, text-shadow 0.3s;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .highlight-banner:hover {
-      background: linear-gradient(90deg, #0096c7, #48cae4);
-      text-shadow: 0px 0px 6px rgba(255,255,255,0.7);
+      color: #fff; text-align: center;
+      padding: .8rem 1rem; font-weight: 600; font-size: 1rem;
+      border-bottom: 2px solid rgba(255,255,255,.3);
     }
 
-    /* 📝 Jobs List */
-    .jobs-list {
-      margin-top: 2rem;
+    /* ---- Centered brand under banner ---- */
+    .header {
+      max-width: 1100px; margin: 16px auto 0; padding: 0 20px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
     }
+    .brand { display: flex; align-items: center; justify-content: center; gap: 14px; }
+    .brand .logo {
+      width: 104px; height: 104px; /* larger on phones too */
+      border-radius: 14px; object-fit: cover;
+      box-shadow: 0 10px 30px rgba(16,40,120,.12);
+    }
+    .brand-name { font-size: 26px; font-weight: 900; letter-spacing: 5px; }
+
+    /* Hide old top-right login (we use big CTAs) */
+    .nav { display: none; }
+
+    /* ---- Panel spacing ---- */
+    .panel { max-width: 1100px; margin: 16px auto 40px; padding: 24px; }
+    .panel-content { display: grid; grid-template-columns: 1.1fr .9fr; gap: 24px; }
+    @media (max-width: 768px) { .panel-content { grid-template-columns: 1fr; } }
+
+    /* ---- Remove search + action switches (kept Latest Jobs) ---- */
+    #searchForm, .actions { display: none !important; }
+
+    /* ---- Floating Login CTA ---- */
+    .login-fab{
+      position: fixed; top: 12px; right: 12px; z-index: 1000;
+      border: none; border-radius: 999px; padding: 12px 18px;
+      font-weight: 900; font-size: 15px; color: #fff;
+      background: linear-gradient(90deg, #1E6CFF, #3FA2FF);
+      box-shadow: 0 10px 30px rgba(16,40,120,.12); cursor: pointer;
+    }
+
+    /* ---- Hero CTA (primary) ---- */
+    .hero-cta { margin-top: 18px; display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn { border: none; border-radius: 12px; padding: 14px 22px; font-weight: 800; font-size: 16px; cursor: pointer; }
+    .btn-primary { color: #fff; background: linear-gradient(90deg, #1E6CFF, #3FA2FF); box-shadow: 0 10px 30px rgba(16,40,120,.12); }
+    .btn-ghost { background: #fff; border: 1px solid #E4ECFF; color: #0A2458; }
+
+    /* ---- Map: responsive + fallback ---- */
+    .map-wrap {
+      position: relative; width: 100%; max-width: 900px; margin: 0 auto;
+      background: #fff; border: 1px solid #e4ecff; border-radius: 14px; box-shadow: 0 10px 30px rgba(16,40,120,.12);
+      overflow: hidden;
+    }
+    /* Modern aspect ratio */
+    .map-img { width: 100%; height: auto; display: block; object-fit: contain; aspect-ratio: 16 / 9; }
+    /* Fallback for older browsers */
+    @supports not (aspect-ratio: 1 / 1) {
+      .map-aspect { position: relative; width: 100%; }
+      .map-aspect::before { content: ""; display: block; padding-top: 56.25%; } /* 16:9 */
+      .map-aspect > .map-img {
+        position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+      }
+    }
+
+    /* ---- Jobs (kept) ---- */
+    .jobs-list { margin-top: 2rem; }
     .job-card {
-      border: 1px solid #ddd;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 6px;
-      transition: box-shadow 0.2s;
+      border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 6px;
+      transition: box-shadow .2s; background: #fff;
     }
-    .job-card:hover {
-      box-shadow: 0px 3px 8px rgba(0,0,0,0.1);
-    }
-    .job-title {
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    .job-company {
-      color: #555;
-    }
-    .job-location {
-      font-style: italic;
-      color: #0077b6;
-    }
+    .job-card:hover { box-shadow: 0 3px 8px rgba(0,0,0,.1); }
+    .job-title { font-size: 1.2rem; font-weight: bold; margin: 0 0 6px; }
+    .job-company { color: #555; font-weight: 600; }
+    .job-location { font-style: italic; color: #0077b6; }
     .load-more {
-      display: block;
-      margin: 1rem auto;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      background: #0077b6;
-      color: white;
-      cursor: pointer;
-      transition: background 0.2s;
+      display: block; margin: 1rem auto; padding: .8rem 1.5rem;
+      font-size: 1rem; font-weight: bold; border: none; border-radius: 6px;
+      background: #0077b6; color: #fff; cursor: pointer; transition: background .2s;
     }
-    .load-more:hover {
-      background: #0096c7;
+    .load-more:hover { background: #0096c7; }
+
+    /* ---- Mobile polish ---- */
+    @media (max-width: 768px){
+      .login-fab { top: 10px; right: 10px; font-size: 14px; padding: 12px 16px; }
+      .brand .logo { width: 104px; height: 104px; }
+      .brand-name { font-size: 24px; letter-spacing: 4px; }
+      .lede { font-size: 15px; }
     }
   </style>
 </head>
 <body>
+  <!-- Floating Login CTA -->
+  <button class="login-fab" id="loginFab" aria-label="Login or Sign Up">Login / Sign Up</button>
 
-<!-- 🌟 Top Highlight Banner -->
-<div class="highlight-banner">
-  💼 Unlock Caribbean Opportunities 🌴 | Find jobs across Jamaica 🇯🇲, Barbados 🇧🇧 & Trinidad 🇹🇹
-</div>
-  
-<header class="header">
-  <div class="brand">
-    <picture>
-      <source srcset="./assets/logo.svg" type="image/svg+xml">
-      <img src="./assets/logo.png" alt="CarribCareerHub logo" class="logo" />
-    </picture>
-    <span class="brand-name">CARRIB CAREERHUB</span>
+  <!-- Banner -->
+  <div class="highlight-banner">
+    💼 Unlock Caribbean Opportunities 🌴 | Find jobs across Jamaica 🇯🇲, Barbados 🇧🇧 & Trinidad 🇹🇹
   </div>
-  <nav class="nav">
-    <a href="login.html" class="login-btn">Login</a>
-  </nav>
-</header>
 
-<main class="panel">
-  <div class="panel-content">
-    <section>
-      <h1 class="hero-title">Find Your Dream Job</h1>
-      
-      <p class="lede">
-        At <strong>CarribCareerHub</strong>, your career journey truly matters.  
-        Whether you’re starting out, changing paths, or chasing new ambitions,  
-        we’re here to guide you toward the opportunities that fit your unique goals.  
-      </p>
-
-      <p class="employer-callout">
-        <strong>Employers:</strong> Need the right people for your business?  
-        Post your job today and let us connect you with skilled talent across Jamaica,  
-        Barbados, Trinidad, and the wider Caribbean.  
-      </p>
-
-      <!-- 🔎 Search form -->
-      <form id="searchForm" class="search-row">
-        <label class="input">
-          <span>🔎</span>
-          <input id="jobTitle" placeholder="Job title or keyword" />
-        </label>
-        <label class="input">
-          <span>📍</span>
-          <input id="location" placeholder="Location (e.g. Jamaica, Barbados)" />
-        </label>
-        <button type="submit" class="search-btn">Search</button>
-      </form>
-
-      <!-- 🚀 Main Actions -->
-      <div class="actions">
-        <button id="findJobsBtn" class="btn btn-primary">Find Jobs</button>
-        <button id="postJobBtn" class="btn btn-secondary">Post a Job</button>
-      </div>
-
-      <!-- 📌 Jobs Section -->
-      <div class="jobs-list" id="jobsList">
-        <h2>Latest Jobs</h2>
-        <div id="jobsContainer">Loading jobs...</div>
-        <button id="loadMoreBtn" class="load-more" style="display:none;">Load More</button>
-      </div>
-    </section>
-
-    <aside class="map-wrap">
+  <!-- Centered brand under banner -->
+  <header class="header">
+    <div class="brand">
       <picture>
-        <source srcset="./assets/map.svg" type="image/svg+xml">
-        <img src="./assets/map.png" alt="Caribbean map"/>
+        <source srcset="./assets/logo.svg" type="image/svg+xml">
+        <!-- Explicit size hints help Lighthouse/CLS -->
+        <img src="./assets/logo.png" alt="CarribCareerHub logo" class="logo" width="208" height="208" />
       </picture>
-    </aside>
-  </div>
-</main>
-  
-<footer class="footer">
-  <div class="links">
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="terms.html">Terms</a>
-  </div>
-  <div class="copy">© 2025 CarribCareerHub</div>
-</footer>
+      <span class="brand-name">CARRIB CAREERHUB</span>
+    </div>
+  </header>
 
-<!-- ✅ Supabase client -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script>
-  // 🔑 Connect to Supabase
-  const supabaseUrl = "https://fpytvfhynleaivkvuedt.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
-  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+  <main class="panel">
+    <div class="panel-content">
+      <section>
+        <h1 class="hero-title">Find Your Dream Job</h1>
 
-  let isLoggedIn = false; // fake login
-  let currentPage = 0;
-  const pageSize = 5;
+        <p class="lede">
+          At <strong>CarribCareerHub</strong>, your career journey truly matters.
+          Whether you’re starting out, changing paths, or chasing new ambitions,
+          we’re here to guide you toward opportunities that fit your unique goals.
+        </p>
 
-  const jobsContainer = document.getElementById('jobsContainer');
-  const loadMoreBtn = document.getElementById('loadMoreBtn');
+        <p class="employer-callout">
+          <strong>Employers:</strong> Need the right people for your business?
+          Post your job today and let us connect you with skilled talent across Jamaica,
+          Barbados, Trinidad, and the wider Caribbean.
+        </p>
 
-  // 🔎 Fetch jobs with pagination
-  async function loadJobs(reset = false) {
-    if (reset) {
-      currentPage = 0;
-      jobsContainer.innerHTML = "Loading jobs...";
-    }
+        <!-- Big primary CTA -->
+        <div class="hero-cta">
+          <button id="loginHero" class="btn btn-primary">Login / Sign Up</button>
+          <button id="learnMoreBtn" class="btn btn-ghost" aria-label="Jump to Latest Jobs">Learn more</button>
+        </div>
 
-    const from = currentPage * pageSize;
-    const to = from + pageSize - 1;
+        <!-- Latest Jobs (kept) -->
+        <div class="jobs-list" id="jobsList">
+          <h2>Latest Jobs</h2>
+          <div id="jobsContainer">Loading jobs...</div>
+          <button id="loadMoreBtn" class="load-more" style="display:none;">Load More</button>
+        </div>
+      </section>
 
-    const { data, error } = await supabaseClient
-      .from('jobs')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .range(from, to);
+      <!-- Map (responsive, no overflow; includes fallback wrapper) -->
+      <aside class="map-wrap">
+        <div class="map-aspect">
+          <picture>
+            <source srcset="./assets/map.svg" type="image/svg+xml">
+            <img
+              src="./assets/map.png"
+              class="map-img"
+              alt="Caribbean map"
+              loading="lazy"
+              width="1600"
+              height="900"
+            />
+          </picture>
+        </div>
+      </aside>
+    </div>
+  </main>
 
-    if (error) {
-      console.error(error);
-      jobsContainer.innerHTML = "❌ Failed to load jobs.";
-      return;
-    }
+  <footer class="footer">
+    <div class="links">
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <div class="copy">© 2025 CarribCareerHub</div>
+  </footer>
 
-    if (reset) jobsContainer.innerHTML = "";
+  <!-- Supabase client -->
+  <script defer src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    // Wait for Supabase lib
+    window.addEventListener('load', () => {
+      // Supabase init
+      const supabaseUrl = "https://fpytvfhynleaivkvuedt.supabase.co";
+      const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+      const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    if (data.length === 0 && reset) {
-      jobsContainer.innerHTML = "No jobs available yet.";
-      loadMoreBtn.style.display = "none";
-      return;
-    }
+      // Single place for login route
+      const LOGIN_URL = "login.html"; // set to your Supabase hosted auth URL if needed
 
-    data.forEach(job => {
-      const card = document.createElement('div');
-      card.className = "job-card";
-      card.innerHTML = `
-        <div class="job-title">${job.title}</div>
-        <div class="job-company">${job.company}</div>
-        <div class="job-location">${job.location}</div>
-        <p>${job.description || ""}</p>
-      `;
-      jobsContainer.appendChild(card);
+      // CTAs
+      const goLogin = () => { window.location.href = LOGIN_URL; };
+      document.getElementById('loginFab').addEventListener('click', goLogin);
+      document.getElementById('loginHero').addEventListener('click', goLogin);
+      document.getElementById('learnMoreBtn').addEventListener('click', () => {
+        document.getElementById('jobsList')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      // Jobs pagination
+      let currentPage = 0;
+      const pageSize = 5;
+      const jobsContainer = document.getElementById('jobsContainer');
+      const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+      async function loadJobs(reset = false) {
+        if (reset) {
+          currentPage = 0;
+          jobsContainer.textContent = "Loading jobs...";
+        }
+
+        const from = currentPage * pageSize;
+        const to = from + pageSize - 1;
+
+        const { data, error } = await supabaseClient
+          .from('jobs')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .range(from, to);
+
+        if (error) {
+          console.error(error);
+          jobsContainer.textContent = "❌ Failed to load jobs.";
+          loadMoreBtn.style.display = "none";
+          return;
+        }
+
+        if (reset) jobsContainer.innerHTML = "";
+
+        if (data.length === 0 && reset) {
+          jobsContainer.textContent = "No jobs available yet.";
+          loadMoreBtn.style.display = "none";
+          return;
+        }
+
+        data.forEach(job => {
+          const card = document.createElement('div');
+          card.className = "job-card";
+          card.innerHTML = `
+            <div class="job-title">${job.title || ""}</div>
+            <div class="job-company">${job.company || ""}</div>
+            <div class="job-location">${job.location || ""}</div>
+            <p>${job.description ? job.description : ""}</p>
+          `;
+          jobsContainer.appendChild(card);
+        });
+
+        loadMoreBtn.style.display = data.length === pageSize ? "block" : "none";
+      }
+
+      // Initial load
+      loadJobs(true);
+
+      // Load more
+      loadMoreBtn.addEventListener('click', () => {
+        currentPage++;
+        loadJobs();
+      });
+
+      // Realtime refresh on jobs change
+      supabaseClient
+        .channel('jobs-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs' }, () => loadJobs(true))
+        .subscribe();
     });
-
-    // Show "Load More" only if there might be more jobs
-    loadMoreBtn.style.display = data.length === pageSize ? "block" : "none";
-  }
-
-  loadJobs(true);
-
-  // 📌 Load More button
-  loadMoreBtn.addEventListener('click', () => {
-    currentPage++;
-    loadJobs();
-  });
-
-  // ✅ Realtime listener: refresh list when jobs change
-  supabaseClient
-    .channel('jobs-changes')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs' }, () => {
-      loadJobs(true); // refresh from start
-    })
-    .subscribe();
-
-  // 🔎 Handle Find Jobs button
-  document.getElementById('findJobsBtn').addEventListener('click', () => {
-    if (!isLoggedIn) {
-      alert('You must be signed in to find jobs.');
-      window.location.href = "login.html";
-    } else {
-      const title = document.getElementById('jobTitle').value;
-      const location = document.getElementById('location').value;
-      window.location.href = `jobs.html?title=${encodeURIComponent(title)}&location=${encodeURIComponent(location)}`;
-    }
-  });
-
-  // 📝 Handle Post Job button
-  document.getElementById('postJobBtn').addEventListener('click', () => {
-    if (!isLoggedIn) {
-      alert('You must be signed in to post a job.');
-      window.location.href = "login.html";
-    } else {
-      window.location.href = "post.html";
-    }
-  });
-
-  // 🔎 Handle search form submit
-  document.getElementById('searchForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (!isLoggedIn) {
-      alert('You must be signed in to search jobs.');
-      window.location.href = "login.html";
-    } else {
-      const title = document.getElementById('jobTitle').value;
-      const location = document.getElementById('location').value;
-      window.location.href = `jobs.html?title=${encodeURIComponent(title)}&location=${encodeURIComponent(location)}`;
-    }
-  });
-</script>
+  </script>
 </body>
 </html>
