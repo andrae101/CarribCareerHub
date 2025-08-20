@@ -1,44 +1,46 @@
-import fetch from "node-fetch";
+// importJobs.mjs
+import fetch from "node-fetch"; 
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// 🔹 Hardcoded Supabase credentials
+const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
 
-const API_URL = "https://remotive.com/api/remote-jobs";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Example API (you can replace with your real jobs API)
+const JOBS_API = "https://remotive.com/api/remote-jobs";
 
 async function importJobs() {
   try {
-    console.log("🔍 Fetching jobs from API...");
-    const response = await fetch(API_URL);
-    const data = await response.json();
+    console.log("📡 Fetching jobs from API...");
+    const response = await fetch(JOBS_API);
+    const json = await response.json();
 
-    const jobs = data.jobs.slice(0, 10); // limit for testing
-    console.log("📥 Jobs fetched from API:", jobs);
-
-    const formattedJobs = jobs.map(job => ({
+    const jobs = json.jobs.map(job => ({
       Title: job.title,
       Company: job.company_name,
       Location: job.candidate_required_location,
-      Description: job.description
+      Description: job.description,
+      Url: job.url,
+      DatePosted: job.publication_date
     }));
 
-    console.log("🚀 Inserting jobs into Supabase...");
-    const { data: inserted, error } = await supabase
-      .from("Jobs")   // 👈 must match your table name exactly
-      .insert(formattedJobs);
+    console.log(`✅ Fetched ${jobs.length} jobs from API`);
+
+    // Insert into Supabase
+    const { data, error } = await supabase
+      .from("Jobs")
+      .insert(jobs);
 
     if (error) {
       console.error("❌ Error inserting jobs:", error);
-      console.log("📦 Data we tried to insert:", formattedJobs);
     } else {
-      console.log(`✅ Successfully inserted ${inserted.length} jobs`);
-      console.log("Inserted records:", inserted);
+      console.log("🎉 Jobs inserted into Supabase:", data);
     }
   } catch (err) {
-    console.error("⚠️ Unexpected error:", err);
+    console.error("⚠️ Import failed:", err.message);
   }
 }
 
 importJobs();
-
