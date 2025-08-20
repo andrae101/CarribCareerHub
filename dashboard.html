@@ -1,4 +1,4 @@
-<!-- /dashboard.html — SPA tabs (Profile, Jobs, Saved), Supabase guard, Saved ⭐, Dark Mode, mobile-polished -->
+<!-- /dashboard.html — Glassmorphism + Hover + Skeletons; SPA tabs; Supabase guard; Saved ⭐ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,29 +9,116 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    /* Small, additive tweaks (uses your existing style.css theme) */
-    .topbar{
-      display:flex;justify-content:space-between;align-items:center;gap:12px;
-      margin-bottom:18px;
+    :root{
+      --glass-bg: rgba(255,255,255,0.65);
+      --glass-stroke: rgba(255,255,255,0.5);
+      --glass-shadow: 0 10px 30px rgba(16,40,120,0.14);
+      --glass-blur: 14px;
+      --ring: 0 0 0 3px rgba(30,108,255,0.18);
+      --lift: translateY(-4px) scale(1.01);
     }
-    .user-menu{display:flex;align-items:center;gap:10px;font-weight:700}
-    .user-menu img{width:40px;height:40px;border-radius:50%}
-    .main{flex:1;background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px}
-    .sidebar h2{margin:0 0 8px 0;font-size:18px}
+    body.dark{
+      --glass-bg: rgba(20,26,40,0.55);
+      --glass-stroke: rgba(200,220,255,0.14);
+      --glass-shadow: 0 12px 36px rgba(0,0,0,0.35);
+      --ring: 0 0 0 3px rgba(63,162,255,0.22);
+    }
+
+    /* Header: logo + single-word brand */
+    .header{
+      max-width:1100px;margin:16px auto 0;padding:0 20px;
+      display:flex;align-items:center;justify-content:center;gap:14px;
+    }
+    .brand{display:flex;align-items:center;gap:14px;flex-wrap:nowrap}
+    .brand .logo{width:96px;height:96px;border-radius:14px;object-fit:cover;box-shadow:var(--shadow)}
+    .brand-name{font-size:26px;font-weight:900;letter-spacing:4px;white-space:nowrap}
+    .nav{margin-left:auto;display:flex;gap:10px}
+    .nav a{padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700;border:1px solid #e4ecff}
+    body.dark .nav a{border-color: rgba(255,255,255,0.14)}
+
+    /* App layout */
+    .dashboard{max-width:1100px;margin:18px auto 40px;padding:0 20px;display:flex;gap:18px}
+
+    /* Glass utility */
+    .glass{
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border:1px solid var(--glass-stroke);
+      border-radius:18px;
+      box-shadow: var(--glass-shadow);
+    }
+
+    /* Sidebar */
+    .sidebar{width:260px;flex:0 0 260px;padding:18px}
+    .sidebar h2{margin:0 0 12px 2px;font-size:16px;font-weight:900;opacity:.9}
     .sidebar nav ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
-    .sidebar nav a{display:block;padding:12px 14px;border-radius:12px;text-decoration:none;font-weight:700;color:var(--ink)}
-    .sidebar nav a.active{background:linear-gradient(90deg,var(--brand),var(--brand-2));color:#fff;box-shadow:var(--shadow)}
+    .sidebar nav a{display:flex;align-items:center;gap:8px;padding:12px 14px;border-radius:12px;font-weight:700;text-decoration:none;border:1px solid transparent;transition:transform .15s ease, box-shadow .15s ease}
+    .sidebar nav a:hover{border-color:var(--glass-stroke)}
+    .sidebar nav a.active{background: rgba(30,108,255,0.12);border-color: rgba(30,108,255,0.28);box-shadow: var(--ring);color: var(--ink)}
+    body.dark .sidebar nav a.active{color:#fff}
+
+    .toggle-theme{margin-top:10px;width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--glass-stroke);font-weight:800;background:transparent;cursor:pointer}
+
+    /* Main + topbar */
+    .main{flex:1;padding:24px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;padding:14px 16px}
+    .user-menu{display:flex;align-items:center;gap:12px;font-weight:800}
+    .user-menu img{width:40px;height:40px;border-radius:50%}
+
     .tab-content{display:none}
     .tab-content.active{display:block}
-    .card{background:#fff;border:1px solid #e4ecff;border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);margin-bottom:16px}
-    .jobs-list{display:grid;gap:16px}
-    .job-item, .job-card{background:var(--panel);border:1px solid #e4ecff;border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;gap:12px}
-    .job-item h3{margin:0 0 6px}
+
+    /* Cards */
+    .card{padding:18px 20px;margin-bottom:16px;transition:transform .18s ease, box-shadow .18s ease}
+    .jobs-list{display:grid;gap:14px}
+    .job-card{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;transition:transform .18s ease, box-shadow .18s ease}
+    .job-card h4{margin:0 0 6px}
     .meta{color:var(--muted);font-size:14px;margin:0}
+    body.dark .meta{color:#c8d0e0}
     .save-btn{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);transition:transform .15s}
     .save-btn.saved{color:var(--accent);transform:scale(1.12)}
-    .toggle-theme{margin-top:8px;padding:10px 14px;border-radius:12px;border:none;font-weight:700;background:var(--accent);color:#fff;box-shadow:var(--shadow);cursor:pointer}
-    @media (max-width:992px){.dashboard{flex-direction:column}.sidebar{position:static;flex-direction:row;gap:10px}.sidebar nav ul{flex-direction:row;flex-wrap:wrap}}
+
+    /* Hover micro-interactions */
+    @media (hover:hover) and (pointer:fine){
+      .card.glass:hover, .job-card.glass:hover{ transform: var(--lift); box-shadow: 0 18px 38px rgba(16,40,120,0.18); }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .card.glass, .job-card.glass{ transition: none; }
+    }
+
+    /* Buttons */
+    .btn{border:none;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease}
+    .btn-primary{color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-2));box-shadow:var(--shadow)}
+    .btn-secondary{color:#fff;background:linear-gradient(90deg,#FFB44D,#FF8A00);box-shadow:var(--shadow)}
+    @media (hover:hover) and (pointer:fine){
+      .btn:hover{ transform: translateY(-2px); box-shadow: 0 12px 26px rgba(16,40,120,.18); }
+      .btn:active{ transform: translateY(0); }
+    }
+
+    /* Inputs */
+    .input{background:transparent}
+    .input input{background:transparent;border:1px solid var(--glass-stroke);border-radius:12px;padding:12px 14px;width:100%}
+
+    /* Skeleton loader */
+    .skeleton{position:relative;overflow:hidden;border-radius:14px}
+    .skeleton::before{
+      content:"";position:absolute;inset:0;
+      background: linear-gradient(90deg, rgba(200,210,230,0.25) 0%, rgba(240,245,255,0.55) 50%, rgba(200,210,230,0.25) 100%);
+      transform: translateX(-100%);
+      animation: shimmer 1.2s infinite;
+    }
+    @keyframes shimmer{ 100%{ transform: translateX(100%); } }
+    .skeleton-line{height:14px;border-radius:8px;background:rgba(255,255,255,0.5)}
+    body.dark .skeleton-line{background:rgba(255,255,255,0.1)}
+    .sk-card{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px}
+    .sk-left{flex:1}
+    .sk-title{width:45%;height:18px;margin-bottom:8px}
+    .sk-meta{width:30%}
+    .sk-action{width:28px;height:28px;border-radius:50%}
+
+    /* Responsive */
+    @media (max-width:992px){ .dashboard{flex-direction:column} .sidebar{width:100%;flex:none} }
   </style>
 </head>
 <body>
@@ -40,7 +127,7 @@
   <header class="header">
     <div class="brand">
       <img src="./assets/logo.svg" alt="CarribCareerHub logo" class="logo" />
-      <div class="brand-name">CARRIB CAREERHUB</div>
+      <div class="brand-name">CARRIBCAREERHUB</div>
     </div>
     <nav class="nav">
       <a href="index.html">Home</a>
@@ -52,7 +139,7 @@
   <!-- App Layout -->
   <main class="dashboard">
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar glass">
       <h2>Dashboard</h2>
       <nav>
         <ul>
@@ -65,8 +152,8 @@
     </aside>
 
     <!-- Main content -->
-    <div class="main">
-      <header class="topbar">
+    <div class="main glass">
+      <header class="topbar glass">
         <h1 id="tab-title">Profile</h1>
         <div class="user-menu">
           <span class="username" id="username">Loading…</span>
@@ -77,38 +164,31 @@
       <div class="content">
         <!-- Profile -->
         <section id="profile" class="tab-content active">
-          <div class="profile-card card">
+          <div class="card glass" style="display:flex; align-items:center; gap:14px;">
             <img id="profilePic" src="https://via.placeholder.com/100" alt="Profile Picture" style="width:100px;height:100px;border-radius:50%;object-fit:cover">
-            <h3 id="profileName">Your Name</h3>
-            <p id="profileEmail">Email: loading…</p>
-            <div class="profile-actions" style="display:flex;gap:10px;flex-wrap:wrap">
-              <button class="btn btn-primary" id="btnUpdatePic">Update Picture</button>
-              <button class="btn btn-secondary" id="btnUploadCV">Upload CV</button>
+            <div>
+              <h3 id="profileName">Your Name</h3>
+              <p id="profileEmail" class="meta">Email: loading…</p>
+              <div style="display:flex; gap:10px; margin-top:8px;">
+                <button class="btn btn-primary" id="btnUpdatePic">Update Picture</button>
+                <button class="btn btn-secondary" id="btnUploadCV">Upload CV</button>
+              </div>
             </div>
           </div>
 
-          <div class="card">
+          <div class="card glass">
             <h3>Applied Jobs</h3>
             <ul id="appliedList" style="padding-left:18px;margin:8px 0 0 0">
               <li>Sample application — replace with real data</li>
             </ul>
           </div>
 
-          <div class="card">
+          <div class="card glass">
             <h3>Account Settings</h3>
             <form id="accountForm">
-              <label>
-                Name
-                <input id="acctName" type="text" placeholder="Your Name">
-              </label>
-              <label>
-                Email
-                <input id="acctEmail" type="email" placeholder="you@example.com">
-              </label>
-              <label>
-                Password
-                <input id="acctPassword" type="password" placeholder="••••••••">
-              </label>
+              <label>Name <input id="acctName" type="text" placeholder="Your Name"></label>
+              <label>Email <input id="acctEmail" type="email" placeholder="you@example.com"></label>
+              <label>Password <input id="acctPassword" type="password" placeholder="••••••••"></label>
               <button type="submit" class="btn btn-primary">Save Changes</button>
               <p id="accountMsg" class="meta" style="margin-top:8px"></p>
             </form>
@@ -117,29 +197,27 @@
 
         <!-- Jobs -->
         <section id="jobs" class="tab-content">
-          <div class="card">
+          <div class="card glass">
             <h3>Find Jobs</h3>
             <div class="search-row">
               <div class="input"><input id="jobQuery" type="text" placeholder="Job title or keyword"></div>
               <div class="input"><input id="jobLocation" type="text" placeholder="Location"></div>
-              <button class="search-btn" id="btnSearch">Search</button>
+              <button class="search-btn btn btn-primary" id="btnSearch">Search</button>
             </div>
           </div>
 
-          <div class="card">
+          <div class="card glass">
             <h3>Categories</h3>
-            <div class="job-categories">
-              <button class="active" data-cat="">All</button>
-              <button data-cat="Full-time">Full-time</button>
-              <button data-cat="Part-time">Part-time</button>
-              <button data-cat="Remote">Remote</button>
-              <button data-cat="On-site">On-site</button>
+            <div class="job-categories" style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn" style="border:1px solid var(--glass-stroke); background:transparent" data-cat="">All</button>
+              <button class="btn" style="border:1px solid var(--glass-stroke); background:transparent" data-cat="Full-time">Full-time</button>
+              <button class="btn" style="border:1px solid var(--glass-stroke); background:transparent" data-cat="Part-time">Part-time</button>
+              <button class="btn" style="border:1px solid var(--glass-stroke); background:transparent" data-cat="Remote">Remote</button>
+              <button class="btn" style="border:1px solid var(--glass-stroke); background:transparent" data-cat="On-site">On-site</button>
             </div>
           </div>
 
-          <div class="jobs-list" id="jobsList">
-            <!-- Filled from Supabase -->
-          </div>
+          <div class="jobs-list" id="jobsList"></div>
 
           <div style="text-align:center;margin-top:10px">
             <button class="btn btn-secondary" id="btnMore" style="display:none">Load More</button>
@@ -148,7 +226,7 @@
 
         <!-- Saved -->
         <section id="saved" class="tab-content">
-          <div class="card">
+          <div class="card glass">
             <h3>Saved Jobs</h3>
             <div class="jobs-list" id="savedList"></div>
             <p id="savedEmpty" class="meta" style="display:none">No saved jobs yet.</p>
@@ -173,14 +251,12 @@
     const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     const LOGIN_PAGE = "login.html";
 
-    // ===== Session Guard =====
+    // Guard
     (async () => {
       const { data:{ session } } = await supabaseClient.auth.getSession();
       if (!session) window.location.href = LOGIN_PAGE;
-      // Update header/profile info
       if (session?.user) {
         const user = session.user;
         document.getElementById('username').textContent = user.user_metadata?.full_name || user.email;
@@ -190,40 +266,24 @@
         document.getElementById('acctName').value = user.user_metadata?.full_name || "";
       }
     })();
+    supabaseClient.auth.onAuthStateChange((event) => { if (event === "SIGNED_OUT") window.location.href = LOGIN_PAGE; });
+    document.getElementById('logoutLink').addEventListener('click', async (e) => { e.preventDefault(); await supabaseClient.auth.signOut(); });
 
-    // Redirect to login on sign-out events
-    supabaseClient.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_OUT") window.location.href = LOGIN_PAGE;
-    });
-
-    // Logout
-    document.getElementById('logoutLink').addEventListener('click', async (e) => {
-      e.preventDefault();
-      await supabaseClient.auth.signOut();
-    });
-
-    // ===== Tabs (SPA) + Persistence =====
-    const links = document.querySelectorAll('.tab-link');
+    // Tabs
+    const links = Array.from(document.querySelectorAll('.tab-link'));
     const contents = document.querySelectorAll('.tab-content');
     const title = document.getElementById('tab-title');
-
     function setTab(tab){
       links.forEach(l=>l.classList.toggle('active', l.dataset.tab===tab));
       contents.forEach(c=>c.classList.toggle('active', c.id===tab));
-      title.textContent = links.find(l=>l.dataset.tab===tab)?.textContent.replace(/^[^\w]+/,'') || "Dashboard";
+      const activeLink = links.find(l=>l.dataset.tab===tab);
+      title.textContent = activeLink ? activeLink.textContent.replace(/^[^\w]+/,'') : "Dashboard";
       localStorage.setItem('dashTab', tab);
     }
-
-    links.forEach(link=>{
-      link.addEventListener('click', (e)=>{
-        e.preventDefault(); setTab(link.dataset.tab);
-      });
-    });
-
-    // Restore last tab
+    links.forEach(link=>link.addEventListener('click', (e)=>{ e.preventDefault(); setTab(link.dataset.tab); }));
     setTab(localStorage.getItem('dashTab') || 'profile');
 
-    // ===== Dark Mode Toggle (persist) =====
+    // Dark mode persist
     const toggleTheme = document.getElementById('toggleTheme');
     if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
     toggleTheme.addEventListener('click', ()=>{
@@ -231,7 +291,7 @@
       localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
     });
 
-    // ===== Jobs: Fetch + Render + Save ⭐ =====
+    // ===== Jobs with Skeleton Loader =====
     const jobsList = document.getElementById('jobsList');
     const savedList = document.getElementById('savedList');
     const savedEmpty = document.getElementById('savedEmpty');
@@ -241,99 +301,95 @@
     const jobLocation = document.getElementById('jobLocation');
 
     let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || "[]");
-    let page = 0;
-    const pageSize = 8;
-    let currentCat = "";
+    let page = 0; const pageSize = 8; let currentCat = "";
 
     function renderSaved(){
       savedList.innerHTML = "";
-      if (!savedJobs.length){
-        savedEmpty.style.display = "block";
-        return;
-      }
+      if (!savedJobs.length){ savedEmpty.style.display = "block"; return; }
       savedEmpty.style.display = "none";
       savedJobs.forEach(job=>{
         const el = document.createElement('div');
-        el.className = "job-card";
+        el.className = "job-card glass";
         el.innerHTML = `
-          <div>
-            <h4>${job.title}</h4>
-            <p class="meta">${job.company || ""} ${job.location ? "• " + job.location : ""}</p>
-          </div>
-          <button class="save-btn saved" data-id="${job.id}" aria-label="Unsave job">⭐</button>
-        `;
+          <div><h4>${job.title}</h4><p class="meta">${job.company || ""} ${job.location ? "• " + job.location : ""}</p></div>
+          <button class="save-btn saved" data-id="${job.id}" aria-label="Unsave job">⭐</button>`;
         el.querySelector('.save-btn').addEventListener('click',()=>toggleSave(job));
         savedList.appendChild(el);
       });
     }
-
     function isSaved(id){ return savedJobs.some(j=>j.id===id); }
-
     function toggleSave(job){
       const idx = savedJobs.findIndex(j=>j.id===job.id);
-      if (idx >= 0){ savedJobs.splice(idx,1); } else { savedJobs.push(job); }
+      if (idx >= 0) savedJobs.splice(idx,1); else savedJobs.push(job);
       localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
-      // Refresh both lists
-      document.querySelectorAll(`.save-btn[data-id="${job.id}"]`).forEach(btn=>{
-        btn.classList.toggle('saved', isSaved(job.id));
-      });
+      document.querySelectorAll(`.save-btn[data-id="${job.id}"]`).forEach(btn=>btn.classList.toggle('saved', isSaved(job.id)));
       renderSaved();
     }
-
     function makeJobCard(job){
-      const el = document.createElement('div');
-      el.className = "job-card";
+      const el = document.createElement('div'); el.className = "job-card glass";
       const id = String(job.id ?? job.uuid ?? job.slug ?? `${job.title}-${job.created_at}`);
       el.innerHTML = `
-        <div>
-          <h4>${job.title || "Untitled role"}</h4>
-          <p class="meta">${job.company || ""} ${job.location ? "• " + job.location : ""} ${job.type ? "• " + job.type : ""}</p>
-        </div>
-        <button class="save-btn ${isSaved(id) ? "saved":""}" data-id="${id}" aria-label="Save job">⭐</button>
-      `;
-      const btn = el.querySelector('.save-btn');
-      btn.addEventListener('click', ()=>{
+        <div><h4>${job.title || "Untitled role"}</h4>
+        <p class="meta">${job.company || ""} ${job.location ? "• " + job.location : ""} ${job.type ? "• " + job.type : ""}</p></div>
+        <button class="save-btn ${isSaved(id) ? "saved":""}" data-id="${id}" aria-label="Save job">⭐</button>`;
+      el.querySelector('.save-btn').addEventListener('click', ()=>{
         toggleSave({ id, title: job.title || "Untitled role", company: job.company || "", location: job.location || "" });
       });
       return el;
     }
 
+    // Skeleton helpers
+    function skeletonJobCard(){
+      const sk = document.createElement('div');
+      sk.className = "job-card glass skeleton sk-card";
+      sk.innerHTML = `
+        <div class="sk-left">
+          <div class="skeleton-line sk-title"></div>
+          <div class="skeleton-line sk-meta"></div>
+        </div>
+        <div class="skeleton-line sk-action"></div>`;
+      return sk;
+    }
+    function showSkeletons(n=pageSize){
+      for(let i=0;i<n;i++) jobsList.appendChild(skeletonJobCard());
+    }
+    function clearSkeletons(){
+      jobsList.querySelectorAll('.skeleton').forEach(el=>el.remove());
+    }
+
     async function loadJobs(reset=false){
       if (reset){ page = 0; jobsList.innerHTML = ""; }
-      const from = page * pageSize;
-      const to = from + pageSize - 1;
+      showSkeletons(reset ? pageSize : Math.max(3, Math.floor(pageSize/2)));
 
+      const from = page * pageSize; const to = from + pageSize - 1;
       let query = supabaseClient.from('jobs').select('*').order('created_at', { ascending: false }).range(from, to);
 
       const q = (jobQuery.value || "").trim();
       const loc = (jobLocation.value || "").trim();
-
-      // Basic filters
-      if (q){
-        // text filter (client-side fallback applied after fetch)
-      }
-      if (loc){
-        // text filter (client-side fallback applied after fetch)
-      }
-      if (currentCat){
-        query = query.eq('type', currentCat);
-      }
+      if (currentCat) query = query.eq('type', currentCat);
 
       const { data, error } = await query;
+
+      clearSkeletons();
+
       if (error){
         console.error(error);
-        jobsList.innerHTML = `<p class="meta">❌ Failed to load jobs.</p>`;
+        jobsList.innerHTML = `<div class="card glass">❌ Failed to load jobs.</div>`;
         btnMore.style.display = "none";
         return;
       }
 
-      // Optional client-side filtering if columns differ
       let rows = data || [];
       if (q) rows = rows.filter(r => (r.title||"").toLowerCase().includes(q.toLowerCase()) || (r.description||"").toLowerCase().includes(q.toLowerCase()));
       if (loc) rows = rows.filter(r => (r.location||"").toLowerCase().includes(loc.toLowerCase()));
 
-      rows.forEach(job => jobsList.appendChild(makeJobCard(job)));
+      if (reset && rows.length === 0){
+        jobsList.innerHTML = `<div class="card glass">No jobs available yet.</div>`;
+        btnMore.style.display = "none";
+        return;
+      }
 
+      rows.forEach(job => jobsList.appendChild(makeJobCard(job)));
       btnMore.style.display = rows.length === pageSize ? "inline-block" : "none";
     }
 
@@ -341,59 +397,34 @@
     document.querySelectorAll('.job-categories button').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         document.querySelectorAll('.job-categories button').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        currentCat = btn.dataset.cat || "";
-        loadJobs(true);
+        btn.classList.add('active'); currentCat = btn.dataset.cat || ""; loadJobs(true);
       });
     });
 
     btnSearch.addEventListener('click', ()=>loadJobs(true));
     document.getElementById('btnMore').addEventListener('click', ()=>{ page++; loadJobs(false); });
 
-    // Realtime updates: refresh Jobs on change
-    supabaseClient
-      .channel('jobs-updates')
-      .on('postgres_changes', { event:'*', schema:'public', table:'jobs' }, () => loadJobs(true))
-      .subscribe();
+    // Realtime refresh
+    supabaseClient.channel('jobs-updates').on('postgres_changes', { event:'*', schema:'public', table:'jobs' }, () => loadJobs(true)).subscribe();
 
-    // Initial loads
     renderSaved();
     loadJobs(true);
 
-    // ===== Account Form (demo wiring) =====
+    // Account form (basic wiring)
     document.getElementById('accountForm').addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const msg = document.getElementById('accountMsg');
-      msg.textContent = "Saving…";
-      // Example: update user metadata (name)
+      e.preventDefault(); const msg = document.getElementById('accountMsg'); msg.textContent = "Saving…";
       const full_name = (document.getElementById('acctName').value || "").trim();
-      let updates = {};
-      if (full_name) updates.data = { full_name };
-
       const newEmail = (document.getElementById('acctEmail').value || "").trim();
       const newPass  = document.getElementById('acctPassword').value;
-
       try{
-        if (Object.keys(updates).length){
-          const { error } = await supabaseClient.auth.updateUser(updates);
-          if (error) throw error;
-        }
-        if (newEmail){
-          const { error } = await supabaseClient.auth.updateUser({ email: newEmail });
-          if (error) throw error;
-        }
-        if (newPass){
-          const { error } = await supabaseClient.auth.updateUser({ password: newPass });
-          if (error) throw error;
-        }
+        if (full_name){ const { error } = await supabaseClient.auth.updateUser({ data:{ full_name } }); if (error) throw error; }
+        if (newEmail){ const { error } = await supabaseClient.auth.updateUser({ email: newEmail }); if (error) throw error; }
+        if (newPass){ const { error } = await supabaseClient.auth.updateUser({ password: newPass }); if (error) throw error; }
         msg.textContent = "✅ Saved.";
-      }catch(err){
-        console.error(err);
-        msg.textContent = "❌ " + (err.message || "Update failed.");
-      }
+      }catch(err){ console.error(err); msg.textContent = "❌ " + (err.message || "Update failed."); }
     });
 
-    // ===== Dummy upload buttons (wire later) =====
+    // Placeholder uploads
     document.getElementById('btnUpdatePic').addEventListener('click', ()=>alert('Profile photo upload not yet wired.'));
     document.getElementById('btnUploadCV').addEventListener('click', ()=>alert('CV upload not yet wired.'));
   </script>
