@@ -65,20 +65,22 @@
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password
-    });
+    // Use emailRedirectTo so confirmation goes back to your live site
+    const { data, error } = await supabase.auth.signUp(
+      { email, password },
+      { emailRedirectTo: "https://carribcareerhub.site/login.html" }
+    );
 
     if (error) {
+      message.style.color = "red";
       message.textContent = "❌ " + error.message;
     } else {
       message.style.color = "green";
       message.textContent = "✅ Account created! Check your email to confirm.";
-      // optional redirect to login
+      // Optional: redirect after a short delay
       setTimeout(() => {
         window.location.href = "login.html";
-      }, 1500);
+      }, 2000);
     }
   });
 </script>
