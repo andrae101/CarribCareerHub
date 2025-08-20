@@ -9,10 +9,10 @@
   --radius: 18px;
   --shadow: 0 10px 30px rgba(16,40,120,0.12);
 
-  /* 🔄 easy swap paths */
-  --logo-img: url('./assets/logo.svg');
-  --map-img: url('./assets/map.svg');
-  --bg-img: url('./assets/bg-water.svg');
+  /* 🔄 Easy swap paths — supports SVG first, PNG fallback */
+  --logo-img: url('./assets/logo.svg'), url('./assets/logo.png');
+  --map-img: url('./assets/map.svg'), url('./assets/map.png');
+  --bg-img: url('./assets/bg-water.svg'), url('./assets/bg-water.png');
 }
 
 *{box-sizing:border-box}
@@ -63,6 +63,7 @@ body{
 .brand img{
   height:64px;
   width:auto;
+  content: var(--logo-img);
 }
 .brand-name {
   font-size: 32px;
@@ -226,6 +227,7 @@ body{
   height:auto;
   opacity:.75;
   object-fit:contain;
+  content: var(--map-img);
 }
 
 /* ======================
