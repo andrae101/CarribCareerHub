@@ -10,7 +10,7 @@
 
 <header class="header">
   <div class="brand">
-    <img src="./assets/logo.svg" alt="CarribCareerHub logo" />
+    <img src="./assets/logo.svg" alt="CaribCareerHub logo" />
     <div class="brand-name">CaribCareerHub</div>
   </div>
   <nav class="nav">
@@ -21,35 +21,49 @@
 <main>
   <div class="login-panel">
     <h2>Post a Job</h2>
-    <p class="lede">Fill out the details below</p>
+    <p class="lede">Fill out the job details below</p>
 
     <form id="postJobForm">
       <div class="field">
         <label>Job Title</label>
         <input type="text" placeholder="Software Engineer" required>
       </div>
+
       <div class="field">
         <label>Company Name</label>
         <input type="text" placeholder="Your Company Ltd" required>
       </div>
+
       <div class="field">
         <label>Job Description</label>
-        <textarea placeholder="Describe the role and responsibilities..." required></textarea>
+        <textarea rows="6" placeholder="Describe the role and responsibilities..." required></textarea>
       </div>
+
       <div class="field">
         <label>Compensation</label>
         <input type="text" placeholder="e.g. $25/hr or $50,000/year" required>
       </div>
+
+      <div class="field">
+        <label>Salary Type</label>
+        <select required>
+          <option value="">Select...</option>
+          <option value="hourly">Hourly</option>
+          <option value="salary">Salary</option>
+        </select>
+      </div>
+
       <div class="field">
         <label>Job Type</label>
         <select required>
           <option value="">Select...</option>
-          <option>Full-Time</option>
-          <option>Part-Time</option>
-          <option>Contract</option>
-          <option>Internship</option>
+          <option value="fulltime">Full-Time</option>
+          <option value="parttime">Part-Time</option>
+          <option value="contract">Contract</option>
+          <option value="internship">Internship</option>
         </select>
       </div>
+
       <button type="submit" class="btn btn-primary">Submit Job</button>
     </form>
 
@@ -69,7 +83,7 @@
 
 <script>
   // 🔒 Fake login check
-  const isLoggedIn = false; // change to true if "logged in"
+  const isLoggedIn = false; // set true if logged in
 
   const form = document.getElementById('postJobForm');
   form.addEventListener('submit', function(e) {
@@ -79,6 +93,7 @@
       window.location.href = "login.html";
     } else {
       alert('Job submitted successfully! ✅');
+      // Future: send job data to backend here
     }
   });
 </script>
