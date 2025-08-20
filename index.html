@@ -1,124 +1,94 @@
-<!-- /index.html — Brand one-word beside logo, pro banner, hero-only Login, centered map, bold footer nav -->
+<!-- /index.html — same layout; hero centered; visible Login; small theme toggle; job cards fixed -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>CarribCareerHub</title>
-  <link rel="stylesheet" href="style.css" />
   <link rel="canonical" href="https://carribcareerhub.site/">
 
   <style>
-    html, body { height: 100%; }
-    body { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+    :root{
+      --bg:#F3F8FF; --panel:#fff; --ink:#0A2458; --muted:#6B7A99;
+      --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
+      --radius:18px; --shadow:0 10px 30px rgba(16,40,120,.12);
+    }
+    body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    /* Dark mode (toggle adds .dark to body) */
+    body.dark{ --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6; --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c; --shadow:0 14px 40px rgba(0,0,0,.45); background:var(--bg); color:var(--ink) }
 
-    /* ===== Highlight Banner (brand-aligned) ===== */
-    .highlight-banner-wrap {
-      background: linear-gradient(90deg, var(--brand), var(--brand-2));
-      color: #fff;
+    /* Banner (kept) */
+    .highlight-banner-wrap{background:linear-gradient(90deg,var(--brand),var(--brand-2));color:#fff}
+    .highlight-banner{max-width:1100px;margin:0 auto;padding:10px 20px;text-align:center;font-weight:900;letter-spacing:.2px}
+
+    /* Header */
+    .header{max-width:1100px;margin:16px auto 0;padding:0 20px;display:flex;align-items:center;justify-content:center;gap:14px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand .logo{width:104px;height:104px;border-radius:14px;object-fit:cover;box-shadow:var(--shadow)}
+    .brand-name{font-size:26px;font-weight:900;letter-spacing:4px;white-space:nowrap}
+
+    /* Panel + layout */
+    .panel{max-width:1100px;margin:16px auto 40px;padding:24px;background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .panel-content{display:grid;grid-template-columns:1.1fr .9fr;gap:24px}
+    @media (max-width: 768px){ .panel-content{grid-template-columns:1fr} }
+
+    /* Hero (centered) */
+    .hero-title{font-size: clamp(34px, 6vw, 54px);font-weight:800;line-height:1.25;margin:0 0 14px;text-align:center}
+    .lede{font-size:18px;line-height:1.7;color:var(--muted);max-width:760px;margin:0 auto 18px;text-align:center}
+    .employer-callout{margin:14px auto 18px;padding:12px 16px;border-radius:12px;background:#fff6e9;border:1px solid #ffd9a8;font-size:16px;font-weight:600;color:#b56a00;max-width:860px}
+
+    /* Hero CTAs */
+    .hero-cta{margin:16px auto 6px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .btn{border:none;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer}
+    .btn-primary{color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-2));box-shadow:var(--shadow)}
+    .btn-ghost{background:#fff;border:1px solid #E4ECFF;color:var(--ink)}
+    body.dark .btn-ghost{background:transparent;border-color:rgba(255,255,255,.14);color:var(--ink)}
+
+    /* Small theme toggle */
+    .theme-toggle{display:inline-flex;align-items:center;gap:6px;padding:10px 12px;border-radius:12px;border:1px solid #E4ECFF;background:#fff;font-weight:800;cursor:pointer}
+    .theme-toggle .icon{font-size:16px}
+    body.dark .theme-toggle{background:transparent;border-color:rgba(255,255,255,.14);color:var(--ink)}
+
+    /* Jobs list — FIXED to fit text neatly */
+    .jobs-list{margin-top:22px}
+    .job-card{
+      background:var(--panel); border:1px solid #e5e8f2; border-radius:14px; box-shadow:var(--shadow);
+      padding:14px 16px; display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:start;
+      word-break: break-word; overflow-wrap: anywhere;
     }
-    .highlight-banner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 10px 20px;
-      display: flex; align-items: center; justify-content: center;
-      text-align: center; font-weight: 900; letter-spacing: .2px; line-height: 1.2;
-      text-wrap: balance;
+    .job-title{font-size:18px;font-weight:800;margin:0 0 2px;line-height:1.2}
+    .job-company{color:var(--muted);font-weight:700;margin:0 0 6px}
+    .job-location{color:var(--brand);font-weight:700;margin:0}
+    .job-desc{grid-column:1 / -1; margin:6px 0 0; color:var(--ink)}
+    /* Prevent crowded text on very small screens */
+    @media (max-width:420px){ .job-title{font-size:17px} .job-company{font-size:14px} .job-desc{font-size:15px} }
+
+    /* Map */
+    .map-wrap{width:100%;max-width:900px;margin:18px auto 0;background:var(--panel);border:1px solid #e4ecff;border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+    .map-aspect{position:relative;width:100%}
+    .map-img{display:block;width:100%;height:auto;object-fit:contain;aspect-ratio:16/9}
+    @supports not (aspect-ratio: 1/1){
+      .map-aspect::before{content:"";display:block;padding-top:56.25%}
+      .map-aspect > picture, .map-aspect > img {position:absolute;inset:0;width:100%;height:100%}
     }
 
-    /* ===== Header: logo + single-word brand side-by-side ===== */
-    .header {
-      max-width: 1100px; margin: 16px auto 0; padding: 0 20px;
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-    }
-    .brand {
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-      flex-wrap: nowrap;
-    }
-    .brand .logo {
-      width: 104px; height: 104px; border-radius: 14px; object-fit: cover; box-shadow: var(--shadow);
-      flex: 0 0 auto;
-    }
-    .brand-name {
-      font-size: 26px; font-weight: 900; letter-spacing: 4px;
-      white-space: nowrap; /* keep in one line */
-    }
-    /* no header nav login; CTA lives in hero */
-    .nav { display: none !important; }
-
-    /* ===== Panel & layout ===== */
-    .panel { max-width: 1100px; margin: 16px auto 40px; padding: 24px; }
-    .panel-content { display: grid; grid-template-columns: 1.1fr .9fr; gap: 24px; align-items: start; }
-    @media (max-width: 768px) { .panel-content { grid-template-columns: 1fr; } }
-
-    /* ===== Hero: keep Login + Learn More; remove search/buttons ===== */
-    #searchForm, .actions { display: none !important; }
-    .hero-title { margin-top: 6px; }
-    .hero-cta { margin-top: 18px; display: flex; gap: 14px; flex-wrap: wrap; }
-    .btn { border: none; border-radius: 12px; padding: 14px 22px; font-weight: 800; font-size: 16px; cursor: pointer; }
-    .btn-primary { color: #fff; background: linear-gradient(90deg, var(--brand), var(--brand-2)); box-shadow: var(--shadow); }
-    .btn-ghost { background: #fff; border: 1px solid #E4ECFF; color: var(--ink); }
-
-    /* ===== Map: centered & fitted ===== */
-    .map-wrap {
-      width: 100%; max-width: 900px; margin-inline: auto;
-      background: #fff; border: 1px solid #e4ecff; border-radius: 14px; box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .map-aspect { position: relative; width: 100%; }
-    .map-img { display: block; width: 100%; height: auto; object-fit: contain; aspect-ratio: 16 / 9; }
-    @supports not (aspect-ratio: 1 / 1) {
-      .map-aspect::before { content: ""; display: block; padding-top: 56.25%; }
-      .map-aspect > picture, .map-aspect > img { position: absolute; inset: 0; width: 100%; height: 100%; }
-      .map-aspect img { object-fit: contain; }
-    }
-
-    /* ===== Jobs list (kept) ===== */
-    .jobs-list { margin-top: 2rem; }
-    .job-card { border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; transition: box-shadow .2s; background: #fff; }
-    .job-card:hover { box-shadow: 0 3px 8px rgba(0,0,0,.1); }
-    .job-title { font-size: 1.2rem; font-weight: bold; margin: 0 0 6px; }
-    .job-company { color: #555; font-weight: 600; }
-    .job-location { font-style: italic; color: #0077b6; }
-    .load-more {
-      display: block; margin: 1rem auto; padding: .8rem 1.5rem;
-      font-size: 1rem; font-weight: bold; border: none; border-radius: 6px;
-      background: #0077b6; color: #fff; cursor: pointer; transition: background .2s;
-    }
-    .load-more:hover { background: #0096c7; }
-
-    /* ===== Footer: bold, clickable nav bar ===== */
-    .footer { max-width: 1100px; margin: 30px auto 40px; padding: 0 20px; }
-    .footer-nav {
-      display: flex; justify-content: center; align-items: center; gap: 14px; flex-wrap: wrap;
-      background: #fff; border: 1px solid #e4ecff; border-radius: 14px; box-shadow: var(--shadow);
-      padding: 12px;
-    }
-    .footer-nav a {
-      display: inline-block; padding: 10px 14px; border-radius: 10px;
-      font-weight: 800; color: var(--ink); text-decoration: none; border: 1px solid transparent;
-    }
-    .footer-nav a:focus, .footer-nav a:hover { border-color: #e4ecff; background: #f8fbff; }
-    .copy { text-align: center; margin-top: 10px; color: var(--muted); }
-
-    /* ===== Mobile tweaks ===== */
-    @media (max-width: 768px) {
-      .brand .logo { width: 96px; height: 96px; } /* slightly smaller for fit */
-      .brand-name { font-size: 22px; letter-spacing: 3px; }
-      .lede { font-size: 15px; }
-    }
+    /* Footer (bold links) */
+    .footer{max-width:1100px;margin:30px auto 40px;padding:0 20px}
+    .footer-nav{display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap;background:var(--panel);border:1px solid #e4ecff;border-radius:14px;box-shadow:var(--shadow);padding:12px}
+    .footer-nav a{display:inline-block;padding:10px 14px;border-radius:10px;font-weight:800;color:var(--ink);text-decoration:none;border:1px solid transparent}
+    .footer-nav a:hover{border-color:#e4ecff;background:#f8fbff}
+    .copy{text-align:center;margin-top:10px;color:var(--muted)}
   </style>
 </head>
 <body>
-
-  <!-- Banner -->
+  <!-- Banner (unchanged) -->
   <div class="highlight-banner-wrap">
     <div class="highlight-banner">
       💼 Unlock Caribbean Opportunities 🌴 — Jobs across Jamaica 🇯🇲, Barbados 🇧🇧 & Trinidad 🇹🇹
     </div>
   </div>
 
-  <!-- Header: logo + one-word brand -->
+  <!-- Header: logo + brand -->
   <header class="header">
     <div class="brand">
       <picture>
@@ -132,6 +102,7 @@
   <main class="panel">
     <div class="panel-content">
       <section>
+        <!-- Centered hero -->
         <h1 class="hero-title">Find Your Dream Job</h1>
         <p class="lede">
           At <strong>CarribCareerHub</strong>, your career journey truly matters.
@@ -144,21 +115,26 @@
           Barbados, Trinidad, and the wider Caribbean.
         </p>
 
-        <!-- Hero CTAs -->
+        <!-- Visible Login + small theme toggle (side by side) -->
         <div class="hero-cta">
           <button id="loginHero" class="btn btn-primary">Login / Sign Up</button>
+          <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="icon" id="themeIcon">🌞</span> Theme
+          </button>
           <button id="learnMoreBtn" class="btn btn-ghost" aria-label="Jump to Latest Jobs">Learn more</button>
         </div>
 
-        <!-- Latest Jobs (kept) -->
+        <!-- Latest Jobs -->
         <div class="jobs-list" id="jobsList">
-          <h2>Latest Jobs</h2>
+          <h2 style="margin:14px 0 10px">Latest Jobs</h2>
           <div id="jobsContainer">Loading jobs...</div>
-          <button id="loadMoreBtn" class="load-more" style="display:none;">Load More</button>
+          <div style="text-align:center;margin-top:10px">
+            <button id="loadMoreBtn" class="btn btn-ghost" style="display:none">Load More</button>
+          </div>
         </div>
       </section>
 
-      <!-- Centered, fitted map -->
+      <!-- Map (unchanged, but contained) -->
       <aside class="map-wrap">
         <div class="map-aspect">
           <picture>
@@ -170,9 +146,9 @@
     </div>
   </main>
 
-  <!-- Footer: bold nav bar -->
+  <!-- Footer (bold links) -->
   <footer class="footer">
-    <nav class="footer-nav" aria-label="Footer">
+    <nav class="footer-nav">
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
       <a href="privacy.html">Privacy</a>
@@ -181,21 +157,32 @@
     <div class="copy">© 2025 CarribCareerHub</div>
   </footer>
 
-  <!-- Supabase client -->
+  <!-- Supabase -->
   <script defer src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    // Login route
-    const LOGIN_URL = "login.html";
+    // Theme restore
+    (function initTheme(){
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') document.body.classList.add('dark');
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.textContent = document.body.classList.contains('dark') ? '🌙' : '🌞';
+    })();
 
-    // CTAs
+    // CTA handlers
     window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('loginHero').addEventListener('click', () => { window.location.href = LOGIN_URL; });
-      document.getElementById('learnMoreBtn').addEventListener('click', () => {
+      document.getElementById('loginHero')?.addEventListener('click', () => { window.location.href = "login.html"; });
+      document.getElementById('learnMoreBtn')?.addEventListener('click', () => {
         document.getElementById('jobsList')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      document.getElementById('themeToggle')?.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.textContent = document.body.classList.contains('dark') ? '🌙' : '🌞';
       });
     });
 
-    // Supabase init for Latest Jobs
+    // Supabase Latest Jobs loader (kept)
     window.addEventListener('load', () => {
       const supabaseUrl = "https://fpytvfhynleaivkvuedt.supabase.co";
       const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
@@ -205,6 +192,21 @@
       const pageSize = 5;
       const jobsContainer = document.getElementById('jobsContainer');
       const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+      function renderCard(job){
+        const wrap = document.createElement('div');
+        wrap.className = 'job-card';
+        wrap.innerHTML = `
+          <div>
+            <h3 class="job-title">${job.title || ""}</h3>
+            <p class="job-company">${job.company || ""}</p>
+            <p class="job-location">${job.location || ""}</p>
+          </div>
+          <div></div>
+          <p class="job-desc">${job.description ? job.description : ""}</p>
+        `;
+        return wrap;
+      }
 
       async function loadJobs(reset = false) {
         if (reset) {
@@ -234,19 +236,8 @@
           return;
         }
 
-        data.forEach(job => {
-          const card = document.createElement('div');
-          card.className = "job-card";
-          card.innerHTML = `
-            <div class="job-title">${job.title || ""}</div>
-            <div class="job-company">${job.company || ""}</div>
-            <div class="job-location">${job.location || ""}</div>
-            <p>${job.description ? job.description : ""}</p>
-          `;
-          jobsContainer.appendChild(card);
-        });
-
-        loadMoreBtn.style.display = data.length === pageSize ? "block" : "none";
+        data.forEach(job => jobsContainer.appendChild(renderCard(job)));
+        loadMoreBtn.style.display = data.length === pageSize ? "inline-block" : "none";
       }
 
       loadJobs(true);
