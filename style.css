@@ -77,6 +77,10 @@ body{
   display: flex;
   align-items: center;
 }
+
+/* ======================
+   Navigation
+====================== */
 .nav {
   margin-left: auto;
 }
@@ -94,6 +98,11 @@ body{
 }
 .nav a:hover {
   opacity:0.9;
+}
+/* Special style for Post Job link */
+.nav a.post-job {
+  background: linear-gradient(90deg, #FFB44D, #FF8A00);
+  color: #fff;
 }
 
 /* ======================
