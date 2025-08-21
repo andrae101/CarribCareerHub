@@ -2,374 +2,377 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
   <title>Dashboard</title>
 
   <style>
-  :root {
-    --bg: #F3F8FF;
-    --panel: #ffffff;
-    --ink: #0A2458;
-    --muted: #6B7A99;
-    --brand: #1E6CFF;
-    --brand-2: #3FA2FF;
-    --accent: #FFA03B;
-    --radius: 18px;
-    --shadow: 0 10px 30px rgba(16,40,120,0.12);
-  }
-
-  /* 🌙 Dark mode variables */
-  body.dark {
-    --bg: #0e1424;
-    --panel: #1c2333;
-    --ink: #f4f6fb;
-    --muted: #aab3cc;
-    --brand: #3FA2FF;
-    --brand-2: #1E6CFF;
-    --accent: #ffb44d;
-    --shadow: 0 10px 30px rgba(0,0,0,0.6);
-  }
-
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-    color:var(--ink);
-    background: var(--bg);
-    overflow-x: hidden;
-    transition: background 0.3s, color 0.3s;
-  }
-
-  /* ======================
-     Dashboard Layout
-  ====================== */
-  .dashboard {
-    display: flex;
-    max-width: 1200px;
-    margin: 30px auto;
-    gap: 24px;
-    padding: 0 20px;
-  }
-
-  /* Sidebar */
-  .sidebar {
-    flex: 0 0 240px;
-    background: var(--panel);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 24px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    height: fit-content;
-    position: sticky;
-    top: 20px;
-    transition: background 0.3s;
-  }
-
-  .sidebar a {
-    padding: 12px 16px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 15px;
-    color: var(--ink);
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-
-  .sidebar a:hover {
-    background: rgba(30, 108, 255, 0.08);
-    color: var(--brand);
-  }
-
-  .sidebar a.active {
-    background: linear-gradient(90deg, var(--brand), var(--brand-2));
-    color: #fff;
-    box-shadow: var(--shadow);
-  }
-
-  /* Toggle button */
-  .toggle-theme {
-    margin-top: 20px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 14px;
-    border: none;
-    cursor: pointer;
-    background: var(--accent);
-    color: #fff;
-    box-shadow: var(--shadow);
-    transition: opacity 0.2s ease;
-  }
-
-  .toggle-theme:hover {
-    opacity: 0.9;
-  }
-
-  /* Content area */
-  .dashboard-content {
-    flex: 1;
-    background: var(--panel);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 28px;
-    min-height: 500px;
-    transition: background 0.3s;
-  }
-
-  .dashboard-content section {
-    display: none;
-  }
-
-  .dashboard-content section.active {
-    display: block;
-  }
-
-  /* ======================
-     Profile Section
-  ====================== */
-  .profile-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 22px;
-    margin-bottom: 32px;
-  }
-
-  .field {
-    text-align: left;
-    margin-bottom: 18px;
-  }
-
-  .field label {
-    font-weight: 600;
-    color: var(--muted);
-    font-size: 14px;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  .field input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #E4ECFF;
-    border-radius: 12px;
-    font-size: 16px;
-    outline: none;
-    transition: border 0.2s ease;
-    background: var(--panel);
-    color: var(--ink);
-  }
-
-  .field input:focus {
-    border-color: var(--brand);
-    box-shadow: 0 0 0 3px rgba(30, 108, 255, 0.1);
-  }
-
-  .upload-area {
-    background: #f9fbff;
-    border: 2px dashed #c8d9ff;
-    border-radius: 14px;
-    text-align: center;
-    padding: 30px 20px;
-    cursor: pointer;
-    transition: border 0.2s ease;
-    margin-bottom: 24px;
-  }
-
-  body.dark .upload-area {
-    background: #222a3b;
-    border-color: #445077;
-  }
-
-  .upload-area:hover {
-    border-color: var(--brand);
-  }
-
-  .applied-jobs {
-    margin-top: 30px;
-  }
-
-  .applied-jobs h3 {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 14px;
-  }
-
-  .applied-jobs li {
-    background: #f7faff;
-    border: 1px solid #e4ecff;
-    padding: 14px 18px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--ink);
-  }
-
-  body.dark .applied-jobs li {
-    background: #1f283d;
-    border-color: #3a4767;
-  }
-
-  /* ======================
-     Jobs Section
-  ====================== */
-  .job-search {
-    margin-bottom: 24px;
-  }
-
-  .search-row {
-    display:flex;
-    gap:14px;
-    align-items:center;
-    flex-wrap:wrap;
-  }
-
-  .input {
-    flex:1;
-    min-width:210px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    background:var(--panel);
-    border:1px solid #E4ECFF;
-    border-radius:12px;
-    padding:12px 14px;
-  }
-
-  .input input{
-    border:none;
-    outline:none;
-    width:100%;
-    font-size:16px;
-    background:transparent;
-    color: var(--ink);
-  }
-
-  .search-btn{
-    border:none;
-    padding:12px 22px;
-    border-radius:12px;
-    font-weight:800;
-    color:#fff;
-    background:linear-gradient(90deg,var(--brand),var(--brand-2));
-    box-shadow:var(--shadow);
-    cursor:pointer;
-  }
-
-  .job-categories {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 26px 0;
-  }
-
-  .job-categories button {
-    border: none;
-    padding: 10px 16px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 14px;
-    background: #f2f6ff;
-    color: var(--ink);
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .job-categories button.active,
-  .job-categories button:hover {
-    background: linear-gradient(90deg, var(--brand), var(--brand-2));
-    color: #fff;
-    box-shadow: var(--shadow);
-  }
-
-  .job-list {
-    display: grid;
-    gap: 16px;
-  }
-
-  .job-card {
-    border: 1px solid #e4ecff;
-    border-radius: 14px;
-    padding: 18px 20px;
-    background: var(--panel);
-    box-shadow: var(--shadow);
-    transition: transform 0.15s ease;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .job-card:hover {
-    transform: translateY(-2px);
-  }
-
-  .job-card h4 {
-    margin: 0 0 8px;
-    font-size: 18px;
-    font-weight: 700;
-  }
-
-  .job-card p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 14px;
-  }
-
-  .save-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: var(--muted);
-    transition: transform 0.2s;
-  }
-  .save-btn.saved {
-    color: var(--accent);
-    transform: scale(1.2);
-  }
-
-  /* ======================
-     Responsive Dashboard
-  ====================== */
-  @media (max-width: 992px) {
-    .dashboard {
-      flex-direction: column;
+    /* ===== Design Tokens ===== */
+    :root {
+      --bg: #f3f8ff;
+      --panel: #ffffff;
+      --ink: #0a2458;
+      --muted: #6b7a99;
+      --brand: #1e6cff;
+      --brand-2: #3fa2ff;
+      --accent: #ffa03b;
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(16, 40, 120, 0.12);
+      --ring: 0 0 0 3px rgba(30,108,255,0.18);
     }
+
+    /* 🌙 Dark mode variables (smoother, higher contrast) */
+    body.dark {
+      --bg: #0e1421;
+      --panel: #131a2a;
+      --ink: #eaf1ff;
+      --muted: #a9b4cc;
+      --brand: #5a8fff;
+      --brand-2: #8ec4ff;
+      --accent: #ffb86c;
+      --shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+      --ring: 0 0 0 3px rgba(142,196,255,0.22);
+    }
+
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0;
+      -webkit-text-size-adjust: 100%;
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      overflow-x: hidden;
+      transition: background .25s ease, color .25s ease;
+    }
+
+    /* Utility: safe text wrapping */
+    .wrap, h1, h2, h3, h4, p, a, button, input {
+      overflow-wrap: anywhere;
+      word-break: normal;
+    }
+
+    /* ===== Dashboard Layout ===== */
+    .dashboard {
+      display: flex;
+      max-width: 1200px;
+      margin: 28px auto 32px;
+      gap: 24px;
+      padding: 0 16px;
+    }
+
+    /* Sidebar */
     .sidebar {
-      flex-direction: row;
+      flex: 0 0 240px;
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: fit-content;
+      position: sticky;
+      top: 16px;
+      border: 1px solid rgba(10,36,88,0.06);
+    }
+    body.dark .sidebar { border-color: rgba(234,241,255,0.08); }
+
+    .sidebar a {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--ink);
+      text-decoration: none;
+      transition: transform .12s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+      border: 1px solid transparent;
+    }
+    .sidebar a:hover {
+      background: color-mix(in oklab, var(--brand) 10%, transparent);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .sidebar a.active {
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    /* Toggle button */
+    .toggle-theme {
+      margin-top: 6px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 14px;
+      border: 1px solid rgba(10,36,88,0.08);
+      cursor: pointer;
+      background: var(--panel);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
       justify-content: center;
-      position: static;
+      gap: 10px;
+    }
+    body.dark .toggle-theme { border-color: rgba(234,241,255,0.14); }
+    .toggle-theme:focus-visible { outline: none; box-shadow: var(--ring); }
+    .toggle-theme:hover { transform: translateY(-1px); }
+
+    /* Content area */
+    .dashboard-content {
+      flex: 1;
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      min-height: 520px;
+      border: 1px solid rgba(10,36,88,0.06);
+    }
+    body.dark .dashboard-content { border-color: rgba(234,241,255,0.08); }
+
+    /* Section handling */
+    .dashboard-content section { display: none; }
+    .dashboard-content section.active { display: block; }
+
+    /* Headings clamp to avoid overlap */
+    h1, h2 {
+      margin: 0 0 12px;
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
+    h2 { font-size: clamp(18px, 4.2vw, 24px); }
+
+    /* ===== Profile Section ===== */
+    .profile-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .field { text-align: left; margin-bottom: 6px; }
+    .field label {
+      font-weight: 700;
+      color: var(--muted);
+      font-size: 13px;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #e4ecff;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+      background: var(--panel);
+      color: var(--ink);
+      transition: border .15s ease, box-shadow .15s ease;
+    }
+    body.dark .field input { border-color: #314166; }
+    .field input:focus { border-color: var(--brand); box-shadow: var(--ring); }
+
+    .upload-area {
+      background: #f7faff;
+      border: 2px dashed #c8d9ff;
+      border-radius: 14px;
+      text-align: center;
+      padding: 28px 16px;
+      cursor: pointer;
+      transition: border .15s ease, background .15s ease;
+      margin-bottom: 18px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    body.dark .upload-area {
+      background: #1a2236;
+      border-color: #3d4b71;
+      color: var(--muted);
+    }
+    .upload-area:hover { border-color: var(--brand); }
+
+    .applied-jobs { margin-top: 20px; }
+    .applied-jobs h3 {
+      font-size: clamp(16px, 3.8vw, 20px);
+      font-weight: 800;
+      margin: 0 0 10px;
+    }
+    .applied-jobs ul { padding-left: 18px; margin: 0; }
+    .applied-jobs li {
+      background: #f2f6ff;
+      border: 1px solid #e4ecff;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      list-style: none;
+    }
+    body.dark .applied-jobs li {
+      background: #121a2b;
+      border-color: #2a3a60;
+    }
+
+    /* ===== Jobs Section ===== */
+    .job-search { margin-bottom: 16px; }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
       flex-wrap: wrap;
     }
-    .sidebar a, .toggle-theme {
+    .input {
       flex: 1;
-      text-align: center;
+      min-width: 220px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--panel);
+      border: 1px solid #e4ecff;
+      border-radius: 12px;
+      padding: 12px 14px;
     }
-    .profile-info {
-      grid-template-columns: 1fr;
+    body.dark .input { border-color: #314166; }
+    .input input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 16px;
+      background: transparent;
+      color: var(--ink);
     }
-  }
+
+    .search-btn {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 900;
+      color: #fff;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+    .search-btn:focus-visible { outline: none; box-shadow: var(--ring); }
+
+    .job-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 12px;
+    }
+    .job-categories button {
+      border: 1px solid rgba(10,36,88,0.08);
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 13px;
+      background: #f2f6ff;
+      color: var(--ink);
+      cursor: pointer;
+      transition: background .15s ease, color .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .job-categories button.active,
+    .job-categories button:hover {
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: var(--shadow);
+    }
+    body.dark .job-categories button { background: #10192b; border-color: #314166; }
+
+    .job-list { display: grid; gap: 12px; }
+
+    .job-card {
+      border: 1px solid #e4ecff;
+      border-radius: 14px;
+      padding: 16px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+      transition: transform .12s ease;
+    }
+    body.dark .job-card { border-color: #2a3a60; }
+    .job-card:hover { transform: translateY(-1px); }
+
+    .job-card h4 {
+      margin: 0 0 6px;
+      font-size: clamp(16px, 3.8vw, 18px);
+      font-weight: 800;
+    }
+    .job-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .save-btn {
+      background: none;
+      border: 1px solid rgba(10,36,88,0.08);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 16px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: transform .12s ease, color .12s ease, border-color .12s ease, background .12s ease;
+      align-self: center;
+    }
+    body.dark .save-btn { border-color: #314166; }
+    .save-btn:hover { transform: scale(1.05); background: rgba(30,108,255,0.08); }
+    .save-btn.saved { color: var(--accent); border-color: var(--accent); }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 992px) {
+      .dashboard { flex-direction: column; }
+      .sidebar {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+      }
+      .sidebar a, .toggle-theme {
+        flex: 1 1 auto;
+        min-width: 140px;
+        text-align: center;
+      }
+      .profile-info { grid-template-columns: 1fr; }
+      .job-card { grid-template-columns: 1fr auto; }
+    }
+
+    @media (max-width: 380px) {
+      .sidebar a { font-size: 14px; padding: 10px 12px; }
+      .toggle-theme { font-size: 13px; padding: 10px 12px; }
+    }
   </style>
 </head>
 <body>
-
   <div class="dashboard">
     <!-- Sidebar -->
-    <div class="sidebar">
+    <aside class="sidebar" aria-label="Dashboard navigation">
       <a href="#" class="active" data-target="profile-section">Profile</a>
       <a href="#" data-target="jobs-section">Jobs</a>
       <a href="#" data-target="saved-section">Saved Jobs ⭐</a>
-      <button class="toggle-theme">🌙 Toggle Dark Mode</button>
-    </div>
+      <button class="toggle-theme" id="themeToggle" type="button" aria-label="Toggle theme">
+        <span id="themeIcon">🌙</span> <span class="wrap">Toggle Theme</span>
+      </button>
+    </aside>
 
     <!-- Main content -->
-    <div class="dashboard-content">
+    <main class="dashboard-content">
       <!-- Profile -->
-      <section id="profile-section" class="active">
-        <h2>My Profile</h2>
+      <section id="profile-section" class="active" aria-labelledby="profileTitle">
+        <h2 id="profileTitle" class="wrap">My Profile</h2>
+
         <div class="profile-info">
           <div class="field">
             <label>Name</label>
@@ -377,156 +380,172 @@
           </div>
           <div class="field">
             <label>Email</label>
-            <input type="email" placeholder="Your email" />
+            <input type="email" placeholder="you@example.com" />
           </div>
           <div class="field">
             <label>Password</label>
             <input type="password" placeholder="New password" />
           </div>
+          <div class="field">
+            <label>Phone (optional)</label>
+            <input type="text" placeholder="(000) 000-0000" />
+          </div>
         </div>
 
-        <div class="upload-area">Click or drag file to upload your CV</div>
-        <div class="upload-area">Click or drag file to upload profile picture</div>
+        <div class="upload-area wrap">Click or drag file to upload your CV</div>
+        <div class="upload-area wrap">Click or drag file to upload profile picture</div>
 
         <div class="applied-jobs">
-          <h3>Applied Jobs</h3>
+          <h3 class="wrap">Applied Jobs</h3>
           <ul>
-            <li>Frontend Developer @ TechCorp</li>
-            <li>Backend Engineer @ CodeBase</li>
+            <li class="wrap">Frontend Developer @ TechCorp — Applied Jan 15</li>
+            <li class="wrap">Backend Engineer @ CodeBase — Applied Jan 28</li>
           </ul>
         </div>
       </section>
 
       <!-- Jobs -->
-      <section id="jobs-section">
-        <h2>Jobs</h2>
+      <section id="jobs-section" aria-labelledby="jobsTitle">
+        <h2 id="jobsTitle" class="wrap">Jobs</h2>
+
         <div class="job-search">
           <div class="search-row">
             <div class="input">
               <input type="text" placeholder="Search jobs..." />
             </div>
-            <button class="search-btn">Search</button>
+            <button class="search-btn" type="button">Search</button>
           </div>
         </div>
 
-        <div class="job-categories">
-          <button class="active">All</button>
-          <button>Full-time</button>
-          <button>Part-time</button>
-          <button>Remote</button>
-          <button>On-site</button>
+        <div class="job-categories" role="tablist" aria-label="Job categories">
+          <button class="active" role="tab" aria-selected="true">All</button>
+          <button role="tab" aria-selected="false">Full-time</button>
+          <button role="tab" aria-selected="false">Part-time</button>
+          <button role="tab" aria-selected="false">Remote</button>
+          <button role="tab" aria-selected="false">On-site</button>
         </div>
 
         <div class="job-list">
           <div class="job-card" data-id="1">
-            <div>
-              <h4>UI Designer</h4>
-              <p>Remote · Design Department</p>
+            <div class="wrap">
+              <h4 class="wrap">UI Designer</h4>
+              <p class="wrap">Remote • Design Department</p>
             </div>
-            <button class="save-btn">⭐</button>
+            <button class="save-btn" aria-label="Save job">⭐</button>
           </div>
+
           <div class="job-card" data-id="2">
-            <div>
-              <h4>Software Engineer</h4>
-              <p>Full-time · Development Team</p>
+            <div class="wrap">
+              <h4 class="wrap">Software Engineer</h4>
+              <p class="wrap">Full-time • Development Team</p>
             </div>
-            <button class="save-btn">⭐</button>
+            <button class="save-btn" aria-label="Save job">⭐</button>
           </div>
         </div>
       </section>
 
       <!-- Saved Jobs -->
-      <section id="saved-section">
-        <h2>Saved Jobs</h2>
+      <section id="saved-section" aria-labelledby="savedTitle">
+        <h2 id="savedTitle" class="wrap">Saved Jobs</h2>
         <div class="job-list saved-jobs"></div>
       </section>
-    </div>
+    </main>
   </div>
 
   <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const links = document.querySelectorAll(".sidebar a");
-    const sections = document.querySelectorAll(".dashboard-content section");
-    const themeToggle = document.querySelector(".toggle-theme");
-    const saveButtons = document.querySelectorAll(".save-btn");
-    const savedList = document.querySelector(".saved-jobs");
+    // ===== State Restore (tabs + theme + saved jobs) =====
+    document.addEventListener("DOMContentLoaded", () => {
+      const links = Array.from(document.querySelectorAll(".sidebar a"));
+      const sections = Array.from(document.querySelectorAll(".dashboard-content section"));
+      const savedList = document.querySelector(".saved-jobs");
+      const themeToggle = document.getElementById("themeToggle");
+      const themeIcon = document.getElementById("themeIcon");
 
-    // restore last active tab
-    const savedTab = localStorage.getItem("activeTab");
-    if (savedTab) {
-      links.forEach(l => l.classList.remove("active"));
-      sections.forEach(s => s.classList.remove("active"));
-      document.querySelector(`.sidebar a[data-target="${savedTab}"]`)?.classList.add("active");
-      document.getElementById(savedTab)?.classList.add("active");
-    }
+      // Restore theme (default to system preference on first load)
+      const savedTheme = localStorage.getItem("theme");
+      if (!savedTheme) {
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (prefersDark) document.body.classList.add("dark");
+        localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+      } else if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+      }
+      themeIcon.textContent = document.body.classList.contains("dark") ? "🌞" : "🌙";
 
-    // restore theme
-    if (localStorage.getItem("theme") === "dark") {
-      document.body.classList.add("dark");
-    }
-
-    // restore saved jobs
-    let savedJobs = JSON.parse(localStorage.getItem("savedJobs") || "[]");
-    function renderSaved() {
-      savedList.innerHTML = savedJobs.map(job => `
-        <div class="job-card">
-          <div>
-            <h4>${job.title}</h4>
-            <p>${job.details}</p>
-          </div>
-        </div>
-      `).join("");
-      document.querySelectorAll(".job-card").forEach(card => {
-        const id = card.dataset.id;
-        const btn = card.querySelector(".save-btn");
-        if (id && savedJobs.find(j => j.id === id)) {
-          btn.classList.add("saved");
-        }
+      // Toggle theme
+      themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+        themeIcon.textContent = document.body.classList.contains("dark") ? "🌞" : "🌙";
       });
-    }
-    renderSaved();
 
-    // tab switching
-    links.forEach(link => {
-      link.addEventListener("click", e => {
-        e.preventDefault();
+      // Restore last active tab
+      const savedTab = localStorage.getItem("activeTab");
+      if (savedTab) {
         links.forEach(l => l.classList.remove("active"));
         sections.forEach(s => s.classList.remove("active"));
+        const link = links.find(l => l.dataset.target === savedTab);
+        const section = sections.find(s => s.id === savedTab);
+        if (link && section) { link.classList.add("active"); section.classList.add("active"); }
+      }
 
-        link.classList.add("active");
-        const targetId = link.getAttribute("data-target");
-        document.getElementById(targetId).classList.add("active");
-        localStorage.setItem("activeTab", targetId);
+      // Tab switching
+      links.forEach(link => {
+        link.addEventListener("click", e => {
+          e.preventDefault();
+          links.forEach(l => l.classList.remove("active"));
+          sections.forEach(s => s.classList.remove("active"));
+          link.classList.add("active");
+          const targetId = link.getAttribute("data-target");
+          document.getElementById(targetId).classList.add("active");
+          localStorage.setItem("activeTab", targetId);
+        });
+      });
+
+      // Saved jobs (local demo)
+      let savedJobs = JSON.parse(localStorage.getItem("savedJobs") || "[]");
+      function renderSaved() {
+        if (!savedList) return;
+        savedList.innerHTML = savedJobs.map(job => `
+          <div class="job-card">
+            <div class="wrap">
+              <h4 class="wrap">${job.title}</h4>
+              <p class="wrap">${job.details}</p>
+            </div>
+            <button class="save-btn saved" data-id="${job.id}" aria-label="Unsave job">⭐</button>
+          </div>
+        `).join("");
+        savedList.querySelectorAll(".save-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            savedJobs = savedJobs.filter(j => j.id !== id);
+            localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
+            renderSaved();
+          });
+        });
+      }
+      renderSaved();
+
+      // Hook save buttons in job list
+      document.querySelectorAll(".job-card .save-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const card = btn.closest(".job-card");
+          const jobId = card.dataset.id;
+          const title = card.querySelector("h4").innerText;
+          const details = card.querySelector("p").innerText;
+
+          if (btn.classList.contains("saved")) {
+            savedJobs = savedJobs.filter(j => j.id !== jobId);
+            btn.classList.remove("saved");
+          } else {
+            savedJobs.push({ id: jobId, title, details });
+            btn.classList.add("saved");
+          }
+          localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
+          renderSaved();
+        });
       });
     });
-
-    // theme toggle
-    themeToggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-    });
-
-    // save job
-    saveButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const card = btn.closest(".job-card");
-        const jobId = card.dataset.id;
-        const title = card.querySelector("h4").innerText;
-        const details = card.querySelector("p").innerText;
-
-        if (btn.classList.contains("saved")) {
-          savedJobs = savedJobs.filter(j => j.id !== jobId);
-          btn.classList.remove("saved");
-        } else {
-          savedJobs.push({ id: jobId, title, details });
-          btn.classList.add("saved");
-        }
-        localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
-        renderSaved();
-      });
-    });
-  });
   </script>
-
 </body>
 </html>
