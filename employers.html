@@ -2,44 +2,472 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Employers • CarribCareerHub</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Employer Dashboard • CaribCareerHub</title>
+  <meta name="color-scheme" content="light dark" />
+
+  <style>
+    :root{
+      --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
+      --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
+      --radius:18px; --shadow:0 10px 30px rgba(16,40,120,.12);
+      --ring:0 0 0 3px rgba(30,108,255,.12);
+      --border:#E4ECFF; --field:#F7FAFF;
+      --ok:#22c55e; --err:#ef4444;
+    }
+    body.dark{
+      --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6;
+      --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
+      --shadow:0 14px 44px rgba(0,0,0,.45); --ring:0 0 0 3px rgba(142,196,255,.22);
+      --border:#263150; --field:#172038;
+      --ok:#3de184; --err:#ff6b6b;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+      overflow-x:hidden;
+    }
+
+    /* Header */
+    .header{
+      max-width:1100px; margin:14px auto 0; padding:0 16px;
+      display:flex; align-items:center; justify-content:center; gap:12px; position:relative;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .brand .logo{width:80px; height:80px; object-fit:contain}
+    .brand-name{font-size:22px; font-weight:900; letter-spacing:4px; white-space:nowrap}
+    .right-rail{position:absolute; right:16px; top:8px; display:flex; align-items:center; gap:8px}
+    .theme-toggle{
+      border:1px solid var(--border); background:var(--panel); color:var(--ink);
+      padding:8px 10px; border-radius:12px; cursor:pointer; font-weight:900;
+    }
+    .logout{
+      border:1px solid var(--border); background:transparent; color:var(--ink);
+      padding:8px 10px; border-radius:12px; cursor:pointer; font-weight:900;
+    }
+    .hero{
+      max-width:1100px; margin:10px auto 0; padding:0 16px 6px;
+      color:var(--muted); font-weight:800; font-size:14px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+
+    /* Shell */
+    .wrap{max-width:1100px; margin:12px auto 30px; padding:0 16px;}
+    .grid{display:grid; grid-template-columns:280px 1fr; gap:16px}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr} .brand .logo{width:72px;height:72px} .brand-name{font-size:20px;letter-spacing:3px} }
+
+    /* Sidebar */
+    .side{
+      background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px;
+      position:sticky; top:10px; height:fit-content;
+    }
+    .side h3{margin:6px 0 10px; font-size:16px}
+    .tabs{display:flex; flex-direction:column; gap:8px}
+    .tab{
+      display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; cursor:pointer; font-weight:900;
+      border:1px solid transparent; color:var(--ink); text-decoration:none;
+    }
+    .tab:hover{ border-color:var(--border) }
+    .tab.active{ background: color-mix(in oklab, var(--brand) 16%, transparent); border-color: color-mix(in oklab, var(--brand) 40%, transparent) }
+
+    /* Main panel */
+    .panel{
+      background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px;
+    }
+    .topbar{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px}
+    .title{margin:0; font-size:20px}
+    .btn{border:none; border-radius:12px; padding:10px 12px; font-weight:900; cursor:pointer}
+    .btn-primary{color:#fff; background:linear-gradient(90deg,var(--brand),var(--brand-2))}
+    .btn-line{background:transparent; border:1px solid var(--border); color:var(--ink)}
+
+    /* Jobs list */
+    .list{display:grid; gap:12px}
+    .row{
+      display:grid; grid-template-columns:1fr auto; gap:10px; align-items:start; padding:14px; border-radius:14px;
+      border:1px solid var(--border); background:var(--field);
+    }
+    .row h4{margin:0 0 4px; font-size:18px}
+    .meta{color:var(--muted); font-size:14px; margin:0}
+    .row-actions{display:flex; gap:8px}
+    .badge{display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; border:1px solid var(--border)}
+
+    /* Modal */
+    .backdrop{position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; padding:16px; z-index:1000}
+    .backdrop.open{display:flex}
+    .modal{width:min(92vw,720px); background:var(--panel); border:1px solid var(--border); border-radius:18px; box-shadow:var(--shadow); padding:16px}
+    .modal-header{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px}
+    .modal-title{margin:0; font-size:18px; font-weight:900}
+    .modal-close{border:1px solid var(--border); background:transparent; border-radius:10px; padding:6px 10px; cursor:pointer}
+    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    @media (max-width:600px){ .grid2{grid-template-columns:1fr} }
+    label{display:block; font-weight:800; font-size:13px; color:var(--muted); margin:10px 0 6px}
+    .field{display:flex; align-items:center; gap:8px; border:1px solid var(--border); border-radius:12px; background:var(--panel); padding:12px}
+    input,select,textarea{width:100%; border:none; outline:none; background:transparent; color:var(--ink); font:16px/1.35 inherit}
+    textarea{min-height:140px; resize:vertical}
+    .modal-actions{display:flex; gap:8px; justify-content:flex-end; margin-top:8px}
+    .status{margin-top:8px; font-weight:900}
+    .ok{color:var(--ok)} .err{color:var(--err)}
+    .center{display:flex; justify-content:center}
+
+    /* Footer */
+    .footer{
+      max-width:1100px; margin:16px auto 40px; padding:0 16px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap
+    }
+    .links{display:flex; gap:18px; flex-wrap:wrap}
+    .footer a{color:var(--ink); text-decoration:none; font-weight:900; border-bottom:2px solid transparent; padding-bottom:2px}
+    .footer a:hover{border-color: color-mix(in oklab, var(--brand) 50%, transparent)}
+    .copy{color:var(--muted); font-weight:700}
+  </style>
 </head>
 <body>
-  
-<header class="header">
-  <div class="brand">
-    <img src="./assets/logo.svg" alt="CarribCareerHub logo" />
-    <div class="name">CarribCareerHub</div>
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <picture>
+        <source srcset="./assets/logo.svg" type="image/svg+xml" />
+        <img src="./assets/logo.png" alt="CaribCareerHub logo" class="logo" />
+      </picture>
+      <span class="brand-name">CARRIBCAREERHUB</span>
+    </div>
+    <div class="right-rail">
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button id="logoutBtn" class="logout" title="Log out">⎋</button>
+    </div>
+  </header>
+
+  <div class="hero">
+    <span>Employer Dashboard — post roles, edit details, and manage your listings.</span>
   </div>
-  <nav class="nav">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="jobs.html">Jobs</a>
-    <a href="employers.html">Employers</a>
-    <a class="signin" href="login.html">Sign In</a>
-    <a class="cta" href="signup.html">Sign Up</a>
-  </nav>
-</header>
 
-  <main class="panel">
-    
-<h1>Employers</h1>
-<p class="lede">Post jobs and manage applications. (Design-only view for now.)</p>
+  <!-- Main -->
+  <main class="wrap">
+    <div class="grid">
+      <!-- Sidebar -->
+      <aside class="side">
+        <h3>Manage</h3>
+        <nav class="tabs">
+          <a class="tab active" data-tab="posts">🧰 Manage Posts</a>
+          <a class="tab" data-tab="profile">👤 Company Profile</a>
+        </nav>
+      </aside>
 
+      <!-- Content -->
+      <section class="panel">
+        <div class="topbar">
+          <h2 class="title" id="tabTitle">Manage Posts</h2>
+          <div style="display:flex; gap:8px">
+            <button id="btnNew" class="btn btn-primary">New Job</button>
+            <button id="btnRefresh" class="btn btn-line">Refresh</button>
+          </div>
+        </div>
+
+        <!-- Posts tab -->
+        <div id="posts" class="tab-pane" style="display:block">
+          <div id="list" class="list">
+            <div class="center"><span class="meta">Loading…</span></div>
+          </div>
+          <div class="center" style="margin-top:10px">
+            <button id="loadMore" class="btn btn-line" style="display:none">Load More</button>
+          </div>
+        </div>
+
+        <!-- Profile tab -->
+        <div id="profile" class="tab-pane" style="display:none">
+          <p class="meta">This area can show and update your employer metadata (company, contact, etc.).</p>
+          <p class="meta">For now, these values are pulled from your account.</p>
+          <div id="profileBox" class="row">
+            <div>
+              <h4 id="companyName">Company</h4>
+              <p id="companyMeta" class="meta"></p>
+            </div>
+            <span class="badge">Read‑only</span>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
-  
-<footer class="footer">
-  <div class="links">
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="terms.html">Terms</a>
-  </div>
-  <div class="copy">© 2025 CarribCareerHub</div>
-</footer>
 
-  <script src="script.js"></script>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="links">
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <div class="copy">© 2025 CaribCareerHub</div>
+  </footer>
+
+  <!-- New/Edit Job Modal -->
+  <div id="jobModal" class="backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h3 id="modalTitle" class="modal-title">Post a Job</h3>
+        <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+      </div>
+      <form id="jobForm" class="grid2" novalidate>
+        <div>
+          <label>Title</label>
+          <div class="field"><input id="f_title" placeholder="e.g., Frontend Developer" required></div>
+        </div>
+        <div>
+          <label>Company</label>
+          <div class="field"><input id="f_company" placeholder="e.g., Your Company Ltd."></div>
+        </div>
+        <div>
+          <label>Location</label>
+          <div class="field"><input id="f_location" placeholder="e.g., Kingston, Jamaica"></div>
+        </div>
+        <div>
+          <label>Type</label>
+          <div class="field">
+            <select id="f_type">
+              <option>Full-time</option>
+              <option>Part-time</option>
+              <option>Remote</option>
+              <option>On-site</option>
+              <option>Contract</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label>Salary (optional)</label>
+          <div class="field"><input id="f_salary" placeholder="e.g., JMD 2,000,000 / year"></div>
+        </div>
+        <div style="grid-column:1/-1">
+          <label>Description</label>
+          <div class="field"><textarea id="f_desc" placeholder="Short role summary and key responsibilities…"></textarea></div>
+        </div>
+
+        <div class="modal-actions" style="grid-column:1/-1">
+          <span id="formMsg" class="status"></span>
+          <button type="button" class="btn btn-line" id="btnCancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSave">Publish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ===== Theme =====
+    (function initTheme(){
+      const saved = localStorage.getItem('cch.theme');
+      if (saved === 'dark') document.body.classList.add('dark');
+      if (!saved){
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) document.body.classList.add('dark');
+        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      }
+      const t = document.getElementById('themeToggle');
+      t.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
+      t.addEventListener('click', ()=>{
+        document.body.classList.toggle('dark');
+        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        t.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
+      });
+    })();
+
+    // ===== Supabase init =====
+    const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const LOGIN_PAGE = "login.html";
+    const SIGNUP_PAGE = "employer-signup.html";
+
+    let currentUser = null;
+    let editingId = null;
+
+    // ===== Auth guard =====
+    (async ()=>{
+      const { data:{ session } } = await supabaseClient.auth.getSession();
+      if (!session) return (window.location.href = LOGIN_PAGE);
+      currentUser = session.user;
+
+      // If role metadata isn't employer, send to signup
+      const role = currentUser.user_metadata?.role || "";
+      if (role.toLowerCase() !== "employer"){
+        window.location.href = SIGNUP_PAGE; return;
+      }
+
+      // Fill profile box
+      document.getElementById('companyName').textContent =
+        currentUser.user_metadata?.company || (currentUser.email || "Your Company");
+      document.getElementById('companyMeta').textContent =
+        [currentUser.user_metadata?.industry, currentUser.user_metadata?.size, currentUser.user_metadata?.location]
+        .filter(Boolean).join(" • ");
+
+      // Load jobs
+      await loadJobs(true);
+    })();
+
+    // Sign out redirect
+    document.getElementById('logoutBtn').addEventListener('click', async ()=>{
+      await supabaseClient.auth.signOut();
+      window.location.href = LOGIN_PAGE;
+    });
+
+    // ===== Tabs =====
+    const tabLinks = Array.from(document.querySelectorAll('.tab'));
+    function setTab(name){
+      tabLinks.forEach(l => l.classList.toggle('active', l.dataset.tab === name));
+      document.querySelectorAll('.tab-pane').forEach(p => p.style.display = (p.id === name ? 'block':'none'));
+      document.getElementById('tabTitle').textContent = name === 'posts' ? 'Manage Posts' : 'Company Profile';
+      localStorage.setItem('employer.tab', name);
+    }
+    tabLinks.forEach(l => l.addEventListener('click', ()=> setTab(l.dataset.tab)));
+    setTab(localStorage.getItem('employer.tab') || 'posts');
+
+    // ===== Modal wiring =====
+    const modal = document.getElementById('jobModal');
+    const jobForm = document.getElementById('jobForm');
+    const btnNew  = document.getElementById('btnNew');
+    const btnCancel = document.getElementById('btnCancel');
+    const btnSave = document.getElementById('btnSave');
+    const formMsg = document.getElementById('formMsg');
+
+    function openModal(edit=false, data=null){
+      modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+      document.getElementById('modalTitle').textContent = edit ? 'Edit Job' : 'Post a Job';
+      btnSave.textContent = edit ? 'Save Changes' : 'Publish';
+      formMsg.textContent = ""; formMsg.className = "status";
+      if (edit && data){
+        editingId = data.id;
+        document.getElementById('f_title').value = data.title || "";
+        document.getElementById('f_company').value = data.company || "";
+        document.getElementById('f_location').value = data.location || "";
+        document.getElementById('f_type').value = data.type || "Full-time";
+        document.getElementById('f_salary').value = data.salary || "";
+        document.getElementById('f_desc').value = data.description || "";
+      }else{
+        editingId = null; jobForm.reset();
+        // prefill company from metadata
+        document.getElementById('f_company').value = currentUser?.user_metadata?.company || "";
+      }
+      document.getElementById('f_title').focus();
+    }
+    function closeModal(){
+      modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); jobForm.reset(); editingId = null; formMsg.textContent="";
+    }
+    btnNew.addEventListener('click', ()=> openModal(false));
+    btnCancel.addEventListener('click', closeModal);
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e)=>{ if (e.target === modal) closeModal(); });
+    window.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+    // ===== Jobs fetch/render =====
+    const list = document.getElementById('list');
+    const loadMore = document.getElementById('loadMore');
+    const btnRefresh = document.getElementById('btnRefresh');
+    let page = 0, pageSize = 8, moreRows = true;
+
+    async function loadJobs(reset=false){
+      try{
+        if (reset){ page = 0; moreRows = true; list.innerHTML = `<div class="center"><span class="meta">Loading…</span></div>`; }
+        if (!moreRows) return;
+        const from = page * pageSize, to = from + pageSize - 1;
+        const { data, error } = await supabaseClient
+          .from('jobs')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending:false })
+          .range(from, to);
+        if (error) throw error;
+
+        if (reset) list.innerHTML = "";
+        if (!data || data.length === 0){
+          if (reset) list.innerHTML = `<div class="center"><span class="meta">No posts yet. Use “New Job”.</span></div>`;
+          loadMore.style.display = "none"; return;
+        }
+
+        data.forEach(renderRow);
+        moreRows = data.length === pageSize;
+        loadMore.style.display = moreRows ? "inline-block" : "none";
+      }catch(err){
+        console.error(err);
+        list.innerHTML = `<div class="center"><span class="status err">Failed to load posts: ${err.message || "unknown"}</span></div>`;
+        loadMore.style.display = "none";
+      }
+    }
+
+    function renderRow(job){
+      const row = document.createElement('div');
+      row.className = "row";
+      row.innerHTML = `
+        <div>
+          <h4>${esc(job.title || "Untitled role")}</h4>
+          <p class="meta">${esc(job.company || "")} ${job.location ? "• " + esc(job.location) : ""} ${job.type ? "• " + esc(job.type) : ""} ${job.salary ? "• " + esc(job.salary) : ""}</p>
+          <p class="meta">${job.created_at ? new Date(job.created_at).toLocaleString() : ""}</p>
+        </div>
+        <div class="row-actions">
+          <button class="btn btn-line" data-edit="${job.id}">Edit</button>
+          <button class="btn btn-primary" data-del="${job.id}" style="background:linear-gradient(90deg,#ff5a5a,#ff7a7a)">Delete</button>
+        </div>
+      `;
+      row.querySelector('[data-edit]').addEventListener('click', ()=> openModal(true, job));
+      row.querySelector('[data-del]').addEventListener('click', ()=> doDelete(job.id));
+      list.appendChild(row);
+    }
+
+    loadMore.addEventListener('click', ()=>{ page++; loadJobs(false); });
+    btnRefresh.addEventListener('click', ()=> loadJobs(true));
+
+    // Realtime updates
+    supabaseClient
+      .channel('jobs-employer-live')
+      .on('postgres_changes', { event:'*', schema:'public', table:'jobs', filter:`user_id=eq.${''}` }, ()=> loadJobs(true))
+      .subscribe();
+    // Note: filter workaround—some clients require explicit filter support. If not, we still refresh.
+
+    // ===== Create/Update/Delete =====
+    jobForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const title = document.getElementById('f_title').value.trim();
+      const company = document.getElementById('f_company').value.trim();
+      const location = document.getElementById('f_location').value.trim();
+      const type = document.getElementById('f_type').value;
+      const salary = document.getElementById('f_salary').value.trim();
+      const description = document.getElementById('f_desc').value.trim();
+
+      if (!title){ formMsg.textContent = "Title is required."; formMsg.className="status err"; return; }
+
+      try{
+        formMsg.textContent = editingId ? "Saving…" : "Publishing…"; formMsg.className="status";
+        if (editingId){
+          const { error } = await supabaseClient.from('jobs').update({
+            title, company, location, type, salary, description
+          }).eq('id', editingId).eq('user_id', currentUser.id);
+          if (error) throw error;
+          formMsg.textContent = "✅ Updated."; formMsg.className="status ok";
+        }else{
+          const { error } = await supabaseClient.from('jobs').insert([{
+            user_id: currentUser.id, title, company, location, type, salary, description
+          }]);
+          if (error) throw error;
+          formMsg.textContent = "✅ Posted!"; formMsg.className="status ok";
+        }
+        setTimeout(()=>{ closeModal(); loadJobs(true); }, 500);
+      }catch(err){
+        formMsg.textContent = "❌ " + (err.message || "Save failed."); formMsg.className="status err";
+      }
+    });
+
+    async function doDelete(id){
+      if (!confirm('Delete this post?')) return;
+      try{
+        const { error } = await supabaseClient.from('jobs').delete().eq('id', id).eq('user_id', currentUser.id);
+        if (error) throw error;
+        loadJobs(true);
+      }catch(err){
+        alert("Delete failed: " + (err.message || "Unknown error"));
+      }
+    }
+
+    // Utils
+    function esc(s){ return (s??"").toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  </script>
 </body>
 </html>
