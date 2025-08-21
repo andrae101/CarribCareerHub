@@ -1,254 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Job • CaribCareerHub</title>
-  <meta name="color-scheme" content="light dark" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Details</title>
   <style>
-    :root{
-      --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
-      --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
-      --radius:18px; --shadow:0 10px 30px rgba(16,40,120,.12);
-      --ring:0 0 0 3px rgba(30,108,255,.12);
-    }
-    body.dark{
-      --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6;
-      --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
-      --shadow:0 14px 40px rgba(0,0,0,.45); --ring:0 0 0 3px rgba(142,196,255,.22);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; background:var(--bg); color:var(--ink);
-      font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+    :root {
+      --bg: #F3F8FF;
+      --panel: #fff;
+      --ink: #0A2458;
+      --muted: #6B7A99;
+      --brand: #1E6CFF;
+      --brand-2: #3FA2FF;
+      --accent: #FFA03B;
     }
 
-    /* banner */
-    .highlight{background:linear-gradient(90deg,var(--brand),var(--brand-2));color:#fff;text-align:center;
-      font-weight:900;padding:10px 16px; box-shadow:var(--shadow); position:sticky; top:0; z-index:10}
-
-    /* header */
-    .header{max-width:1100px;margin:14px auto 0;padding:0 16px;display:flex;justify-content:center;gap:12px;align-items:center;position:relative}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand .logo{width:80px;height:80px;object-fit:contain}
-    .brand-name{font-weight:900;letter-spacing:4px;white-space:nowrap}
-    .right{position:absolute;right:16px;top:0;display:flex;gap:10px;align-items:center}
-    .btn{display:inline-block;border:none;padding:10px 14px;border-radius:12px;font-weight:900;cursor:pointer}
-    .btn-primary{background:linear-gradient(90deg,var(--brand),var(--brand-2));color:#fff;box-shadow:var(--shadow)}
-    .btn-ghost{background:var(--panel);color:var(--ink);border:1px solid color-mix(in oklab,var(--ink) 12%, transparent)}
-    .theme-toggle{font-weight:900}
-
-    /* main */
-    .wrap{max-width:1100px;margin:16px auto 36px;padding:0 16px}
-    .grid{display:grid;grid-template-columns:2fr 1fr;gap:18px}
-    @media (max-width:900px){ .grid{grid-template-columns:1fr} }
-
-    .card{background:color-mix(in oklab, var(--panel) 90%, transparent); border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      border-radius:var(--radius); box-shadow:var(--shadow); padding:18px}
-
-    .title{margin:0 0 6px;font-size:clamp(22px,3.5vw,30px);font-weight:900}
-    .meta{margin:0;color:var(--muted);font-weight:700}
-    .badge{display:inline-block;margin-top:10px;padding:6px 10px;border-radius:999px;border:1px solid color-mix(in oklab,var(--ink) 16%, transparent);font-size:12px;font-weight:900}
-
-    .desc{margin:14px 0 0;white-space:pre-wrap;word-break:break-word}
-    .muted{color:var(--muted)}
-    .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-
-    /* apply form */
-    .field{margin:10px 0}
-    .field label{display:block;font-weight:800;margin:0 0 6px}
-    .input, textarea{
-      width:100%; padding:12px 14px; border-radius:12px;
-      border:1px solid color-mix(in oklab,var(--ink) 14%, transparent);
-      background:transparent; color:var(--ink); font:inherit;
+    body.dark {
+      --bg: #0e1424;
+      --panel: #1c2333;
+      --ink: #f4f6fb;
+      --muted: #aab3cc;
     }
-    textarea{min-height:140px;resize:vertical}
-    .note{font-size:13px;color:var(--muted);margin-top:6px}
-    .ok{color:#2ad06f}.err{color:#ff6b6b}
 
-    .footer{max-width:1100px;margin:0 auto 28px;padding:0 16px;color:var(--muted);text-align:center}
-    a.link{color:var(--brand);text-decoration:none;font-weight:800}
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      transition: background 0.3s, color 0.3s;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 28px;
+    }
+
+    .muted {
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .apply-form {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f7faff;
+      border-radius: 10px;
+    }
+
+    body.dark .apply-form {
+      background: #2a3248;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: 600;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 15px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .toggle-theme {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <div class="highlight">🌴 CaribCareerHub</div>
+  <button class="toggle-theme">🌙 Toggle Dark Mode</button>
+  <div class="container">
+    <h1 id="job-title">Loading...</h1>
+    <p class="muted" id="job-company"></p>
+    <p id="job-description"></p>
+    <p><strong>Salary:</strong> <span id="job-salary"></span></p>
+    <p><strong>Location:</strong> <span id="job-location"></span></p>
 
-  <header class="header">
-    <div class="brand">
-      <img class="logo" src="./assets/logo.png" alt="CaribCareerHub logo" />
-      <div class="brand-name">CARRIBCAREERHUB</div>
+    <div class="apply-form">
+      <h2>Apply for this Job</h2>
+      <form id="apply-form">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+
+        <label for="cv">Upload CV (PDF)</label>
+        <input type="file" id="cv" accept=".pdf" required>
+
+        <button type="submit">Submit Application</button>
+      </form>
+      <p id="status"></p>
     </div>
-    <div class="right">
-      <button id="themeToggle" class="btn btn-ghost theme-toggle" aria-label="Toggle theme">🌙</button>
-      <a href="login.html" class="btn btn-primary">Login</a>
-    </div>
-  </header>
+  </div>
 
-  <main class="wrap">
-    <div class="grid">
-      <!-- Job details -->
-      <section class="card" id="jobCard">
-        <p class="muted" id="loading">Loading job…</p>
-      </section>
-
-      <!-- Apply form -->
-      <aside class="card">
-        <div class="row" style="margin-bottom:8px">
-          <h3 style="margin:0">Apply for this job</h3>
-          <span class="badge" id="jobTypeBadge" hidden></span>
-        </div>
-
-        <form id="applyForm" novalidate>
-          <div class="field">
-            <label for="name">Full name</label>
-            <input id="name" class="input" placeholder="Your full name" required />
-          </div>
-          <div class="field">
-            <label for="email">Email</label>
-            <input id="email" class="input" type="email" placeholder="you@example.com" required />
-          </div>
-          <div class="field">
-            <label for="resume">Resume URL (PDF/Drive/Dropbox)</label>
-            <input id="resume" class="input" type="url" placeholder="https://…" />
-            <div class="note">Tip: upload your resume to Drive/Dropbox and paste the share link.</div>
-          </div>
-          <div class="field">
-            <label for="cover">Short message</label>
-            <textarea id="cover" placeholder="Cover letter / relevant experience…"></textarea>
-          </div>
-
-          <div class="row">
-            <button id="submitBtn" class="btn btn-primary" type="submit">Send application</button>
-            <a class="link" href="index.html">← Back to jobs</a>
-          </div>
-          <p id="msg" class="note"></p>
-        </form>
-      </aside>
-    </div>
-  </main>
-
-  <div class="footer">© 2025 CaribCareerHub</div>
-
-  <!-- Supabase JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <script>
-    // ===== Theme (shared behavior) =====
-    (function initTheme(){
-      const saved = localStorage.getItem('cch.theme');
-      if (saved === 'dark') document.body.classList.add('dark');
-      if (!saved){
-        const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefers) document.body.classList.add('dark');
-        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-      }
-      const btn = document.getElementById('themeToggle');
-      const setIcon = ()=> btn.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
-      setIcon();
-      btn.addEventListener('click', ()=>{ document.body.classList.toggle('dark'); localStorage.setItem('cch.theme', document.body.classList.contains('dark')?'dark':'light'); setIcon(); });
-    })();
+    const { createClient } = supabase;
+    const supabaseUrl = "https://fpytvfhynleaivkvuedt.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+    const _supabase = createClient(supabaseUrl, supabaseKey);
 
-    // ===== Supabase config (from you) =====
-    const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Get job ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const jobId = urlParams.get("id");
 
-    // ===== Helpers =====
-    const $ = (sel)=> document.querySelector(sel);
-    function esc(s){ return (s??"").toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
-    function getParam(name){ return new URLSearchParams(location.search).get(name); }
+    async function loadJob() {
+      const { data, error } = await _supabase
+        .from("jobs")
+        .select("*")
+        .eq("id", jobId)
+        .single();
 
-    // ===== Load job =====
-    const jobCard = $("#jobCard");
-    const loading = $("#loading");
-    const badge = $("#jobTypeBadge");
-    let job = null;
-
-    async function loadJob(){
-      const id = getParam('id');
-      if (!id){ jobCard.innerHTML = "<p class='muted'>No job specified.</p>"; return; }
-
-      const { data, error } = await supabaseClient.from('jobs').select('*').eq('id', id).maybeSingle();
-      if (error){ jobCard.innerHTML = "<p class='muted'>Could not load job.</p>"; return; }
-      if (!data){ jobCard.innerHTML = "<p class='muted'>Job not found.</p>"; return; }
-
-      job = data;
-
-      // Title / meta
-      document.title = (job.title ? job.title + " • " : "") + "CaribCareerHub";
-      const title = `<h1 class="title">${esc(job.title || "Untitled role")}</h1>`;
-      const meta = `<p class="meta">${esc(job.company || "")}${job.location ? " • "+esc(job.location) : ""}${job.type ? " • "+esc(job.type) : ""}</p>`;
-      const posted = job.created_at ? `<span class="badge">Posted ${new Date(job.created_at).toLocaleDateString()}</span>` : "";
-
-      // Description
-      const desc = `<div class="desc">${esc(job.description || "No description provided.")}</div>`;
-
-      jobCard.innerHTML = title + meta + posted + desc;
-
-      if (job.type){ badge.hidden = false; badge.textContent = job.type; }
-    }
-
-    // ===== Apply =====
-    const form = $("#applyForm");
-    const nameInput = $("#name");
-    const emailInput = $("#email");
-    const resumeInput = $("#resume");
-    const coverInput = $("#cover");
-    const submitBtn = $("#submitBtn");
-    const msg = $("#msg");
-
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      msg.textContent = "";
-      if (!job){ msg.textContent = "Job not loaded yet."; msg.className = "note err"; return; }
-
-      const applicant_name = nameInput.value.trim();
-      const applicant_email = emailInput.value.trim();
-      const resume_url = resumeInput.value.trim();
-      const cover_letter = coverInput.value.trim();
-
-      if (!applicant_name || !applicant_email){
-        msg.textContent = "Name and email are required."; msg.className = "note err"; return;
-      }
-
-      submitBtn.disabled = true; submitBtn.textContent = "Sending…";
-
-      const payload = {
-        job_id: job.id,
-        job_title: job.title || null,
-        company: job.company || null,
-        applicant_name,
-        applicant_email,
-        resume_url: resume_url || null,
-        cover_letter: cover_letter || null,
-        status: "Reviewing"
-      };
-
-      const { error } = await supabaseClient.from('applications').insert([payload]);
-      submitBtn.disabled = false; submitBtn.textContent = "Send application";
-
-      if (error){
-        msg.textContent = "❌ " + (error.message || "Failed to submit.");
-        msg.className = "note err";
+      if (error) {
+        document.getElementById("job-title").innerText = "Job not found";
+        console.error(error);
         return;
       }
 
-      msg.textContent = "✅ Your application was sent. We'll keep you posted.";
-      msg.className = "note ok";
-      form.reset();
+      document.getElementById("job-title").innerText = data.title;
+      document.getElementById("job-company").innerText = data.company;
+      document.getElementById("job-description").innerText = data.description || "No description";
+      document.getElementById("job-salary").innerText = data.salary || "Not specified";
+      document.getElementById("job-location").innerText = data.location || "Not specified";
+    }
+
+    loadJob();
+
+    document.getElementById("apply-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const cvFile = document.getElementById("cv").files[0];
+
+      if (!cvFile) {
+        document.getElementById("status").innerText = "Please upload your CV.";
+        return;
+      }
+
+      // Upload CV to Supabase storage
+      const fileName = `${Date.now()}_${cvFile.name}`;
+      let { error: uploadError } = await _supabase.storage
+        .from("cvs")
+        .upload(fileName, cvFile);
+
+      if (uploadError) {
+        document.getElementById("status").innerText = "CV upload failed.";
+        console.error(uploadError);
+        return;
+      }
+
+      // Save application to DB
+      const { error: insertError } = await _supabase
+        .from("applications")
+        .insert([{ job_id: jobId, name, email, cv: fileName }]);
+
+      if (insertError) {
+        document.getElementById("status").innerText = "Application failed.";
+        console.error(insertError);
+      } else {
+        document.getElementById("status").innerText = "Application submitted successfully!";
+        document.getElementById("apply-form").reset();
+      }
     });
 
-    // Bootstrap
-    loadJob();
+    // Dark mode toggle
+    const themeToggle = document.querySelector(".toggle-theme");
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+    });
   </script>
-
-  <!--
-  If you see a "row-level security" error on submit:
-  In Supabase → SQL editor, make sure the applications table allows anonymous inserts:
-    create policy "Public can apply" on applications
-    for insert using (true);
-  And keep your employer views restricted with select policies by user_id (already added in your ATS step).
-  -->
 </body>
 </html>
