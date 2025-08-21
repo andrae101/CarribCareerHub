@@ -8,167 +8,197 @@
   <meta name="color-scheme" content="light dark" />
 
   <style>
-    :root{
-      --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
-      --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
-      --radius:18px; --shadow:0 10px 30px rgba(16,40,120,0.12);
-      --ring:0 0 0 3px rgba(30,108,255,.12);
-      --btn:#1E6CFF; --btn2:#3FA2FF;
-      --chip:#eef4ff; --chip-b:#d7e4ff;
-    }
-    body.dark{
-      --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6;
-      --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
-      --shadow:0 14px 40px rgba(0,0,0,.5); --ring:0 0 0 3px rgba(142,196,255,.22);
-      --btn:#5a8fff; --btn2:#8ec4ff;
-      --chip:#0f1a33; --chip-b:#2c3e6b;
+    :root {
+      --bg: #f3f8ff;
+      --panel: #ffffff;
+      --ink: #0a2458;
+      --muted: #6b7a99;
+      --brand: #1e6cff;
+      --brand-2: #3fa2ff;
+      --accent: #ffa03b;
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(16,40,120,0.12);
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-      color:var(--ink); background:var(--bg); overflow-x:hidden;
-      -webkit-text-size-adjust:100%;
+    body.dark {
+      --bg: #0e1424;
+      --panel: #1c2333;
+      --ink: #f4f6fb;
+      --muted: #aab3cc;
+      --brand: #3fa2ff;
+      --brand-2: #1e6cff;
+      --accent: #ffb44d;
+      --shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
 
-    /* Top banner – spans full width on all screens */
-    .highlight-banner{
-      position:sticky; top:0; z-index:1000;
-      width:100%;
-      background:linear-gradient(90deg,var(--brand),var(--brand-2));
-      color:#fff; text-align:center; font-weight:900;
-      padding:10px 16px; font-size:14px; letter-spacing:.3px;
-      box-shadow:var(--shadow);
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font: 16px/1.5 "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
+    /* Banner */
+    .highlight-banner {
+      background: var(--brand);
+      color: #fff;
+      padding: 8px 16px;
+      text-align: center;
+      font-weight: 600;
     }
 
     /* Header */
-    .header{
-      max-width:1100px; margin:14px auto 0; padding:0 16px;
-      display:flex; align-items:center; justify-content:center; gap:12px; position:relative;
+    .header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .brand{display:flex; align-items:center; gap:12px}
-    .brand .logo{width:82px;height:82px;object-fit:contain}
-    .brand-name{font-size:22px;font-weight:900;letter-spacing:4px;white-space:nowrap}
-
-    .right-rail{
-      position:absolute; right:16px; top:50%; transform:translateY(-50%);
-      display:flex; align-items:center; gap:8px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .theme-toggle{
-      border:1px solid rgba(0,0,0,.08);
-      padding:8px 10px; border-radius:12px;
-      background:var(--panel); color:var(--ink); cursor:pointer; font-weight:900;
-      box-shadow:var(--shadow);
+    .logo {
+      height: 40px;
+      width: auto;
     }
-    body.dark .theme-toggle{
-      border-color:rgba(255,255,255,.18);
-      background:#0b1324; /* high contrast in dark */
-      color:#eaf1ff;
+    .brand-name {
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 1px;
     }
-    .login-btn{
-      display:inline-block; padding:8px 12px; border-radius:10px;
-      font-weight:900; text-decoration:none; color:#fff;
-      background:linear-gradient(90deg,var(--btn),var(--btn2)); box-shadow:var(--shadow);
-      font-size:14px; line-height:1;
+    .right-rail {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .theme-toggle, .login-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .theme-toggle {
+      background: var(--accent);
+      color: #fff;
+    }
+    .login-btn {
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      color: #fff;
+      text-decoration: none;
     }
 
     /* Panel */
-    .panel{
-      max-width:1100px; margin:16px auto 32px; padding:20px; border-radius:var(--radius);
-      background:color-mix(in oklab, var(--panel) 90%, transparent); box-shadow:var(--shadow);
-      border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    .panel {
+      max-width: 1200px;
+      margin: 20px auto;
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
     }
-    .panel-content{ display:grid; grid-template-columns:1.1fr .9fr; gap:24px; }
+    .panel-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      align-items: flex-start;
+    }
+    .panel-content section {
+      flex: 1;
+      min-width: 280px;
+    }
+    .hero-title {
+      font-size: 32px;
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+    .lede {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .employer-callout {
+      margin: 20px 0;
+      font-size: 16px;
+    }
+    .employer-callout .cta {
+      margin-left: 12px;
+      padding: 8px 14px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .jobs h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    .jobs .wrap {
+      display: grid;
+      gap: 12px;
+    }
+    .job-item {
+      background: #f9fbff;
+      border: 1px solid #e4ecff;
+      padding: 14px;
+      border-radius: 12px;
+    }
+    body.dark .job-item {
+      background: #1f283d;
+      border-color: #3a4767;
+    }
 
-    /* Hero */
-    .hero-title{
-      font-size: clamp(28px, 5.4vw, 44px);
-      font-weight:900; line-height:1.25; margin:6px 0 10px; text-align:center;
-      letter-spacing:.4px;
+    .map-wrap img {
+      max-width: 350px;
+      height: auto;
     }
-    .lede{
-      font-size:16px; line-height:1.8; color:var(--muted);
-      margin:0 auto 12px; text-align:center; max-width:760px;
-    }
-    .employer-callout{
-      margin:14px auto 0; padding:12px 14px; border-radius:12px;
-      background:var(--chip); border:1px solid var(--chip-b); color:var(--ink);
-      font-weight:700; max-width:760px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
-    }
-    .cta{
-      display:inline-block; padding:8px 12px; border-radius:10px; font-weight:900; color:#fff;
-      background:linear-gradient(90deg,var(--btn),var(--btn2)); text-decoration:none; box-shadow:var(--shadow); white-space:nowrap;
-    }
-
-    /* Latest Jobs */
-    .jobs{
-      margin-top:18px;
-    }
-    .jobs h2{
-      margin:0 0 10px; font-size:clamp(18px,3.8vw,22px); font-weight:900;
-    }
-    .job-card{
-      display:grid; gap:6px; border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      border-radius:12px; padding:12px 14px; background:var(--panel); box-shadow:var(--shadow); margin-bottom:12px;
-    }
-    .job-title{ margin:0; font-size:18px; font-weight:900; line-height:1.25 }
-    .job-company{ margin:0; color:var(--muted); font-weight:700 }
-    .job-location{ margin:0; color:var(--brand); font-weight:800 }
-    .wrap{ word-break: normal; overflow-wrap:anywhere }
-
-    /* Map side */
-    .map-wrap{ display:flex; align-items:center; justify-content:center }
-    .map-wrap img{ width:100%; max-width:520px; height:auto; object-fit:contain; opacity:.9; border-radius:14px }
 
     /* Footer */
-    .footer{
-      max-width:1100px; margin:10px auto 40px; padding:0 16px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    .footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
     }
-    .footer .links{ display:flex; gap:min(42px,8vw); flex-wrap:wrap; justify-content:center; width:100% }
-    .footer a{ color:var(--ink); text-decoration:none; font-weight:900; border-bottom:2px solid transparent; padding-bottom:2px }
-    .footer a:hover{ border-color: color-mix(in oklab, var(--brand) 50%, transparent) }
-    .copy{ color:var(--muted); font-weight:700; width:100%; text-align:center; margin-top:10px }
-
-    /* Responsive */
-    @media (max-width: 900px){
-      .panel-content{ grid-template-columns: 1fr }
-      .brand .logo{ width:72px; height:72px }
-      .right-rail{ position:static; transform:none; margin-left:auto }
+    .footer nav {
+      margin-bottom: 10px;
     }
-    @media (max-width: 360px){
-      .brand-name{ font-size:18px; letter-spacing:2px }
-      .login-btn{ padding:7px 10px; font-size:13px }
-      .theme-toggle{ padding:7px 10px; font-size:13px }
+    .footer nav a {
+      margin: 0 12px;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .footer nav a:hover {
+      color: var(--brand);
     }
   </style>
 </head>
 <body>
 
-  <!-- Banner -->
   <div class="highlight-banner">
     🌴 CaribCareerHub — Real jobs across Jamaica 🇯🇲 • Barbados 🇧🇧 • Trinidad 🇹🇹
   </div>
 
-  <!-- Header -->
   <header class="header">
     <div class="brand">
-      <picture>
-        <source srcset="./assets/logo.svg" type="image/svg+xml" />
-        <img src="./assets/logo.png" alt="CaribCareerHub logo" class="logo" />
-      </picture>
+      <img src="./assets/logo.png" alt="CaribCareerHub logo" class="logo" />
       <span class="brand-name">CARRIBCAREERHUB</span>
     </div>
 
     <div class="right-rail">
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button id="themeToggle" class="theme-toggle">🌙</button>
       <a href="login.html" class="login-btn">Login</a>
     </div>
   </header>
 
-  <!-- Main -->
   <main class="panel">
     <div class="panel-content">
       <section>
@@ -177,12 +207,14 @@
           We know job hunting can be tough. CaribCareerHub brings together trusted listings across the region, filtered and refreshed for you—so you can focus on landing the role, not chasing the posting.
         </p>
 
+        <!-- ✅ Employer Callout with "Start here" -->
         <p class="employer-callout">
-          <span class="wrap"><strong>Employers:</strong> Post your openings and reach ready Caribbean talent—fast. Manage posts, track responses, and update listings anytime.</span>
-          <a class="cta" href="employer.html">Start here</a>
+          <strong>Employers:</strong> Post your openings and reach ready Caribbean talent—fast. 
+          Manage posts, track responses, and update listings anytime.
+          <a class="cta" href="employer-signup.html">Start here</a>
         </p>
 
-        <!-- Latest Jobs (auto-refresh) -->
+        <!-- Latest Jobs -->
         <div class="jobs">
           <h2>Latest Updates</h2>
           <div id="jobsContainer" class="wrap">Loading jobs…</div>
@@ -190,17 +222,13 @@
       </section>
 
       <aside class="map-wrap">
-        <picture>
-          <source srcset="./assets/map.svg" type="image/svg+xml">
-          <img src="./assets/map.png" alt="Caribbean map" />
-        </picture>
+        <img src="./assets/map.png" alt="Caribbean map" />
       </aside>
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
-    <nav class="links" aria-label="Footer">
+    <nav>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
       <a href="privacy.html">Privacy</a>
@@ -209,166 +237,35 @@
     <div class="copy">© 2025 CaribCareerHub</div>
   </footer>
 
-  <!-- External Jobs (Latest only, with auto-refresh) -->
   <script>
-    // ===== Theme (high-contrast toggle in dark) =====
-    (function initTheme(){
-      const saved = localStorage.getItem('cch.theme');
-      if (!saved) {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) document.body.classList.add('dark');
-        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
-      } else if (saved === 'dark') {
-        document.body.classList.add('dark');
-      }
-      const btn = document.getElementById('themeToggle');
-      const setIcon = () => btn.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
-      setIcon();
-      btn.addEventListener('click', ()=>{
-        document.body.classList.toggle('dark');
-        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
-        setIcon();
-      });
-    })();
-
-    // ===== Jobs: Latest (Remotive + your serverless proxies) =====
-    const PAGE_SIZE = 8; // show at least 5; we’re showing 8
-    const jobsEl = document.getElementById('jobsContainer');
-
-    function esc(s){return (s??"").toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
-    function stripHtml(html){ const d = document.createElement('div'); d.innerHTML = html; return d.textContent || d.innerText || ""; }
-    function keyFor(j){ return [j.title,j.company,j.location].map(x=>(x||"").toLowerCase().trim()).join("|"); }
-
-    function normalizeJob(j, meta){
-      return {
-        id: j.id || j.uuid || j.job_id || j.url || crypto.randomUUID(),
-        title: j.title || j.job_title || "Untitled role",
-        company: j.company || j.employer_name || j.company_name || "",
-        location: j.location || j.job_city || j.job_country || j.candidate_required_location || "",
-        type: j.type || j.job_employment_type || j.contract_type || j.contract_time || "",
-        description: j.description || j.job_description || "",
-        apply_url: j.url || j.job_apply_link || j.redirect_url || j.job_posting_url || "#",
-        posted_at: j.created_at || j.created || j.posted_at || j.publication_date || null,
-        source: meta.source
-      };
+    // Theme toggle
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+    });
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark");
     }
 
-    async function fetchRemotiveLatest(){
-      // No keyword to maximize recency; filter later for Caribbean
-      const res = await fetch('https://remotive.com/api/remote-jobs');
-      if (!res.ok) return [];
-      const json = await res.json();
-      const rows = (json.jobs||[])
-        .filter(j => {
-          const loc = (j.candidate_required_location||"").toLowerCase();
-          return loc.includes("caribbean") || loc.includes("jamaica") || loc.includes("barbados") || loc.includes("trinidad") || loc.includes("remote");
-        })
-        .slice(0, 30)
-        .map(r => normalizeJob({
-          id:r.id, title:r.title, company_name:r.company_name,
-          candidate_required_location:r.candidate_required_location, job_type:r.job_type,
-          description: stripHtml(r.description||""), url:r.url, publication_date:r.publication_date
-        }, { source:"Remotive" }));
-      return rows;
-    }
-
-    async function fetchAdzunaLatest(){
-      // Requires your Vercel function /api/adzuna with env keys set
-      // Pull a general “developer” + “Jamaica” first page; adjust if you want
-      const qs = new URLSearchParams({ what:"", where:"Caribbean", page:"1", per_page:"20", country:"gb" });
-      const res = await fetch(`/api/adzuna?${qs}`);
-      if (!res.ok) return [];
-      const json = await res.json();
-      return (json.results||[]).map(r => normalizeJob({
-        id:r.id, title:r.title, company:r.company?.display_name,
-        location:r.location?.display_name, contract_type:r.contract_type || r.contract_time,
-        description: stripHtml(r.description||""), redirect_url:r.redirect_url, created:r.created
-      }, { source:"Adzuna" }));
-    }
-
-    async function fetchJSearchLatest(){
-      // Requires your /api/jsearch (RapidAPI key)
-      const res = await fetch(`/api/jsearch?query=${encodeURIComponent("Caribbean jobs")}&page=1`);
-      if (!res.ok) return [];
-      const json = await res.json();
-      return (json.data||[]).map(r => normalizeJob({
-        job_id:r.job_id, job_title:r.job_title, employer_name:r.employer_name,
-        job_city:r.job_city || r.job_country, job_employment_type:r.job_employment_type,
-        job_description:r.job_description, job_apply_link:r.job_apply_link || r.job_posting_url,
-        posted_at:r.job_posted_at_datetime_utc || r.job_posted_at
-      }, { source:"JSearch" }));
-    }
-
-    async function loadLatest(){
-      try{
-        jobsEl.textContent = "Loading jobs…";
-
-        const tasks = [
-          fetchRemotiveLatest().catch(()=>[]),
-          fetchAdzunaLatest().catch(()=>[]),
-          fetchJSearchLatest().catch(()=>[])
-        ];
-        const chunks = await Promise.all(tasks);
-        let merged = [].concat(...chunks);
-
-        // de-dupe
-        const seen = new Set(), deduped = [];
-        for (const j of merged){
-          const k = keyFor(j);
-          if (seen.has(k)) continue;
-          seen.add(k); deduped.push(j);
-        }
-
-        // sort by recency if possible
-        deduped.sort((a,b)=>{
-          const da = a.posted_at ? Date.parse(a.posted_at) : 0;
-          const db = b.posted_at ? Date.parse(b.posted_at) : 0;
-          return db - da;
-        });
-
-        // fallback if too few
-        if (deduped.length < 5){
-          const extra = await fetchRemotiveLatest().catch(()=>[]);
-          for (const j of extra){
-            const k = keyFor(j);
-            if (!seen.has(k)) { seen.add(k); deduped.push(j); }
-            if (deduped.length >= 8) break;
-          }
-        }
-
-        renderJobs(deduped.slice(0, PAGE_SIZE));
-      }catch(err){
-        console.error(err);
-        jobsEl.textContent = "Failed to load jobs right now.";
-      }
-    }
-
-    function renderJobs(rows){
-      if (!rows || !rows.length){
-        jobsEl.textContent = "No jobs found yet.";
-        return;
-      }
-      jobsEl.innerHTML = "";
-      for (const j of rows){
-        const card = document.createElement('div');
-        card.className = "job-card";
-        card.innerHTML = `
-          <div class="job-title">${esc(j.title)}</div>
-          <div class="job-company">${esc(j.company)}</div>
-          <div class="job-location">${esc([j.location, j.type].filter(Boolean).join(" • "))}</div>
-          <p class="wrap" style="margin:6px 0 4px">${esc((j.description||"").slice(0,200))}${j.description && j.description.length>200 ? "…" : ""}</p>
-          <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
-            <a href="${j.apply_url}" target="_blank" rel="noopener" class="cta" style="padding:7px 10px;border-radius:8px">Apply</a>
-            <span class="wrap" style="font-size:12px;color:var(--muted);font-weight:800">Source: ${esc(j.source)}</span>
+    // Load jobs with auto-refresh
+    async function loadJobs() {
+      try {
+        const res = await fetch("/api/adzuna");
+        const jobs = await res.json();
+        const container = document.getElementById("jobsContainer");
+        container.innerHTML = jobs.slice(0, 5).map(job => `
+          <div class="job-item">
+            <h4>${job.title}</h4>
+            <p>${job.company.display_name || "Unknown Company"} — ${job.location.display_name}</p>
           </div>
-        `;
-        jobsEl.appendChild(card);
+        `).join("");
+      } catch (err) {
+        document.getElementById("jobsContainer").innerHTML = "<p>Failed to load jobs.</p>";
       }
     }
-
-    // Initial load + auto-refresh every 12 minutes (720,000 ms)
-    loadLatest();
-    setInterval(loadLatest, 12 * 60 * 1000);
+    loadJobs();
+    setInterval(loadJobs, 15000); // refresh every 15s
   </script>
+
 </body>
 </html>
