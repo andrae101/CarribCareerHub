@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Employer Sign Up • CaribCareerHub</title>
   <meta name="color-scheme" content="light dark" />
-  <link rel="canonical" href="https://carribcareerhub.site/" />
 
   <style>
     :root{
@@ -13,221 +12,342 @@
       --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
       --radius:18px; --shadow:0 10px 30px rgba(16,40,120,.12);
       --ring:0 0 0 3px rgba(30,108,255,.12);
+      --ok:#2ad06f; --err:#ff5a5a;
+      --field:#f6f9ff; --border:#E4ECFF;
     }
     body.dark{
-      --bg:#0e1424; --panel:#1c2333; --ink:#f4f6fb; --muted:#aab3cc;
-      --brand:#3FA2FF; --brand-2:#1E6CFF; --accent:#ffb44d; --shadow:0 10px 30px rgba(0,0,0,.6);
-      --ring:0 0 0 3px rgba(63,162,255,.18);
+      --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6;
+      --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
+      --shadow:0 14px 44px rgba(0,0,0,.45); --ring:0 0 0 3px rgba(142,196,255,.22);
+      --field:#172038; --border:#2a3553;
+      --ok:#3de184; --err:#ff7676;
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial,sans-serif;transition:background .25s,color .25s}
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+      overflow-x:hidden;
+    }
+
+    /* Banner */
+    .highlight-banner{
+      background:linear-gradient(90deg,var(--brand),var(--brand-2));
+      color:#fff; text-align:center; font-weight:900;
+      padding:10px 16px; font-size:13px; letter-spacing:.3px;
+      position:sticky; top:0; z-index:50; box-shadow:var(--shadow);
+    }
 
     /* Header */
-    .header{max-width:1100px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
-    .brand{display:flex;align-items:center;gap:10px;min-width:0}
-    .brand img{height:40px;width:auto}
-    .brand-name{font-weight:900;letter-spacing:.5px;font-size:18px;white-space:nowrap}
-    .right{display:flex;align-items:center;gap:10px}
-    .theme-toggle{border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:8px 12px;background:var(--panel);color:var(--ink);font-weight:800;cursor:pointer}
-    body.dark .theme-toggle{border-color:rgba(255,255,255,.16)}
-    .home-link{display:inline-block;padding:8px 12px;border-radius:12px;text-decoration:none;color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-2));font-weight:800}
+    .header{
+      max-width:1080px; margin:14px auto 0; padding:0 16px;
+      display:flex; align-items:center; justify-content:center; gap:12px; position:relative;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{width:80px;height:80px;object-fit:contain}
+    .brand-name{font-weight:900; letter-spacing:4px; white-space:nowrap; font-size:22px}
+    .right-rail{position:absolute; right:16px; top:8px; display:flex; gap:8px}
+    .theme-toggle{
+      border:1px solid var(--border); background:var(--panel); color:var(--ink);
+      padding:8px 10px; border-radius:12px; cursor:pointer; font-weight:900;
+    }
+    .login-btn{
+      display:inline-block; padding:9px 12px; border-radius:12px; font-weight:900;
+      text-decoration:none; color:#fff; background:linear-gradient(90deg,var(--brand),var(--brand-2));
+      box-shadow:var(--shadow); font-size:14px;
+    }
 
-    /* Panel */
-    .wrap{max-width:1100px;margin:18px auto;padding:0 20px}
-    .panel{display:grid;grid-template-columns:1.05fr .95fr;gap:22px}
-    @media (max-width:900px){ .panel{grid-template-columns:1fr} }
+    /* Shell */
+    .wrap{max-width:1080px; margin:18px auto 28px; padding:0 16px;}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr} .logo{width:72px;height:72px} .brand-name{font-size:20px;letter-spacing:3px} }
 
-    .card{background:var(--panel);border:1px solid #e4ecff;border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
-    body.dark .card{border-color:#34405f}
-
-    .hero h1{margin:0 0 10px;font-size:28px;font-weight:900}
-    .hero p{margin:0;color:var(--muted)}
-    .bullets{margin-top:14px;display:grid;gap:8px}
-    .bullets li{list-style:none;background:color-mix(in oklab,var(--panel) 94%, transparent);border:1px solid #e4ecff;border-radius:12px;padding:10px 12px}
-    body.dark .bullets li{border-color:#34405f}
+    /* Card */
+    .card{
+      background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
+      padding:18px 18px;
+    }
+    .card h1{margin:2px 0 8px; font-size:26px; line-height:1.2}
+    .lede{color:var(--muted); margin:0 0 14px}
+    .note{color:var(--muted); font-size:14px}
 
     /* Form */
-    form{display:grid;gap:12px}
-    label{font-size:14px;font-weight:800;color:var(--muted)}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:600px){ .row{grid-template-columns:1fr} }
-    input,select,textarea{
-      width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e4ecff;background:transparent;color:var(--ink);font:16px/1.4 inherit;outline:none
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    @media (max-width:720px){ .row{grid-template-columns:1fr} }
+    label{display:block; font-weight:800; font-size:13px; color:var(--muted); margin:10px 0 6px}
+    .field{
+      background:var(--field); border:1px solid var(--border); border-radius:12px; padding:12px 12px;
+      display:flex; align-items:center; gap:8px;
     }
-    body.dark input, body.dark select, body.dark textarea{border-color:#34405f}
-    input:focus,select:focus,textarea:focus{box-shadow:var(--ring);border-color:color-mix(in oklab,var(--brand) 40%, #e4ecff)}
-    .hint{font-size:12px;color:var(--muted);margin-top:2px}
+    input,select{border:none; outline:none; width:100%; background:transparent; color:var(--ink); font:16px/1.35 inherit}
+    .help{font-size:12px; color:var(--muted); margin-top:6px}
 
-    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px}
-    .btn{border:none;border-radius:12px;padding:12px 16px;font-weight:900;cursor:pointer}
-    .btn-primary{color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-2))}
-    .btn-line{background:transparent;border:1px solid color-mix(in oklab,var(--ink) 18%, transparent);color:var(--ink)}
-    .msg{min-height:20px;font-weight:800}
-    .ok{color:#2bd07f}.err{color:#ff6b6b}
+    .actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:10px}
+    .btn{border:none; border-radius:12px; padding:12px 14px; font-weight:900; cursor:pointer}
+    .btn-primary{color:#fff; background:linear-gradient(90deg,var(--brand),var(--brand-2))}
+    .btn-line{background:transparent; border:1px solid var(--border); color:var(--ink)}
+
+    .status{margin-top:10px; font-weight:800}
+    .ok{color:var(--ok)} .err{color:var(--err)}
+
+    /* Right col info */
+    .info h3{margin:0 0 8px} .info ul{margin:0; padding-left:18px}
+    .pill{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid var(--border); font-weight:900; font-size:12px}
 
     /* Footer */
-    .footer{max-width:1100px;margin:20px auto 28px;padding:0 20px;text-align:center;color:var(--muted)}
-    .footer a{color:inherit;text-decoration:none;margin:0 10px}
-    .footer a:hover{color:var(--brand)}
+    .footer{
+      max-width:1080px; margin:18px auto 38px; padding:0 16px;
+      display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap
+    }
+    .links{display:flex; gap:18px; flex-wrap:wrap}
+    .footer a{color:var(--ink); text-decoration:none; font-weight:900; border-bottom:2px solid transparent; padding-bottom:2px}
+    .footer a:hover{border-color: color-mix(in oklab, var(--brand) 50%, transparent)}
+    .copy{color:var(--muted); font-weight:700}
   </style>
 </head>
 <body>
+  <!-- Top banner -->
+  <div class="highlight-banner">💼 Employers: Post roles and reach Caribbean talent fast.</div>
+
   <!-- Header -->
   <header class="header">
     <div class="brand">
-      <img src="./assets/logo.png" alt="CaribCareerHub logo">
-      <div class="brand-name">CARRIBCAREERHUB</div>
+      <picture>
+        <source srcset="./assets/logo.svg" type="image/svg+xml" />
+        <img src="./assets/logo.png" alt="CaribCareerHub logo" class="logo" />
+      </picture>
+      <span class="brand-name">CARRIBCAREERHUB</span>
     </div>
-    <div class="right">
+    <div class="right-rail">
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-      <a class="home-link" href="index.html">Home</a>
+      <a class="login-btn" href="login.html">Login</a>
     </div>
   </header>
 
-  <div class="wrap panel">
-    <!-- Left: Pitch -->
-    <section class="card hero">
-      <h1>Hire faster with CaribCareerHub</h1>
-      <p>Post roles, reach talent across Jamaica, Barbados & Trinidad, and manage applications in one clean dashboard.</p>
-      <ul class="bullets">
-        <li>🔎 Smart listings that surface to the right candidates</li>
-        <li>⚡ Post in minutes, edit anytime, track responses</li>
-        <li>🌙 Light & Dark modes for comfy work—day or night</li>
-      </ul>
-      <p style="margin-top:14px;color:var(--muted)">Already have an account? <a href="login.html" style="font-weight:900;color:var(--brand);text-decoration:none">Sign in</a></p>
-    </section>
+  <!-- Main -->
+  <main class="wrap">
+    <div class="grid">
+      <!-- Form card -->
+      <section class="card">
+        <h1>Create Employer Account</h1>
+        <p class="lede">Add your company, post openings, and manage applications in one place.</p>
 
-    <!-- Right: Form -->
-    <section class="card">
-      <h2 style="margin:0 0 10px;font-size:22px">Create employer account</h2>
-      <form id="signupForm" novalidate>
-        <div class="row">
-          <div>
-            <label>Company name</label>
-            <input id="company" placeholder="e.g., Blue Wave Studios" required />
+        <form id="empForm" novalidate>
+          <div class="row">
+            <div>
+              <label>Company Name</label>
+              <div class="field"><input id="company" placeholder="e.g., Island Tech Ltd." required></div>
+            </div>
+            <div>
+              <label>Industry</label>
+              <div class="field">
+                <select id="industry">
+                  <option value="">Select industry</option>
+                  <option>Technology</option>
+                  <option>Finance</option>
+                  <option>Healthcare</option>
+                  <option>Hospitality & Tourism</option>
+                  <option>Retail</option>
+                  <option>Logistics</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div>
-            <label>Contact name</label>
-            <input id="contact" placeholder="e.g., Alicia Brown" required />
+
+          <div class="row">
+            <div>
+              <label>Company Size</label>
+              <div class="field">
+                <select id="size">
+                  <option value="">Select size</option>
+                  <option>1-10</option>
+                  <option>11-50</option>
+                  <option>51-200</option>
+                  <option>201-500</option>
+                  <option>500+</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label>Location</label>
+              <div class="field"><input id="location" placeholder="e.g., Kingston, Jamaica"></div>
+            </div>
           </div>
+
+          <div class="row">
+            <div>
+              <label>Website (optional)</label>
+              <div class="field"><input id="website" placeholder="https://yourcompany.com"></div>
+            </div>
+            <div>
+              <label>Contact Name</label>
+              <div class="field"><input id="contact" placeholder="e.g., Marsha Gordon"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Work Email</label>
+              <div class="field"><input id="email" type="email" placeholder="you@company.com" required></div>
+            </div>
+            <div>
+              <label>Password</label>
+              <div class="field"><input id="password" type="password" placeholder="Min 8 characters" required></div>
+              <div class="help">Use a strong password you’ll remember.</div>
+            </div>
+          </div>
+
+          <div>
+            <label>Company Logo (optional)</label>
+            <div class="field"><input id="logo" type="url" placeholder="Direct image URL (PNG/JPG)"></div>
+          </div>
+
+          <div style="margin-top:8px">
+            <label style="display:flex;gap:10px;align-items:center">
+              <input id="tos" type="checkbox" style="width:18px;height:18px"> I agree to the Terms and Privacy Policy
+            </label>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn btn-primary">Create Employer Account</button>
+            <a href="login.html" class="btn btn-line">I already have an account</a>
+          </div>
+
+          <p id="msg" class="status"></p>
+        </form>
+      </section>
+
+      <!-- Info card -->
+      <aside class="card info">
+        <h3>Why hire on CaribCareerHub?</h3>
+        <ul>
+          <li>Reach candidates across Jamaica, Barbados, Trinidad & more.</li>
+          <li>Smart job pages with easy mobile apply.</li>
+          <li>Manage posts, edits, and applications in your dashboard.</li>
+        </ul>
+        <div style="margin-top:14px">
+          <span class="pill">Fast setup</span>
+          <span class="pill">No code needed</span>
+          <span class="pill">Mobile‑first</span>
         </div>
 
-        <div class="row">
-          <div>
-            <label>Email</label>
-            <input id="email" type="email" placeholder="you@company.com" required />
-          </div>
-          <div>
-            <label>Password</label>
-            <input id="password" type="password" placeholder="Min 8 characters" minlength="8" required />
-            <div class="hint">We’ll email a confirmation link.</div>
-          </div>
+        <div style="margin-top:18px">
+          <h3>What happens next?</h3>
+          <ol style="margin:0; padding-left:18px">
+            <li>Sign up with your work email.</li>
+            <li>Check your inbox to confirm your account.</li>
+            <li>You’ll be taken to the Employer Dashboard to post jobs.</li>
+          </ol>
         </div>
+      </aside>
+    </div>
+  </main>
 
-        <div class="row">
-          <div>
-            <label>Location</label>
-            <input id="location" placeholder="e.g., Kingston, Jamaica" />
-          </div>
-          <div>
-            <label>Company website</label>
-            <input id="website" type="url" placeholder="https://example.com" />
-          </div>
-        </div>
-
-        <div>
-          <label>About the company (optional)</label>
-          <textarea id="about" placeholder="What do you do? What makes your team special?" rows="4"></textarea>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-primary" type="submit">Create account</button>
-          <button class="btn btn-line" type="button" id="toLogin">I already have an account</button>
-          <span id="msg" class="msg"></span>
-        </div>
-      </form>
-    </section>
-  </div>
-
+  <!-- Footer -->
   <footer class="footer">
-    <nav>
-      <a href="about.html">About</a> •
-      <a href="contact.html">Contact</a> •
-      <a href="privacy.html">Privacy</a> •
+    <div class="links">
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a>
       <a href="terms.html">Terms</a>
-    </nav>
-    © 2025 CaribCareerHub
+    </div>
+    <div class="copy">© 2025 CaribCareerHub</div>
   </footer>
 
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Theme boot
-    (function(){
-      const saved = localStorage.getItem('theme');
+    // --- Theme (shared with your index/home) ---
+    (function initTheme(){
+      const saved = localStorage.getItem('cch.theme');
       if (saved === 'dark') document.body.classList.add('dark');
+      if (!saved){
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) document.body.classList.add('dark');
+        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      }
       const btn = document.getElementById('themeToggle');
       btn.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
       btn.addEventListener('click', ()=>{
         document.body.classList.toggle('dark');
-        localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark' : 'light');
         btn.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
       });
     })();
 
-    // ===== Supabase (uses your existing project) =====
+    // --- Supabase init (uses your existing project) ---
     const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Form wiring
-    const form = document.getElementById('signupForm');
-    const msg = document.getElementById('msg');
-    document.getElementById('toLogin').addEventListener('click', ()=> window.location.href = 'login.html');
+    // If already signed in, bounce to employer dashboard
+    (async () => {
+      const { data:{ session } } = await supabaseClient.auth.getSession();
+      if (session?.user?.user_metadata?.role === 'employer') {
+        window.location.href = "employer.html";
+      }
+    })();
+
+    // --- Form handling ---
+    const form = document.getElementById('empForm');
+    const msg  = document.getElementById('msg');
 
     form.addEventListener('submit', async (e)=>{
       e.preventDefault();
-      msg.className = 'msg'; msg.textContent = '';
+      msg.textContent = ""; msg.className = "status";
 
-      // Collect
-      const company = document.getElementById('company').value.trim();
-      const contact = document.getElementById('contact').value.trim();
-      const email   = document.getElementById('email').value.trim();
-      const password= document.getElementById('password').value;
-      const location= document.getElementById('location').value.trim();
-      const website = document.getElementById('website').value.trim();
-      const about   = document.getElementById('about').value.trim();
+      const company  = document.getElementById('company').value.trim();
+      const industry = document.getElementById('industry').value.trim();
+      const size     = document.getElementById('size').value.trim();
+      const location = document.getElementById('location').value.trim();
+      const website  = document.getElementById('website').value.trim();
+      const contact  = document.getElementById('contact').value.trim();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const logo     = document.getElementById('logo').value.trim();
+      const tos      = document.getElementById('tos').checked;
 
-      if (!company || !contact || !email || !password){
-        msg.textContent = 'Please fill in all required fields.'; msg.classList.add('err'); return;
+      if (!company || !email || !password){
+        msg.textContent = "Please fill in company, email and password.";
+        msg.classList.add('err'); return;
+      }
+      if (!tos){
+        msg.textContent = "Please accept the Terms and Privacy Policy.";
+        msg.classList.add('err'); return;
       }
 
       try{
-        msg.textContent = 'Creating your account…';
+        msg.textContent = "Creating your employer account…";
 
-        // Create auth user + store employer details in user metadata
-        const meta = { role: 'employer', company_name: company, contact_name: contact, location, website, about };
+        // 1) Create auth user with employer metadata
         const { data, error } = await supabaseClient.auth.signUp({
-          email, password, options: { data: meta, emailRedirectTo: window.location.origin + '/dashboard.html' }
+          email, password,
+          options: { data: { role: "employer", company, industry, size, location, website, contact, logo } }
         });
         if (error) throw error;
 
-        // Optional: also keep a simple row in an employers table (if you have one)
-        // This will no-op if the table doesn't exist, that's fine.
-        try {
-          await supabaseClient.from('employers').insert([{ email, company_name: company, contact_name: contact, location, website, about }]);
-        } catch(_ignore){}
+        // 2) (Optional) Insert profile row in an 'employers' table if it exists
+        try{
+          await supabaseClient.from('employers').insert([{
+            user_id: data.user?.id,
+            company, industry, size, location, website, contact, logo, email
+          }]);
+        }catch(_ignore){ /* table may not exist yet — safe to skip */ }
 
-        msg.textContent = '✅ Account created. Check your email to confirm.';
+        // 3) Success message
+        msg.innerHTML = "✅ Account created. Please check your email to confirm.<br>Once confirmed, you’ll be redirected to your Employer Dashboard.";
         msg.classList.add('ok');
 
-        // Send them to dashboard with "Manage Posts" tab preselected
-        localStorage.setItem('dashTab', 'manage'); // your dashboard reads this key
-        setTimeout(()=>{ window.location.href = 'dashboard.html'; }, 800);
+        // 4) Poll for session after confirmation (lightweight UX)
+        // NOTE: after email confirmation, Supabase creates a session when they log in;
+        // we’ll just provide a helpful link:
+        setTimeout(()=>{ window.location.href = "login.html"; }, 2500);
+
       }catch(err){
         console.error(err);
-        msg.textContent = '❌ ' + (err.message || 'Sign up failed.');
+        msg.textContent = "❌ " + (err?.message || "Sign up failed.");
         msg.classList.add('err');
       }
     });
