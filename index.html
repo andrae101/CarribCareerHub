@@ -1,162 +1,96 @@
-<!-- ============================
-File: index.html
-Complete homepage with multi-source jobs (Remotive/Adzuna/JSearch),
-source switcher, theme toggle, and mobile polish.
-============================ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>CaribCareerHub • Find Jobs Across the Caribbean</title>
-  <link rel="canonical" href="https://carribcareerhub.site/" />
+  <title>CaribCareerHub • Caribbean Jobs</title>
   <meta name="color-scheme" content="light dark" />
+  <link rel="canonical" href="https://carribcareerhub.site/" />
 
   <style>
     :root{
-      --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
-      --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
-      --radius:18px; --shadow:0 10px 30px rgba(16,40,120,0.12);
-      --ring:0 0 0 3px rgba(30,108,255,.12);
-    }
-    body.dark{
       --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6;
       --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
-      --shadow:0 14px 40px rgba(0,0,0,.45); --ring:0 0 0 3px rgba(142,196,255,.22);
+      --radius:18px; --shadow:0 14px 40px rgba(0,0,0,.45);
+      --border:1px solid rgba(255,255,255,.12);
+    }
+    body.light{
+      --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
+      --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
+      --shadow:0 10px 30px rgba(16,40,120,0.12);
+      --border:1px solid rgba(10,36,88,.12);
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{
-      margin:0;
-      font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-      color:var(--ink);
-      background: var(--bg);
-      overflow-x:hidden;
-    }
+    body{ margin:0; overflow-x:hidden; font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif; color:var(--ink); background:var(--bg) }
 
-    /* Top banner */
+    /* Banner */
     .highlight-banner{
-      background:linear-gradient(90deg,var(--brand),var(--brand-2));
-      color:#fff;
-      text-align:center;
-      font-weight:800;
-      padding:10px 16px;
-      font-size:14px;
-      letter-spacing:.3px;
       position:sticky; top:0; z-index:1000;
-      box-shadow:var(--shadow);
+      background:linear-gradient(90deg,var(--brand),var(--brand-2));
+      color:#fff; text-align:center; font-weight:800;
+      padding:10px 12px; font-size:14px; letter-spacing:.3px; box-shadow:var(--shadow);
     }
 
     /* Header */
-    .header{
-      max-width:1100px; margin:14px auto 0; padding:0 16px;
-      display:flex; align-items:center; justify-content:center; gap:12px;
-    }
-    .brand{display:flex; align-items:center; gap:12px}
-    .brand .logo{width:86px;height:86px;object-fit:contain}
-    .brand-name{font-size:24px;font-weight:900;letter-spacing:4px;white-space:nowrap}
-    .right-rail{
-      position:absolute; right:16px; top:68px; display:flex; align-items:center; gap:10px;
-    }
-    .login-btn{
-      display:inline-block; padding:10px 14px; border-radius:12px;
-      font-weight:800; text-decoration:none; color:#fff;
-      background:linear-gradient(90deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow);
-    }
-    .theme-toggle{
-      border:1px solid rgba(0,0,0,.08); padding:8px 10px; border-radius:12px;
-      background:var(--panel); color:var(--ink); cursor:pointer; font-weight:900;
-    }
-    body.dark .theme-toggle{ border-color:rgba(255,255,255,.16) }
+    .header{ max-width:1100px; margin:12px auto 0; padding:0 16px; display:flex; align-items:center; justify-content:space-between }
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{width:54px; height:54px; object-fit:contain}
+    .brand-name{font-size:20px; font-weight:900; letter-spacing:3px; white-space:nowrap}
+    .controls{display:flex; gap:8px; align-items:center}
+    .btn{ border:none; padding:8px 12px; border-radius:12px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; justify-content:center }
+    .btn-ghost{ background:var(--panel); color:var(--ink); border:var(--border) }
+    .btn-primary{ color:#fff; background:linear-gradient(90deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow); text-decoration:none }
 
-    /* Panel (hero + map) */
+    /* Panel */
     .panel{
-      max-width:1100px; margin:16px auto 32px; padding:24px; border-radius:var(--radius);
-      background:color-mix(in oklab, var(--panel) 90%, transparent); box-shadow:var(--shadow);
-      border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      max-width:1100px; margin:16px auto 32px; padding:20px;
+      background:color-mix(in oklab, var(--panel) 90%, transparent);
+      border:var(--border); border-radius:var(--radius);
+      box-shadow:var(--shadow); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     }
-    .panel-content{
-      display:grid; grid-template-columns:1.1fr .9fr; gap:24px;
-    }
+    .panel-content{ display:grid; grid-template-columns:1.1fr .9fr; gap:24px }
 
     /* Hero */
-    .hero-title{
-      font-size: clamp(32px, 6vw, 54px);
-      font-weight:900; line-height:1.25; margin:10px 0 12px; text-align:center;
-      letter-spacing:.4px;
-    }
-    .lede{
-      font-size:17px; line-height:1.75; color:var(--muted);
-      margin:0 auto 16px; text-align:center; max-width:720px;
-    }
+    .hero-title{ font-size: clamp(28px, 6vw, 46px); font-weight:900; line-height:1.2; margin:6px 0 10px; text-align:center; letter-spacing:.3px }
     .employer-callout{
-      margin:16px auto 0; padding:12px 14px; border-radius:12px;
-      background:#fff6e9; border:1px solid #ffd9a8; color:#b56a00; font-weight:700;
-      max-width:720px;
+      margin:10px auto 0; padding:10px 12px; border-radius:12px;
+      background:color-mix(in oklab, var(--accent) 20%, var(--panel));
+      border:var(--border); color:var(--ink); font-weight:800; text-align:center; max-width:680px;
     }
-    body.dark .employer-callout{ background: #2a1e0e; border-color:#5a3d13; color:#ffd9a8 }
-
-    /* Search */
-    .search-row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:center; margin-top:16px}
-    .input{ flex:1; min-width:220px; display:flex; align-items:center; gap:10px; background:var(--panel);
-      border:1px solid color-mix(in oklab, var(--ink) 10%, transparent); border-radius:12px; padding:12px 14px; max-width:360px }
-    .input input{ border:none; outline:none; width:100%; font-size:16px; background:transparent; color:var(--ink) }
-    .search-btn{ border:none; padding:12px 22px; border-radius:12px; font-weight:800; color:#fff;
-      background:linear-gradient(90deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow); cursor:pointer }
-
-    /* Source switcher */
-    .switcher{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:14px 0 0 }
-    .pill{ padding:8px 12px; border-radius:999px; border:1px solid color-mix(in oklab, var(--ink) 14%, transparent);
-      background:transparent; color:var(--ink); font-weight:800; cursor:pointer }
-    .pill.active{ background: color-mix(in oklab, var(--brand) 18%, transparent); border-color: color-mix(in oklab, var(--brand) 38%, transparent) }
 
     /* Jobs list */
-    .jobs-list{ margin-top:18px }
+    .jobs{ margin-top:18px }
+    .jobs h2{ margin:12px 0 10px }
     .job-card{
-      display:grid; gap:6px; border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      border-radius:12px; padding:12px 14px; background:var(--panel); box-shadow:var(--shadow); margin-bottom:12px;
+      display:grid; gap:6px; border:var(--border); border-radius:12px;
+      padding:12px 14px; background:var(--panel); box-shadow:var(--shadow); margin-bottom:12px;
     }
     .job-title{ margin:0; font-size:18px; font-weight:900; line-height:1.25 }
     .job-company{ margin:0; color:var(--muted); font-weight:700 }
-    .job-location{ margin:0; color:var(--brand); font-weight:800 }
-    .wrap{ word-break: break-word; overflow-wrap: anywhere }
+    .job-meta{ margin:0; color:var(--brand); font-weight:800 }
+    .wrap{ word-break:break-word; overflow-wrap:anywhere }
     .load-more{ display:inline-block; margin:12px auto 0; padding:10px 14px; font-weight:900; border:none; border-radius:12px;
       background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:#fff; cursor:pointer; box-shadow:var(--shadow) }
 
-    /* Map side */
+    /* Map */
     .map-wrap{ display:flex; align-items:center; justify-content:center }
-    .map-wrap img{ width:100%; max-width:520px; height:auto; object-fit:contain; opacity:.85; }
+    .map-wrap img{ width:100%; max-width:520px; height:auto; object-fit:contain; opacity:.9 }
 
     /* Footer */
-    .footer{
-      max-width:1100px; margin:10px auto 40px; padding:0 16px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
-    }
+    .footer{ max-width:1100px; margin:10px auto 40px; padding:0 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap }
     .footer .links{ display:flex; gap:18px; flex-wrap:wrap }
     .footer a{ color:var(--ink); text-decoration:none; font-weight:900; border-bottom:2px solid transparent; padding-bottom:2px }
     .footer a:hover{ border-color: color-mix(in oklab, var(--brand) 50%, transparent) }
     .copy{ color:var(--muted); font-weight:700 }
 
-    /* Responsive */
-    @media (max-width: 900px){
-      .panel-content{ grid-template-columns: 1fr }
-      .right-rail{ top:16px }
-      .brand .logo{ width:76px; height:76px }
-    }
-    @media (max-width: 360px){
-      .brand-name{ font-size:18px; letter-spacing:2px }
-      .pill{ padding:7px 10px; font-size:13px }
-    }
+    @media (max-width: 900px){ .panel-content{ grid-template-columns: 1fr } }
   </style>
 </head>
 <body>
-
   <!-- Banner -->
-  <div class="highlight-banner">
-    🌴 CaribCareerHub — Real jobs across Jamaica 🇯🇲 • Barbados 🇧🇧 • Trinidad 🇹🇹
-  </div>
+  <div class="highlight-banner">🌴 CaribCareerHub — Real jobs across Jamaica 🇯🇲 • Barbados 🇧🇧 • Trinidad 🇹🇹</div>
 
   <!-- Header -->
   <header class="header">
@@ -167,9 +101,9 @@ source switcher, theme toggle, and mobile polish.
       </picture>
       <span class="brand-name">CARRIBCAREERHUB</span>
     </div>
-    <div class="right-rail">
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-      <a href="login.html" class="login-btn">Login</a>
+    <div class="controls">
+      <button id="themeToggle" class="btn btn-ghost" aria-label="Toggle theme">🌙</button>
+      <a class="btn btn-primary" href="login.html">Login</a>
     </div>
   </header>
 
@@ -178,37 +112,11 @@ source switcher, theme toggle, and mobile polish.
     <div class="panel-content">
       <section>
         <h1 class="hero-title">Find Your Next Role in the Caribbean</h1>
-        <p class="lede">
-          Search live listings from trusted job sources — plus community posts from employers on CaribCareerHub.
-        </p>
-        <p class="employer-callout">
-          <strong>Employers:</strong> Post your jobs from your dashboard to reach Caribbean talent.
-        </p>
+        <p class="employer-callout"><strong>Employers:</strong> Post your jobs from your dashboard to reach Caribbean talent.</p>
 
-        <!-- Search -->
-        <form id="searchForm" class="search-row">
-          <label class="input">
-            <span>🔎</span>
-            <input id="jobTitle" placeholder="Job title or keyword" />
-          </label>
-          <label class="input">
-            <span>📍</span>
-            <input id="location" placeholder="Location (e.g. Jamaica, Barbados, 'Remote')" />
-          </label>
-          <button type="submit" class="search-btn">Search</button>
-        </form>
-
-        <!-- Source switcher -->
-        <div class="switcher" role="tablist" aria-label="Job Sources">
-          <button class="pill active" data-src="all" role="tab" aria-selected="true">All</button>
-          <button class="pill" data-src="remotive" role="tab" aria-selected="false">Remotive</button>
-          <button class="pill" data-src="adzuna" role="tab" aria-selected="false">Adzuna</button>
-          <button class="pill" data-src="jsearch" role="tab" aria-selected="false">JSearch</button>
-        </div>
-
-        <!-- Jobs -->
-        <div class="jobs-list" id="jobsList">
-          <h2 style="margin:14px 0 10px">Latest Jobs</h2>
+        <!-- Latest Jobs (no search UI) -->
+        <div class="jobs">
+          <h2>Latest Jobs</h2>
           <div id="jobsContainer" class="wrap">Loading jobs…</div>
           <button id="loadMoreBtn" class="load-more" style="display:none">Load More</button>
         </div>
@@ -226,329 +134,125 @@ source switcher, theme toggle, and mobile polish.
   <!-- Footer -->
   <footer class="footer">
     <div class="links">
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
+      <a href="about.html">About</a><a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
     </div>
     <div class="copy">© 2025 CaribCareerHub</div>
   </footer>
 
-  <!-- External Jobs Engine -->
+  <!-- Theme + Latest Jobs loader -->
   <script>
-    // ===== Theme =====
-    (function initTheme(){
+    // theme
+    (function(){
       const saved = localStorage.getItem('cch.theme');
-      if (saved === 'dark') document.body.classList.add('dark');
-      if (!saved){
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) document.body.classList.add('dark');
-        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
-      }
-      document.getElementById('themeToggle').textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
-      document.getElementById('themeToggle').addEventListener('click', ()=>{
-        document.body.classList.toggle('dark');
-        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
-        document.getElementById('themeToggle').textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = saved ? saved === 'dark' : prefersDark;
+      document.body.classList.toggle('light', !isDark);
+      const btn = document.getElementById('themeToggle');
+      const sync = () => btn.textContent = document.body.classList.contains('light') ? '🌙' : '🌞';
+      sync();
+      btn.addEventListener('click', ()=>{
+        document.body.classList.toggle('light');
+        localStorage.setItem('cch.theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        sync();
       });
     })();
 
-    // ===== Config =====
+    // jobs (Adzuna via /api/adzuna + Remotive public)
     const PAGE_SIZE = 10;
+    const DEFAULT_QUERY = "";        // no keyword
+    const DEFAULT_LOCATION = "Jamaica";
 
-    // By default, All = Remotive enabled immediately; Adzuna/JSearch use serverless proxies.
-    const SOURCE_DEFAULTS = { remotive: true, adzuna: true, jsearch: true };
-
-    // ===== DOM =====
-    const form = document.getElementById('searchForm');
-    const titleInput = document.getElementById('jobTitle');
-    const locInput = document.getElementById('location');
     const list = document.getElementById('jobsContainer');
     const moreBtn = document.getElementById('loadMoreBtn');
-    const pills = Array.from(document.querySelectorAll('.pill'));
+    const state = { page: 1, buffer: [] };
 
-    // ===== State =====
-    const state = {
-      q: sessionStorage.getItem('ext.q') || '',
-      loc: sessionStorage.getItem('ext.loc') || 'Jamaica',
-      page: 1,
-      sources: { ...SOURCE_DEFAULTS }, // All on; pills can restrict
-      pill: 'all'
-    };
-    if (titleInput && state.q) titleInput.value = state.q;
-    if (locInput && state.loc) locInput.value = state.loc;
+    const esc = s => (s??"").toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+    const stripHtml = html => { const d = document.createElement('div'); d.innerHTML = html||""; return d.textContent||d.innerText||""; };
 
-    // ===== Utils =====
-    function esc(s){return (s??"").toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
-    function stripHtml(html){ const d = document.createElement('div'); d.innerHTML = html; return d.textContent || d.innerText || ""; }
-    function keyFor(job){ return [job.title, job.company, job.location].map(s=>(s||"").toLowerCase().trim()).join("|||"); }
-
-    // ===== Normalizer =====
-    function normalizeJob(j, meta){
+    function normalize(j, source){
       return {
-        id: j.id || j.uuid || j.job_id || j.job_uuid || j.url || j.apply_url || crypto.randomUUID(),
+        id: j.id || j.job_id || j.url || crypto.randomUUID(),
         title: j.title || j.job_title || "Untitled role",
-        company: j.company || j.employer_name || j.company_name || "",
-        location: j.location || j.job_city || j.job_country || j.candidate_required_location || "",
-        type: j.type || j.job_employment_type || j.contract_type || j.contract_time || "",
-        description: j.description || j.job_description || "",
-        apply_url: j.url || j.job_apply_link || j.redirect_url || j.job_posting_url || "#",
-        posted_at: j.created_at || j.created || j.posted_at || j.publication_date || null,
-        source: meta.source
+        company: j.company?.display_name || j.company || j.company_name || j.employer_name || "",
+        location: j.location?.display_name || j.job_city || j.candidate_required_location || j.job_country || "",
+        type: j.contract_type || j.contract_time || j.job_employment_type || "",
+        description: j.description ? stripHtml(j.description) : (j.job_description||""),
+        apply_url: j.redirect_url || j.url || j.job_apply_link || "#",
+        posted_at: j.created || j.publication_date || j.job_posted_at_datetime_utc || null,
+        source
       };
     }
 
-    // ===== Fetchers =====
-    async function fetchRemotive({ q, loc, page }){
-      const res = await fetch(`https://remotive.com/api/remote-jobs?search=${encodeURIComponent(q)}`);
-      if (!res.ok) throw new Error("Remotive error");
-      const json = await res.json();
-      const rows = (json.jobs||[])
-        .filter(j => !loc || (j.candidate_required_location||"").toLowerCase().includes(loc.toLowerCase()) || loc.toLowerCase()==="remote")
-        .slice((page-1)*PAGE_SIZE, page*PAGE_SIZE) // slice locally
-        .map(r => normalizeJob({
-          id: r.id, title: r.title, company_name: r.company_name,
-          candidate_required_location: r.candidate_required_location, job_type: r.job_type,
-          description: stripHtml(r.description||""), url: r.url, publication_date: r.publication_date
-        }, { source: "Remotive" }));
-      return rows;
+    async function fetchAdzuna(page){
+      const url = `/api/adzuna?what=${encodeURIComponent(DEFAULT_QUERY)}&where=${encodeURIComponent(DEFAULT_LOCATION)}&page=${page}&per_page=${PAGE_SIZE}`;
+      const r = await fetch(url);
+      if (!r.ok) return [];
+      const json = await r.json();
+      return (json.results||[]).map(x => normalize(x, "Adzuna"));
     }
 
-    async function fetchAdzuna({ q, loc, page }){
-      // Use your serverless proxy to keep keys safe
-      const url = `/api/adzuna?what=${encodeURIComponent(q)}&where=${encodeURIComponent(loc)}&page=${page}&per_page=${PAGE_SIZE}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Adzuna error");
-      const json = await res.json();
-      const rows = (json.results||[]).map(r => normalizeJob({
-        id: r.id, title: r.title, company: r.company?.display_name,
-        location: r.location?.display_name, contract_type: r.contract_type || r.contract_time,
-        description: stripHtml(r.description||""), redirect_url: r.redirect_url, created: r.created
-      }, { source: "Adzuna" }));
-      return rows;
+    async function fetchRemotive(page){
+      const r = await fetch(`https://remotive.com/api/remote-jobs?search=${encodeURIComponent(DEFAULT_QUERY)}`);
+      if (!r.ok) return [];
+      const json = await r.json();
+      return (json.jobs||[])
+        .filter(j => (j.candidate_required_location||"").toLowerCase().includes(DEFAULT_LOCATION.toLowerCase()))
+        .slice((page-1)*PAGE_SIZE, page*PAGE_SIZE)
+        .map(x => normalize({
+          id:x.id, title:x.title, company_name:x.company_name,
+          candidate_required_location:x.candidate_required_location, job_type:x.job_type,
+          description: stripHtml(x.description||""), url:x.url, publication_date:x.publication_date
+        }, "Remotive"));
     }
 
-    async function fetchJSearch({ q, loc, page }){
-      // Use your serverless proxy to keep the RapidAPI key safe
-      const url = `/api/jsearch?query=${encodeURIComponent(q + " " + loc)}&page=${page}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("JSearch error");
-      const json = await res.json();
-      const rows = (json.data||[]).map(r => normalizeJob({
-        job_id: r.job_id, job_title: r.job_title, employer_name: r.employer_name,
-        job_city: r.job_city || r.job_country, job_employment_type: r.job_employment_type,
-        job_description: r.job_description, job_apply_link: r.job_apply_link || r.job_posting_url,
-        posted_at: r.job_posted_at_datetime_utc || r.job_posted_at
-      }, { source: "JSearch" }));
-      return rows;
-    }
-
-    const fetchers = { remotive: fetchRemotive, adzuna: fetchAdzuna, jsearch: fetchJSearch };
-
-    // ===== Engine =====
-    async function loadExternalPage({ q, loc, page }){
-      // Determine which sources are active (pill)
-      const active = [];
-      if (state.pill === 'all'){
-        for (const [k,v] of Object.entries(state.sources)) if (v) active.push(k);
-      } else {
-        active.push(state.pill);
-      }
-      if (!active.length) active.push('remotive');
-
-      const tasks = active.map(name => fetchers[name]({ q, loc, page }).catch(()=>[]));
-      const chunks = await Promise.all(tasks);
-      const merged = [].concat(...chunks);
-
-      // De-dupe
-      const seen = new Set(); const deduped = [];
-      for (const j of merged){
-        const k = keyFor(j);
-        if (seen.has(k)) continue;
-        seen.add(k); deduped.push(j);
-      }
-
-      // Sort recent first if we have timestamps
-      deduped.sort((a,b)=>{
-        const da = a.posted_at ? Date.parse(a.posted_at) : 0;
-        const db = b.posted_at ? Date.parse(b.posted_at) : 0;
-        return db - da;
-      });
-
-      return deduped;
-    }
-
-    // ===== Render =====
     function renderCard(j){
-      const card = document.createElement('div');
-      card.className = "job-card wrap";
-      card.innerHTML = `
+      const el = document.createElement('div');
+      el.className = 'job-card wrap';
+      el.innerHTML = `
         <div class="job-title">${esc(j.title)}</div>
         <div class="job-company">${esc(j.company)}</div>
-        <div class="job-location">${esc([j.location, j.type].filter(Boolean).join(" • "))}</div>
+        <div class="job-meta">${esc([j.location, j.type].filter(Boolean).join(' • '))}</div>
         <p class="wrap" style="margin:8px 0 10px">${esc((j.description||"").slice(0,220))}${j.description && j.description.length>220 ? "…" : ""}</p>
         <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
-          <a href="${j.apply_url}" target="_blank" rel="noopener" class="login-btn" style="padding:8px 12px">Apply</a>
-          <span class="wrap" style="font-size:12px;color:var(--muted);font-weight:800">Source: ${esc(j.source)}</span>
-        </div>
-      `;
-      list.appendChild(card);
+          <a href="${j.apply_url}" target="_blank" rel="noopener" class="btn btn-primary" style="padding:8px 12px">Apply</a>
+          <span style="font-size:12px;color:var(--muted);font-weight:800">Source: ${esc(j.source)}</span>
+        </div>`;
+      list.appendChild(el);
     }
 
-    async function runSearch(reset=true){
+    async function loadPage(reset=false){
       try{
-        if (reset){
-          state.page = 1;
-          list.textContent = "Loading jobs…";
-        }
-        const q = (titleInput?.value || "").trim() || "developer";
-        const loc = (locInput?.value || "").trim() || "Jamaica";
-        state.q = q; state.loc = loc;
-        sessionStorage.setItem('ext.q', q);
-        sessionStorage.setItem('ext.loc', loc);
+        if (reset){ state.page = 1; state.buffer = []; list.textContent = "Loading jobs…"; }
+        const [a, r] = await Promise.all([fetchAdzuna(state.page), fetchRemotive(state.page)]);
+        const merged = [...a, ...r];
 
-        const results = await loadExternalPage({ q, loc, page: state.page });
+        // dedupe by title+company+location
+        const seen = new Set(); const dedup = [];
+        for (const j of merged){
+          const key = [j.title, j.company, j.location].map(s => (s||"").toLowerCase().trim()).join("|");
+          if (seen.has(key)) continue; seen.add(key); dedup.push(j);
+        }
+        // sort by posted_at desc if available
+        dedup.sort((x,y)=> (Date.parse(y.posted_at||0)||0) - (Date.parse(x.posted_at||0)||0));
 
         if (reset) list.innerHTML = "";
-        if (!results.length && reset){
-          list.textContent = "No jobs found yet.";
-          moreBtn.style.display = "none";
-          return;
-        }
+        if (!dedup.length && reset){ list.textContent = "No jobs yet."; moreBtn.style.display='none'; return; }
 
-        results.slice(0, PAGE_SIZE).forEach(renderCard);
-        moreBtn.style.display = results.length >= PAGE_SIZE ? "block" : "none";
-      }catch(err){
-        console.error(err);
-        list.textContent = "Failed to load external jobs.";
-        moreBtn.style.display = "none";
+        dedup.forEach(renderCard);
+        moreBtn.style.display = dedup.length >= PAGE_SIZE ? 'block' : 'none';
+      }catch(e){
+        console.error(e);
+        if (state.page===1) list.textContent = "Failed to load jobs.";
+        moreBtn.style.display='none';
       }
     }
 
-    // ===== Events =====
-    function debounce(fn, ms=350){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); }; }
-
-    if (form){
-      form.addEventListener('submit', (e)=>{ e.preventDefault(); runSearch(true); });
-    }
-    if (titleInput) titleInput.addEventListener('input', debounce(()=>runSearch(true), 500));
-    if (locInput) locInput.addEventListener('input', debounce(()=>runSearch(true), 500));
-
-    pills.forEach(p => {
-      p.addEventListener('click', ()=>{
-        pills.forEach(x=>x.classList.remove('active'));
-        p.classList.add('active');
-        state.pill = p.dataset.src; // 'all' | 'remotive' | 'adzuna' | 'jsearch'
-        runSearch(true);
-      });
+    document.getElementById('loadMoreBtn').addEventListener('click', ()=>{
+      state.page += 1; loadPage(false);
     });
 
-    if (moreBtn){
-      moreBtn.addEventListener('click', ()=>{
-        state.page += 1;
-        runSearch(false);
-      });
-    }
-
-    // Initial load
-    runSearch(true);
+    loadPage(true);
   </script>
 </body>
 </html>
-
-<!-- ============================
-File: api/adzuna.js   (Vercel Serverless Function)
-- Put your ADZUNA_APP_ID and ADZUNA_APP_KEY in Vercel Project Settings → Environment Variables
-- Example GET: /api/adzuna?what=developer&where=Jamaica&page=1&per_page=10
-============================ -->
-export default async function handler(req, res) {
-  try {
-    const { what = "", where = "", page = "1", per_page = "10", country = "gb" } = req.query || {};
-    const app_id = process.env.ADZUNA_APP_ID;
-    const app_key = process.env.ADZUNA_APP_KEY;
-    if (!app_id || !app_key) {
-      return res.status(500).json({ error: "Missing ADZUNA_APP_ID or ADZUNA_APP_KEY" });
-    }
-    const url = `https://api.adzuna.com/v1/api/jobs/${country}/search/${encodeURIComponent(page)}?app_id=${app_id}&app_key=${app_key}&results_per_page=${encodeURIComponent(per_page)}&what=${encodeURIComponent(what)}&where=${encodeURIComponent(where)}&content-type=application/json`;
-    const r = await fetch(url);
-    const data = await r.json();
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.status(r.ok ? 200 : 500).json(data);
-  } catch (e) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.status(500).json({ error: e.message || "Adzuna proxy failed" });
-  }
-}
-
-<!-- ============================
-File: api/jsearch.js   (Vercel Serverless Function)
-- Put your RAPIDAPI_KEY in Vercel Env as RAPIDAPI_KEY
-- Example GET: /api/jsearch?query=developer%20Jamaica&page=1
-============================ -->
-export default async function handler(req, res) {
-  try {
-    const { query = "", page = "1" } = req.query || {};
-    const key = process.env.RAPIDAPI_KEY;
-    if (!key) return res.status(500).json({ error: "Missing RAPIDAPI_KEY" });
-
-    const r = await fetch(`https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(query)}&page=${encodeURIComponent(page)}`, {
-      headers: { "X-RapidAPI-Key": key, "X-RapidAPI-Host": "jsearch.p.rapidapi.com" }
-    });
-    const data = await r.json();
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.status(r.ok ? 200 : 500).json(data);
-  } catch (e) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.status(500).json({ error: e.message || "JSearch proxy failed" });
-  }
-}
-
-<!-- ============================
-File: netlify/functions/adzuna.js   (Netlify Function)
-- Add ADZUNA_APP_ID + ADZUNA_APP_KEY in Netlify → Site settings → Environment variables
-- Deploy inside /netlify/functions/
-============================ -->
-exports.handler = async (event) => {
-  try {
-    const params = new URLSearchParams(event.rawQuery || "");
-    const what = params.get("what") || "";
-    const where = params.get("where") || "";
-    const page = params.get("page") || "1";
-    const per_page = params.get("per_page") || "10";
-    const country = params.get("country") || "gb";
-    const app_id = process.env.ADZUNA_APP_ID;
-    const app_key = process.env.ADZUNA_APP_KEY;
-    if (!app_id || !app_key) {
-      return { statusCode: 500, headers: { "Access-Control-Allow-Origin": "*" }, body: JSON.stringify({ error: "Missing Adzuna env" }) };
-    }
-    const url = `https://api.adzuna.com/v1/api/jobs/${country}/search/${encodeURIComponent(page)}?app_id=${app_id}&app_key=${app_key}&results_per_page=${encodeURIComponent(per_page)}&what=${encodeURIComponent(what)}&where=${encodeURIComponent(where)}&content-type=application/json`;
-    const r = await fetch(url);
-    const data = await r.json();
-    return { statusCode: r.ok ? 200 : 500, headers: { "Access-Control-Allow-Origin": "*" }, body: JSON.stringify(data) };
-  } catch (e) {
-    return { statusCode: 500, headers: { "Access-Control-Allow-Origin": "*" }, body: JSON.stringify({ error: e.message || "Adzuna proxy failed" }) };
-  }
-};
-
-<!-- ============================
-File: netlify/functions/jsearch.js   (Netlify Function)
-- Add RAPIDAPI_KEY in Netlify env
-============================ -->
-exports.handler = async (event) => {
-  try {
-    const params = new URLSearchParams(event.rawQuery || "");
-    const query = params.get("query") || "";
-    const page = params.get("page") || "1";
-    const key = process.env.RAPIDAPI_KEY;
-    if (!key) {
-      return { statusCode: 500, headers: { "Access-Control-Allow-Origin": "*" }, body: JSON.stringify({ error: "Missing RAPIDAPI_KEY" }) };
-    }
-    const r = await fetch(`https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(query)}&page=${encodeURIComponent(page)}`, {
-      headers: { "X-RapidAPI-Key": key, "X-RapidAPI-Host": "jsearch.p.rapidapi.com" }
-    });
-    const data = await r.json();
-    return { statusCode: r.ok ? 200 : 500, headers: { "Access-Control-Allow-Origin": "*" }, body: JSON.stringify(data) };
-  } catch (e) {
-    return { statusCode: 500, headers: { "Access-Control-Allow-Origin": "*" }, body: JSON.stringify({ error: e.message || "JSearch proxy failed" }) };
-  }
-};
