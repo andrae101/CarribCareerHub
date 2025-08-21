@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Manage Posts • Applicants | CaribCareerHub</title>
+<meta name="color-scheme" content="light dark" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
+    --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
+    --radius:18px; --shadow:0 10px 30px rgba(16,40,120,.12); --ring:0 0 0 3px rgba(30,108,255,.14);
+  }
+  body.dark{
+    --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6;
+    --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
+    --shadow:0 14px 40px rgba(0,0,0,.45); --ring:0 0 0 3px rgba(142,196,255,.22);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;overflow-x:hidden}
+
+  .wrap{max-width:1100px;margin:16px auto 32px;padding:0 16px}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 14px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand img{width:54px;height:54px;object-fit:contain}
+  .brand-name{font-weight:900;letter-spacing:3px}
+  .rail{display:flex;align-items:center;gap:8px}
+  .btn{border:none;border-radius:12px;padding:10px 12px;font-weight:800;cursor:pointer}
+  .btn-primary{color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-2))}
+  .btn-line{background:transparent;border:1px solid color-mix(in oklab, var(--ink) 18%, transparent);color:var(--ink)}
+  .theme{border:1px solid color-mix(in oklab, var(--ink) 14%, transparent);background:var(--panel);color:var(--ink)}
+
+  .panel{background:color-mix(in oklab, var(--panel) 90%, transparent);border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);border-radius:var(--radius);box-shadow:var(--shadow);backdrop-filter:blur(8px);padding:16px}
+  h1{margin:0 0 8px}
+  .list{display:grid;gap:10px;margin-top:10px}
+  .row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid color-mix(in oklab, var(--ink) 12%, transparent);background:var(--panel);border-radius:14px;padding:12px}
+  .muted{color:var(--muted)}
+  .k{display:flex;gap:8px;flex-wrap:wrap}
+  .tag{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid color-mix(in oklab, var(--ink) 14%, transparent);font-size:12px;font-weight:900}
+
+  /* Modal */
+  .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .backdrop.open{display:flex}
+  .modal{width:min(92vw,900px);background:var(--panel);border:1px solid color-mix(in oklab, var(--ink) 16%, transparent);border-radius:18px;box-shadow:var(--shadow);padding:14px}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .modal-title{margin:0;font-size:18px;font-weight:900}
+  .close{border:1px solid color-mix(in oklab, var(--ink) 16%, transparent);background:transparent;border-radius:10px;padding:6px 10px;cursor:pointer}
+  .grid{display:grid;gap:10px}
+  .grid.two{grid-template-columns:1fr 1fr}
+  .item{border:1px solid color-mix(in oklab, var(--ink) 12%, transparent);border-radius:12px;padding:12px}
+  .item h4{margin:0 0 6px}
+  select, input, textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid color-mix(in oklab, var(--ink) 16%, transparent);background:transparent;color:var(--ink)}
+  a.link{color:var(--brand);text-decoration:none;font-weight:800}
+  .status{font-size:12px;font-weight:900;padding:4px 8px;border-radius:999px;border:1px solid color-mix(in oklab, var(--ink) 20%, transparent)}
+  .status.applied{background:color-mix(in oklab, var(--brand) 16%, transparent)}
+  .status.interview{background:color-mix(in oklab, #ffd600 20%, transparent);color:#2a2600}
+  .status.offer{background:color-mix(in oklab, #59d985 24%, transparent);color:#062a18}
+  .status.rejected{background:color-mix(in oklab, #ff6b6b 22%, transparent);color:#fff}
+
+  @media (max-width:720px){ .grid.two{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <img src="./assets/logo.png" alt="CaribCareerHub" />
+      <div class="brand-name">CARRIBCAREERHUB</div>
+    </div>
+    <div class="rail">
+      <button id="themeToggle" class="btn theme" aria-label="Toggle theme">🌙</button>
+      <a href="dashboard.html" class="btn btn-line">Dashboard</a>
+      <button id="logoutBtn" class="btn btn-line">Log out</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h1>Manage Posts</h1>
+    <p class="muted">See your jobs and open each to view applicants and update their status.</p>
+    <div id="jobsList" class="list">
+      <div class="muted">Loading…</div>
+    </div>
+  </div>
+</div>
+
+<!-- Applicants Modal -->
+<div id="appsModal" class="backdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="appsTitle">
+    <div class="modal-head">
+      <h2 class="modal-title" id="appsTitle">Applicants</h2>
+      <button id="appsClose" class="close" aria-label="Close">×</button>
+    </div>
+    <div class="muted" id="appsSub" style="margin:6px 0 10px"></div>
+    <div id="appsList" class="grid"></div>
+  </div>
+</div>
+
+<script>
+/* ===== Config: Supabase ===== */
+const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const LOGIN_PAGE = "login.html";
+
+/* ===== Theme ===== */
+(function initTheme(){
+  const saved = localStorage.getItem('cch.theme');
+  if (saved === 'dark') document.body.classList.add('dark');
+  document.getElementById('themeToggle').textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
+  document.getElementById('themeToggle').addEventListener('click', ()=>{
+    document.body.classList.toggle('dark');
+    localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
+    document.getElementById('themeToggle').textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
+  });
+})();
+
+/* ===== Auth Guard ===== */
+let currentUser = null;
+(async ()=>{
+  const { data:{ session } } = await supabaseClient.auth.getSession();
+  if (!session) { window.location.href = LOGIN_PAGE; return; }
+  currentUser = session.user;
+  loadJobs();
+})();
+supabaseClient.auth.onAuthStateChange((ev)=>{ if (ev === "SIGNED_OUT") window.location.href = LOGIN_PAGE; });
+document.getElementById('logoutBtn').addEventListener('click', async ()=>{ await supabaseClient.auth.signOut(); });
+
+/* ===== Jobs (owned by employer) ===== */
+const jobsList = document.getElementById('jobsList');
+async function loadJobs(){
+  jobsList.innerHTML = `<div class="muted">Loading…</div>`;
+  const { data, error } = await supabaseClient
+    .from('jobs')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending:false });
+
+  if (error){ jobsList.innerHTML = `<div class="muted">❌ Failed to load jobs.</div>`; return; }
+  if (!data || data.length === 0){ jobsList.innerHTML = `<div class="muted">No posts yet.</div>`; return; }
+
+  jobsList.innerHTML = "";
+  data.forEach(job=>{
+    const el = document.createElement('div'); el.className = "row";
+    el.innerHTML = `
+      <div>
+        <div style="font-weight:900">${escapeHtml(job.title || 'Untitled')}</div>
+        <div class="muted">${escapeHtml(job.company || '')} ${job.location ? '• '+escapeHtml(job.location) : ''} ${job.salary ? '• $'+escapeHtml(job.salary) : ''}</div>
+        <div class="k" style="margin-top:6px">
+          ${job.type ? `<span class="tag">${escapeHtml(job.type)}</span>` : ''}
+          <span class="tag">Posted ${formatDate(job.created_at)}</span>
+        </div>
+      </div>
+      <div class="k">
+        <button class="btn btn-line" data-apps="${job.id}">Applicants</button>
+        <button class="btn btn-line" data-edit="${job.id}">Edit</button>
+        <button class="btn btn-primary" data-del="${job.id}" style="background:linear-gradient(90deg,#ff5a5a,#ff7a7a)">Delete</button>
+      </div>
+    `;
+
+    el.querySelector('[data-apps]').addEventListener('click', ()=> openApplicants(job));
+    el.querySelector('[data-del]').addEventListener('click', async ()=>{
+      if (!confirm('Delete this job?')) return;
+      const { error } = await supabaseClient.from('jobs').delete().eq('id', job.id);
+      if (error) return alert('Delete failed: ' + error.message);
+      loadJobs();
+    });
+    // (Edit wiring can be added later)
+    jobsList.appendChild(el);
+  });
+}
+
+/* ===== Applicants Modal ===== */
+const appsModal = document.getElementById('appsModal');
+const appsClose = document.getElementById('appsClose');
+const appsList  = document.getElementById('appsList');
+const appsSub   = document.getElementById('appsSub');
+
+function openModal(){ appsModal.classList.add('open'); appsModal.setAttribute('aria-hidden','false'); }
+function closeModal(){ appsModal.classList.remove('open'); appsModal.setAttribute('aria-hidden','true'); appsList.innerHTML = ""; }
+
+appsClose.addEventListener('click', closeModal);
+appsModal.addEventListener('click', (e)=>{ if (e.target === appsModal) closeModal(); });
+window.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && appsModal.classList.contains('open')) closeModal(); });
+
+async function openApplicants(job){
+  document.getElementById('appsTitle').textContent = `Applicants • ${job.title || 'Job'}`;
+  appsSub.textContent = `${job.company || ''} ${job.location ? '• '+job.location : ''}`;
+  appsList.innerHTML = `<div class="muted">Loading…</div>`;
+  openModal();
+
+  const { data, error } = await supabaseClient
+    .from('applications')
+    .select('*')
+    .eq('job_id', job.id)
+    .order('applied_at', { ascending:false });
+
+  if (error){ appsList.innerHTML = `<div class="muted">❌ Failed to load applicants.</div>`; return; }
+  if (!data || data.length===0){ appsList.innerHTML = `<div class="muted">No applicants yet.</div>`; return; }
+
+  appsList.innerHTML = "";
+  data.forEach(app=>{
+    const row = document.createElement('div'); row.className = "item grid two";
+    row.innerHTML = `
+      <div>
+        <h4>${escapeHtml(app.applicant_name)}</h4>
+        <div class="muted" style="margin-bottom:6px">${escapeHtml(app.applicant_email)}</div>
+        ${app.cv_url ? `<a class="link" href="${escapeAttr(app.cv_url)}" target="_blank" rel="noopener">View CV</a>` : `<span class="muted">No CV provided</span>`}
+        <div class="muted" style="margin-top:8px">${escapeHtml(app.cover_letter || '')}</div>
+      </div>
+      <div>
+        <label class="muted" style="font-weight:900">Status</label>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <span class="status ${statusClass(app.status)}" id="badge-${app.id}">${escapeHtml(app.status || 'Applied')}</span>
+          <select id="sel-${app.id}">
+            ${['Applied','Interview','Offer','Rejected'].map(s=>`<option ${s===app.status?'selected':''}>${s}</option>`).join('')}
+          </select>
+          <button class="btn btn-primary" data-save="${app.id}">Save</button>
+        </div>
+        <div class="muted" style="margin-top:8px">Applied: ${formatDate(app.applied_at)}</div>
+      </div>
+    `;
+    row.querySelector('[data-save]').addEventListener('click', async ()=>{
+      const sel = document.getElementById(`sel-${app.id}`);
+      const newStatus = sel.value;
+      const { error } = await supabaseClient.from('applications').update({ status: newStatus }).eq('id', app.id);
+      if (error){ alert('Update failed: ' + error.message); return; }
+      const badge = document.getElementById(`badge-${app.id}`);
+      badge.textContent = newStatus;
+      badge.className = `status ${statusClass(newStatus)}`;
+    });
+    appsList.appendChild(row);
+  });
+}
+
+/* ===== Helpers ===== */
+function escapeHtml(s){ return (s||"").toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+function escapeAttr(s){ return (s||"").toString().replace(/"/g, '&quot;'); }
+function formatDate(d){ try{ return new Date(d).toLocaleDateString(); }catch(e){ return ''; } }
+function statusClass(s){
+  const v = (s||'Applied').toLowerCase();
+  if (v.includes('interview')) return 'interview';
+  if (v.includes('offer')) return 'offer';
+  if (v.includes('reject')) return 'rejected';
+  return 'applied';
+}
+</script>
+</body>
+</html>
