@@ -6,42 +6,50 @@
   <title>CaribCareerHub • Caribbean Jobs</title>
   <meta name="color-scheme" content="light dark" />
   <link rel="canonical" href="https://carribcareerhub.site/" />
-
   <style>
     :root{
       --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6;
       --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
       --radius:18px; --shadow:0 14px 40px rgba(0,0,0,.45);
       --border:1px solid rgba(255,255,255,.12);
+      --ring:0 0 0 3px rgba(138,180,248,.25);
     }
     body.light{
       --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
       --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
       --shadow:0 10px 30px rgba(16,40,120,0.12);
       --border:1px solid rgba(10,36,88,.12);
+      --ring:0 0 0 3px rgba(30,108,255,.18);
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{ margin:0; overflow-x:hidden; font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif; color:var(--ink); background:var(--bg) }
 
-    /* Banner */
+    /* Top banner — fills safe area left/right */
     .highlight-banner{
       position:sticky; top:0; z-index:1000;
       background:linear-gradient(90deg,var(--brand),var(--brand-2));
       color:#fff; text-align:center; font-weight:800;
-      padding:10px 12px; font-size:14px; letter-spacing:.3px; box-shadow:var(--shadow);
+      padding:10px max(12px, env(safe-area-inset-right)) 10px max(12px, env(safe-area-inset-left));
+      font-size:14px; letter-spacing:.3px; box-shadow:var(--shadow);
+      width:100%;
     }
 
     /* Header */
-    .header{ max-width:1100px; margin:12px auto 0; padding:0 16px; display:flex; align-items:center; justify-content:space-between }
-    .brand{display:flex; align-items:center; gap:10px}
+    .header{ max-width:1100px; margin:12px auto 0; padding:0 16px; display:flex; align-items:center; justify-content:space-between; gap:12px }
+    .brand{display:flex; align-items:center; gap:10px; min-width:0}
     .logo{width:54px; height:54px; object-fit:contain}
-    .brand-name{font-size:20px; font-weight:900; letter-spacing:3px; white-space:nowrap}
-    .controls{display:flex; gap:8px; align-items:center}
-    .btn{ border:none; padding:8px 12px; border-radius:12px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; justify-content:center }
+    .brand-name{font-size:20px; font-weight:900; letter-spacing:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+    .controls{display:flex; gap:8px; align-items:center; flex-shrink:0}
+    .btn{ border:none; padding:8px 12px; border-radius:12px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; white-space:nowrap }
+    .btn-primary{ color:#fff; background:linear-gradient(90deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow); text-decoration:none; max-height:38px }
     .btn-ghost{ background:var(--panel); color:var(--ink); border:var(--border) }
-    .btn-primary{ color:#fff; background:linear-gradient(90deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow); text-decoration:none }
+    /* dark-mode contrast for the theme toggle */
+    body:not(.light) .btn-ghost{ background:#23325b; color:#fff; border:1px solid rgba(255,255,255,.25) }
+
+    .btn:focus-visible{ outline:none; box-shadow:var(--ring) }
 
     /* Panel */
     .panel{
@@ -53,12 +61,16 @@
     .panel-content{ display:grid; grid-template-columns:1.1fr .9fr; gap:24px }
 
     /* Hero */
-    .hero-title{ font-size: clamp(28px, 6vw, 46px); font-weight:900; line-height:1.2; margin:6px 0 10px; text-align:center; letter-spacing:.3px }
+    .hero-title{ font-size: clamp(28px, 6vw, 46px); font-weight:900; line-height:1.2; margin:6px 0 6px; text-align:center; letter-spacing:.3px }
+    .tagline{ margin:0 auto 12px; text-align:center; color:var(--muted); font-weight:700; max-width:720px }
     .employer-callout{
-      margin:10px auto 0; padding:10px 12px; border-radius:12px;
-      background:color-mix(in oklab, var(--accent) 20%, var(--panel));
-      border:var(--border); color:var(--ink); font-weight:800; text-align:center; max-width:680px;
+      margin:12px auto 0; padding:12px 14px; border-radius:14px;
+      background:linear-gradient(0deg, color-mix(in oklab, var(--accent) 15%, var(--panel)), var(--panel));
+      border:var(--border); color:var(--ink); text-align:center; max-width:720px; font-weight:800;
     }
+    .employer-callout strong{ color:inherit }
+    .employer-callout a{ color:var(--brand); text-decoration:none; border-bottom:2px solid transparent }
+    .employer-callout a:hover{ border-color: color-mix(in oklab, var(--brand) 50%, transparent) }
 
     /* Jobs list */
     .jobs{ margin-top:18px }
@@ -78,14 +90,19 @@
     .map-wrap{ display:flex; align-items:center; justify-content:center }
     .map-wrap img{ width:100%; max-width:520px; height:auto; object-fit:contain; opacity:.9 }
 
-    /* Footer */
-    .footer{ max-width:1100px; margin:10px auto 40px; padding:0 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap }
-    .footer .links{ display:flex; gap:18px; flex-wrap:wrap }
+    /* Footer (balanced spacing) */
+    .footer{ max-width:1100px; margin:10px auto 40px; padding:0 16px; display:flex; flex-direction:column; gap:10px }
+    .links{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:18px }
+    @media (min-width: 780px){ .links{ justify-content:space-between } }
     .footer a{ color:var(--ink); text-decoration:none; font-weight:900; border-bottom:2px solid transparent; padding-bottom:2px }
     .footer a:hover{ border-color: color-mix(in oklab, var(--brand) 50%, transparent) }
-    .copy{ color:var(--muted); font-weight:700 }
+    .copy{ color:var(--muted); font-weight:700; text-align:center }
 
-    @media (max-width: 900px){ .panel-content{ grid-template-columns: 1fr } }
+    @media (max-width: 900px){
+      .panel-content{ grid-template-columns: 1fr }
+      .brand-name{ font-size:18px; letter-spacing:2px }
+      .logo{ width:48px; height:48px }
+    }
   </style>
 </head>
 <body>
@@ -112,7 +129,12 @@
     <div class="panel-content">
       <section>
         <h1 class="hero-title">Find Your Next Role in the Caribbean</h1>
-        <p class="employer-callout"><strong>Employers:</strong> Post your jobs from your dashboard to reach Caribbean talent.</p>
+        <p class="tagline">Real companies. Real opportunities. Your next chapter starts here.</p>
+
+        <p class="employer-callout">
+          📣 <strong>Employers:</strong> Reach Caribbean talent fast —
+          <a href="employers.html">post your job from your dashboard</a>.
+        </p>
 
         <!-- Latest Jobs (no search UI) -->
         <div class="jobs">
@@ -133,14 +155,16 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="links">
-      <a href="about.html">About</a><a href="contact.html">Contact</a>
-      <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
-    </div>
+    <nav class="links">
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
     <div class="copy">© 2025 CaribCareerHub</div>
   </footer>
 
-  <!-- Theme + Latest Jobs loader -->
+  <!-- Theme + Latest Jobs loader (unchanged logic) -->
   <script>
     // theme
     (function(){
@@ -160,12 +184,12 @@
 
     // jobs (Adzuna via /api/adzuna + Remotive public)
     const PAGE_SIZE = 10;
-    const DEFAULT_QUERY = "";        // no keyword
+    const DEFAULT_QUERY = "";
     const DEFAULT_LOCATION = "Jamaica";
 
     const list = document.getElementById('jobsContainer');
     const moreBtn = document.getElementById('loadMoreBtn');
-    const state = { page: 1, buffer: [] };
+    const state = { page: 1 };
 
     const esc = s => (s??"").toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
     const stripHtml = html => { const d = document.createElement('div'); d.innerHTML = html||""; return d.textContent||d.innerText||""; };
@@ -223,17 +247,16 @@
 
     async function loadPage(reset=false){
       try{
-        if (reset){ state.page = 1; state.buffer = []; list.textContent = "Loading jobs…"; }
+        if (reset){ state.page = 1; list.textContent = "Loading jobs…"; }
         const [a, r] = await Promise.all([fetchAdzuna(state.page), fetchRemotive(state.page)]);
         const merged = [...a, ...r];
 
-        // dedupe by title+company+location
+        // dedupe + sort
         const seen = new Set(); const dedup = [];
         for (const j of merged){
           const key = [j.title, j.company, j.location].map(s => (s||"").toLowerCase().trim()).join("|");
           if (seen.has(key)) continue; seen.add(key); dedup.push(j);
         }
-        // sort by posted_at desc if available
         dedup.sort((x,y)=> (Date.parse(y.posted_at||0)||0) - (Date.parse(x.posted_at||0)||0));
 
         if (reset) list.innerHTML = "";
