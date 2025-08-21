@@ -1,4 +1,4 @@
-<!-- /index.html — Homepage (no search bar), fixed banner/login, catchy copy, auto-refresh jobs, dark-mode polished -->
+<!-- /index.html — polished header (toggle + login), appealing copy, auto-refresh jobs, strong dark mode -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +32,7 @@
       overflow-x:hidden;
     }
 
-    /* Top banner (full-bleed, no cutoff) */
+    /* Top banner — true full-bleed */
     .highlight-banner{
       width:100vw; margin-left:calc(50% - 50vw);
       background:linear-gradient(90deg,var(--brand),var(--brand-2));
@@ -44,30 +44,30 @@
     /* Header */
     .header{
       max-width:1100px; margin:14px auto 0; padding:0 16px;
-      position:relative; display:flex; align-items:center; justify-content:center; gap:12px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
     }
-    .brand{display:flex; align-items:center; gap:12px}
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
     .brand .logo{width:86px;height:86px;object-fit:contain}
-    .brand-name{font-size:24px;font-weight:900;letter-spacing:4px;white-space:nowrap}
+    .brand-name{font-size:24px;font-weight:900;letter-spacing:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+    /* Right rail: toggle + login aligned side-by-side, non-overflowing */
     .right-rail{
-      position:absolute; right:16px; top:50%; transform:translateY(-50%);
-      display:flex; align-items:center; gap:10px;
+      display:inline-flex; align-items:center; gap:10px; flex-shrink:0;
+      max-width:60%; justify-content:flex-end;
     }
+    .theme-toggle{
+      border:1px solid rgba(0,0,0,.1); padding:8px 10px; border-radius:12px;
+      background:var(--panel); color:var(--ink); cursor:pointer; font-weight:900;
+      box-shadow:var(--shadow); flex:0 0 auto;
+    }
+    body.dark .theme-toggle{ background:#0d1422; color:#fff; border-color:rgba(255,255,255,.18) }
+
     .login-btn{
       display:inline-block; padding:10px 14px; border-radius:12px;
       font-weight:800; text-decoration:none; color:#fff;
       background:linear-gradient(90deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow);
       max-width:140px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .theme-toggle{
-      border:1px solid rgba(0,0,0,.1); padding:8px 10px; border-radius:12px;
-      background:var(--panel); color:var(--ink); cursor:pointer; font-weight:900;
-      box-shadow:var(--shadow);
-    }
-    /* extra contrast in dark mode so the icon is visible */
-    body.dark .theme-toggle{
-      background:#0d1422; color:#fff; border-color:rgba(255,255,255,.18);
+      flex:0 0 auto;
     }
 
     /* Panel (hero + map) */
@@ -88,9 +88,8 @@
     }
     .lede{
       font-size:17px; line-height:1.75; color:var(--muted);
-      margin:0 auto 14px; text-align:center; max-width:720px;
+      margin:0 auto 10px; text-align:center; max-width:720px;
     }
-    /* NEW: punchier seeker copy */
     .lede-boost{
       margin:6px auto 0; text-align:center; max-width:760px; font-weight:800;
       color:var(--ink);
@@ -147,9 +146,11 @@
     @media (max-width: 900px){
       .panel-content{ grid-template-columns:1fr }
       .brand .logo{ width:76px; height:76px }
-      .right-rail{ position:static; transform:none; margin-left:auto }
-      .header{ justify-content:space-between }
       .footer .links{ justify-content:space-around }
+    }
+    @media (max-width: 420px){
+      .right-rail{ gap:8px }
+      .login-btn{ max-width:112px; padding:9px 12px }
     }
     @media (max-width: 360px){
       .brand-name{ font-size:18px; letter-spacing:2px }
@@ -184,16 +185,14 @@
       <section>
         <h1 class="hero-title">Find Your Dream Job in the Caribbean</h1>
 
-        <!-- Catchier seeker copy -->
-        <p class="lede">
-          Job hunting is hard — we make it easier.
-        </p>
+        <!-- Appealing, concise copy -->
+        <p class="lede">Job hunting is hard — we make it easier.</p>
         <p class="lede lede-boost">
           Discover fresh roles across Jamaica, Barbados, and Trinidad. Save your favorites, apply fast,
           and let CaribCareerHub guide you every step of the way.
         </p>
 
-        <!-- Employer callout with Start Here -->
+        <!-- Employer callout + Start Here -->
         <div class="employer-callout">
           <span>
             <strong>Employers:</strong> Post your openings and reach qualified Caribbean talent.
@@ -230,9 +229,9 @@
     <div class="copy">© 2025 CaribCareerHub</div>
   </footer>
 
-  <!-- External Jobs Loader (Remotive + /api/adzuna if configured) -->
+  <!-- External Jobs Loader -->
   <script>
-    // ===== Theme (persist + visible icon in dark) =====
+    // ===== Theme =====
     (function initTheme(){
       const saved = localStorage.getItem('cch.theme');
       if (saved === 'dark') document.body.classList.add('dark');
@@ -255,7 +254,7 @@
     const list = document.getElementById('jobsContainer');
     const moreBtn = document.getElementById('loadMoreBtn');
     let page = 1;
-    let cache = []; // store current batch for "Load More"
+    let cache = [];
 
     function esc(s){return (s??"").toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
     function stripHtml(html){ const d = document.createElement('div'); d.innerHTML = html; return d.textContent || d.innerText || ""; }
@@ -288,7 +287,6 @@
     }
 
     async function fetchAdzuna(){
-      // Works only if your /api/adzuna is set up with env keys in your Vercel project.
       try{
         const url = `/api/adzuna?what=&where=Jamaica&page=1&per_page=20`;
         const res = await fetch(url);
@@ -332,15 +330,15 @@
         page = 1;
       }
       const [r1, r2] = await Promise.all([fetchRemotive(), fetchAdzuna()]);
-      // merge + dedupe
       const merged = [...r1, ...r2];
+      // dedupe
       const seen = new Set(); const deduped = [];
       for (const j of merged){
         const k = keyFor(j);
         if (seen.has(k)) continue;
         seen.add(k); deduped.push(j);
       }
-      // sort by recency if available
+      // sort by recency when available
       deduped.sort((a,b)=>{
         const da = a.posted_at ? Date.parse(a.posted_at) : 0;
         const db = b.posted_at ? Date.parse(b.posted_at) : 0;
@@ -362,8 +360,8 @@
     // Initial load
     loadJobs(true);
 
-    // Auto-refresh every 12 minutes
-    setInterval(()=> loadJobs(true), 12 * 60 * 1000);
+    // Auto-refresh Latest Jobs every 10 minutes
+    setInterval(()=> loadJobs(true), 10 * 60 * 1000);
   </script>
 </body>
 </html>
