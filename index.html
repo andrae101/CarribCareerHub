@@ -2,175 +2,342 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CaribbCareerHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>CaribCareerHub • Find Jobs Across the Caribbean</title>
+  <link rel="canonical" href="https://carribcareerhub.site/" />
+  <meta name="color-scheme" content="light dark" />
+
   <style>
-    :root {
-      --bg: #f3f8ff;
-      --panel: #fff;
-      --ink: #0a2458;
-      --muted: #6b7a99;
-      --brand: #1E6CFF;
-      --brand-2: #3FA2FF;
-      --accent: #FFA03B;
-      --radius: 14px;
+    :root{
+      --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
+      --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
+      --radius:18px; --shadow:0 12px 32px rgba(16,40,120,.12);
+      --ring:0 0 0 3px rgba(30,108,255,.14);
+      --card:#fff;
+      --line: color-mix(in oklab, var(--ink) 12%, transparent);
     }
-    body.dark {
-      --bg: #0e1424;
-      --panel: #1c2333;
-      --ink: #f4f6fb;
-      --muted: #aab3cc;
-      --brand: #3FA2FF;
-      --brand-2: #1E6CFF;
-      --accent: #ffb44d;
+    body.dark{
+      --bg:#0f1525; --panel:#121a2d; --ink:#ecf2ff; --muted:#b7c1d6;
+      --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
+      --shadow:0 14px 40px rgba(0,0,0,.45); --ring:0 0 0 3px rgba(142,196,255,.22);
+      --card:#121a2d;
+      --line: color-mix(in oklab, var(--ink) 18%, transparent);
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body {
-      font-family: system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      transition: background 0.3s, color 0.3s;
-      overflow-x: hidden;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font:16px/1.55 system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial,sans-serif;
+      overflow-x:hidden;
     }
-    header {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:14px 24px;
-      background:var(--panel);
-      box-shadow:0 4px 12px rgba(0,0,0,.08);
-      position:sticky;
-      top:0;
-      z-index:100;
-    }
-    .logo {font-weight:700;font-size:20px;color:var(--brand);text-decoration:none;}
-    .right-rail {
-      display:flex;
-      gap:12px;
-      align-items:center;
-    }
-    .login-btn {
-      padding:8px 16px;
-      border-radius:8px;
+
+    /* Full-width banner (no gap on right) */
+    .highlight-banner{
+      width:100%;
       background:linear-gradient(90deg,var(--brand),var(--brand-2));
-      color:#fff;
-      font-weight:600;
-      text-decoration:none;
-      font-size:14px;
+      color:#fff; text-align:center; font-weight:900;
+      padding:10px 16px; font-size:14px; letter-spacing:.3px;
+      position:sticky; top:0; z-index:1000; box-shadow:var(--shadow);
+    }
+
+    /* Header */
+    .header-wrap{width:100%}
+    .header{
+      max-width:1100px; margin:14px auto 0; padding:0 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand picture, .brand img{display:block}
+    .logo{
+      width:80px; height:80px; object-fit:contain; flex:0 0 auto;
+    }
+    .brand-name{
+      font-size:24px; font-weight:900; letter-spacing:4px; white-space:nowrap;
+      overflow:hidden; text-overflow:ellipsis;
+    }
+    .actions{display:flex; align-items:center; gap:8px}
+    .theme-toggle{
+      border:1px solid var(--line); padding:8px 10px; border-radius:12px;
+      background:var(--panel); color:var(--ink); cursor:pointer; font-weight:900;
+    }
+    .login-btn{
+      display:inline-block; padding:9px 12px; border-radius:12px;
+      font-weight:800; text-decoration:none; color:#fff;
+      background:linear-gradient(90deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow);
       white-space:nowrap;
     }
-    .theme-toggle {
-      border:none;
-      background:var(--accent);
-      padding:8px 12px;
-      border-radius:8px;
-      cursor:pointer;
-      color:#fff;
-      font-size:14px;
-    }
-    .hero {
-      text-align:center;
-      padding:60px 20px 40px;
-    }
-    .hero h1 {font-size:32px;margin-bottom:12px;}
-    .hero p {color:var(--muted);max-width:600px;margin:0 auto 20px;}
-    .jobs {
-      max-width:900px;
-      margin:40px auto;
-      padding:0 20px;
-    }
-    .job-card {
-      background:var(--panel);
-      padding:16px;
+
+    /* Main panel */
+    .panel{
+      max-width:1100px; margin:16px auto 32px; padding:24px;
       border-radius:var(--radius);
-      box-shadow:0 4px 12px rgba(0,0,0,.08);
-      margin-bottom:16px;
+      background:color-mix(in oklab, var(--panel) 92%, transparent);
+      border:1px solid var(--line); box-shadow:var(--shadow);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     }
-    .job-card h3 {margin-bottom:6px;font-size:18px;}
-    footer {
-      margin-top:40px;
-      padding:20px;
-      text-align:center;
-      background:var(--panel);
-      color:var(--muted);
-      font-size:14px;
+    .panel-content{
+      display:grid; grid-template-columns:1.15fr .85fr; gap:24px;
     }
-    footer nav {display:flex;justify-content:center;gap:24px;margin-top:10px;}
-    footer nav a {color:var(--muted);text-decoration:none;font-size:14px;}
-    footer nav a:hover {color:var(--brand);}
+
+    /* Hero */
+    .hero-title{
+      font-size: clamp(30px, 6vw, 48px);
+      font-weight:900; line-height:1.15; margin:6px 0 10px; text-align:center;
+      letter-spacing:.4px;
+    }
+    .lede{
+      font-size:17px; line-height:1.75; color:var(--muted);
+      margin:0 auto 14px; text-align:center; max-width:720px;
+    }
+    .lede b{color:var(--ink)}
+    .employer-callout{
+      margin:16px auto 0; padding:12px 14px; border-radius:12px;
+      background: color-mix(in oklab, #fff6e9 88%, var(--panel));
+      border:1px solid color-mix(in oklab, #ffd9a8 80%, var(--line));
+      color:#9a5d00; font-weight:800; max-width:760px; text-align:center;
+    }
+    body.dark .employer-callout{ background:#2a1e0e; border-color:#5a3d13; color:#ffd9a8 }
+    .start-here{
+      display:inline-block; margin-left:8px; padding:8px 12px; border-radius:10px;
+      background:linear-gradient(90deg,var(--accent),#ff8a00); color:#1a1308; font-weight:900; text-decoration:none;
+    }
+
+    /* Jobs list */
+    .jobs-list{ margin-top:18px }
+    .jobs-list h2{margin:0 0 10px}
+    .cards{display:grid; gap:12px}
+    .job-card{
+      display:grid; gap:6px; border:1px solid var(--line);
+      border-radius:14px; padding:14px; background:var(--card); box-shadow:var(--shadow);
+    }
+    .job-title{ margin:0; font-size:18px; font-weight:900; line-height:1.25;
+      display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden }
+    .job-company{ margin:0; color:var(--muted); font-weight:700;
+      display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden }
+    .job-location{ margin:0; color:var(--brand); font-weight:800;
+      display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden }
+    .desc{
+      margin:6px 0 8px; color:var(--ink); opacity:.9; font-size:14px;
+      display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden
+    }
+    .card-actions{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+    .apply{ padding:8px 12px; border-radius:10px; font-weight:800; color:#fff; text-decoration:none;
+      background:linear-gradient(90deg,var(--brand),var(--brand-2)); }
+    .badge{font-size:12px; color:var(--muted); font-weight:800}
+
+    /* Map side */
+    .map-wrap{ display:flex; align-items:center; justify-content:center }
+    .map-wrap img{ width:100%; max-width:520px; height:auto; object-fit:contain; opacity:.9 }
+
+    /* Footer */
+    .footer{
+      max-width:1100px; margin:0 auto 36px; padding:0 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    .footer .links{ display:flex; gap:24px; flex-wrap:wrap; justify-content:center }
+    .footer a{ color:var(--ink); text-decoration:none; font-weight:900; border-bottom:2px solid transparent; padding-bottom:2px }
+    .footer a:hover{ border-color: color-mix(in oklab, var(--brand) 50%, transparent) }
+    .copy{ color:var(--muted); font-weight:700 }
+
+    /* Responsive */
+    @media (max-width: 950px){
+      .panel-content{ grid-template-columns:1fr }
+      .logo{ width:72px; height:72px }
+    }
+    @media (max-width: 400px){
+      .brand-name{ font-size:18px; letter-spacing:2px }
+      .login-btn{ padding:8px 10px; font-size:14px }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo">CaribbCareerHub</a>
-    <div class="right-rail">
-      <button id="themeToggle" class="theme-toggle">🌙</button>
-      <a href="applicant.html" class="login-btn" id="accountLink" style="display:none">Account</a>
-      <a href="login.html" class="login-btn" id="loginLink">Login</a>
+  <!-- Banner (full width, no cut on right) -->
+  <div class="highlight-banner">
+    🌴 CaribCareerHub — Real jobs across Jamaica 🇯🇲 • Barbados 🇧🇧 • Trinidad 🇹🇹
+  </div>
+
+  <!-- Header -->
+  <div class="header-wrap">
+    <header class="header">
+      <div class="brand">
+        <picture>
+          <source srcset="./assets/logo.svg" type="image/svg+xml" />
+          <img src="./assets/logo.png" alt="CaribCareerHub logo" class="logo"
+               onerror="this.onerror=null;this.src='https://dummyimage.com/160x160/1E6CFF/ffffff&text=CCH';" />
+        </picture>
+        <span class="brand-name">CARRIBCAREERHUB</span>
+      </div>
+      <div class="actions">
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+        <a id="accountBtn" href="login.html" class="login-btn">Login</a>
+      </div>
+    </header>
+  </div>
+
+  <!-- Main -->
+  <main class="panel">
+    <div class="panel-content">
+      <section>
+        <h1 class="hero-title">Find Your Dream Job in the Caribbean</h1>
+        <p class="lede">
+          Tired of scrolling? <b>We do the digging for you.</b> Fresh roles from trusted sources +
+          community posts — all in one place, tailored for the region.
+        </p>
+
+        <p class="employer-callout">
+          <strong>Employers:</strong> Post your roles and reach talent across the Caribbean —
+          fast, focused, and easy to manage. <a class="start-here" href="employer.html">Start here</a>
+        </p>
+
+        <!-- Latest Updates (5 cards, auto-refresh) -->
+        <div class="jobs-list">
+          <h2>Latest Updates</h2>
+          <div id="cards" class="cards"></div>
+        </div>
+      </section>
+
+      <aside class="map-wrap">
+        <picture>
+          <source srcset="./assets/map.svg" type="image/svg+xml">
+          <img src="./assets/map.png" alt="Caribbean map" />
+        </picture>
+      </aside>
     </div>
-  </header>
+  </main>
 
-  <section class="hero">
-    <h1>Find Your Dream Job in the Caribbean</h1>
-    <p>We connect talented job seekers with top employers across the region. Start your journey today and discover opportunities that match your skills and passion.</p>
-  </section>
-
-  <section class="jobs" id="jobList">
-    <h2>Latest Updates</h2>
-    <!-- Jobs will load here -->
-  </section>
-
-  <footer>
-    <p>&copy; 2025 CaribbCareerHub. All rights reserved.</p>
-    <nav>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="links">
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
       <a href="privacy.html">Privacy</a>
-    </nav>
+      <a href="terms.html">Terms</a>
+    </div>
+    <div class="copy">© 2025 CaribCareerHub</div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase (optional auto button switch) -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    // Supabase setup
-    const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // ===== Theme (toggle always visible, better in dark) =====
+    (function initTheme(){
+      const saved = localStorage.getItem('cch.theme');
+      if (saved === 'dark') document.body.classList.add('dark');
+      if (!saved){
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) document.body.classList.add('dark');
+        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
+      }
+      const btn = document.getElementById('themeToggle');
+      function updateIcon(){ btn.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙'; }
+      btn.addEventListener('click', ()=>{
+        document.body.classList.toggle('dark');
+        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
+        updateIcon();
+      });
+      updateIcon();
+    })();
 
-    const loginLink = document.getElementById('loginLink');
-    const accountLink = document.getElementById('accountLink');
+    // ===== Account button: Login → Dashboard (if Supabase session exists) =====
+    (async function initAccountButton(){
+      try{
+        // If you have Supabase set up, auto-switch button
+        const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const { data:{ session } } = await supabaseClient.auth.getSession();
+        const btn = document.getElementById('accountBtn');
+        if (session){
+          btn.textContent = "Dashboard";
+          btn.href = "dashboard.html";
+        } else {
+          btn.textContent = "Login";
+          btn.href = "login.html";
+        }
+      }catch(e){
+        // If Supabase not available, keep Login
+      }
+    })();
 
-    // Toggle Login/Account button
-    supabase.auth.getSession().then(({ data:{ session } })=>{
-      const loggedIn = !!session;
-      loginLink.style.display = loggedIn ? 'none':'inline-block';
-      accountLink.style.display = loggedIn ? 'inline-block':'none';
-    });
-    supabase.auth.onAuthStateChange((_e, session)=>{
-      const loggedIn = !!session;
-      loginLink.style.display = loggedIn ? 'none':'inline-block';
-      accountLink.style.display = loggedIn ? 'inline-block':'none';
-    });
+    // ===== Jobs feed (5 pretty cards, auto-refresh every 15s) =====
+    const cards = document.getElementById('cards');
+    const PAGE_SIZE = 5;
 
-    // Theme toggle
-    const themeToggle = document.getElementById('themeToggle');
-    themeToggle.addEventListener('click', ()=>{
-      document.body.classList.toggle('dark');
-      themeToggle.textContent = document.body.classList.contains('dark') ? "☀️" : "🌙";
-    });
+    function esc(s){return (s??"").toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+    function stripHtml(html){ const d = document.createElement('div'); d.innerHTML = html; return d.textContent || d.innerText || ""; }
 
-    // Fake job updates
-    const jobList = document.getElementById('jobList');
-    function loadJobs(){
-      jobList.innerHTML = `
-        <div class="job-card"><h3>Frontend Developer</h3><p>Remote · TechCorp</p></div>
-        <div class="job-card"><h3>Backend Engineer</h3><p>Kingston · CodeBase</p></div>
-        <div class="job-card"><h3>UI/UX Designer</h3><p>Remote · DesignHub</p></div>
-        <div class="job-card"><h3>Project Manager</h3><p>Barbados · BuildIt</p></div>
-        <div class="job-card"><h3>Data Analyst</h3><p>Trinidad · DataWorks</p></div>
-      `;
+    function normalizeJob(j, src){
+      return {
+        id: j.id || j.job_id || j.uuid || j.url || j.redirect_url || crypto.randomUUID(),
+        title: j.title || j.job_title || "Untitled role",
+        company: j.company?.display_name || j.company_name || j.employer_name || "",
+        location: j.location?.display_name || j.candidate_required_location || j.job_city || j.job_country || "",
+        type: j.contract_type || j.contract_time || j.job_employment_type || "",
+        description: stripHtml(j.description || j.job_description || ""),
+        url: j.url || j.job_apply_link || j.redirect_url || j.job_posting_url || "#",
+        source: src
+      };
     }
-    loadJobs();
-    setInterval(loadJobs, 15000); // refresh every 15s
+
+    async function fetchRemotive(){
+      const r = await fetch("https://remotive.com/api/remote-jobs?search=caribbean");
+      if (!r.ok) return [];
+      const json = await r.json();
+      return (json.jobs||[]).slice(0, 10).map(j=>normalizeJob({
+        id:j.id, title:j.title, company_name:j.company_name,
+        candidate_required_location:j.candidate_required_location, description:j.description,
+        url:j.url
+      }, "Remotive"));
+    }
+
+    async function fetchAdzuna(){
+      // Uses your serverless proxy if available, otherwise it will just skip
+      try{
+        const r = await fetch("/api/adzuna?what=&where=Caribbean&page=1&per_page=10");
+        if (!r.ok) return [];
+        const json = await r.json();
+        return (json.results||[]).map(j=>normalizeJob(j,"Adzuna"));
+      }catch{ return []; }
+    }
+
+    function render(list){
+      cards.innerHTML = "";
+      list.slice(0, PAGE_SIZE).forEach(j=>{
+        const el = document.createElement('div');
+        el.className = "job-card";
+        el.innerHTML = `
+          <h3 class="job-title" title="${esc(j.title)}">${esc(j.title)}</h3>
+          <p class="job-company" title="${esc(j.company)}">${esc(j.company)}</p>
+          <p class="job-location">${esc([j.location, j.type].filter(Boolean).join(" • "))}</p>
+          <p class="desc">${esc(j.description.slice(0,160))}${j.description.length>160?'…':''}</p>
+          <div class="card-actions">
+            <a class="apply" href="${j.url}" target="_blank" rel="noopener">Apply</a>
+            <span class="badge">Source: ${esc(j.source)}</span>
+          </div>
+        `;
+        cards.appendChild(el);
+      });
+    }
+
+    async function refreshJobs(){
+      try{
+        // Pull from both, shuffle for variety, then render
+        const [a,b] = await Promise.all([fetchRemotive(), fetchAdzuna()]);
+        const merged = [...a, ...b];
+        if (!merged.length){
+          cards.innerHTML = `<div style="color:var(--muted);font-weight:800">No jobs found yet.</div>`;
+          return;
+        }
+        // shuffle
+        for (let i=merged.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [merged[i],merged[j]]=[merged[j],merged[i]]; }
+        render(merged);
+      }catch(e){
+        cards.innerHTML = `<div style="color:var(--muted);font-weight:800">Failed to load jobs.</div>`;
+      }
+    }
+
+    refreshJobs();                     // initial
+    setInterval(refreshJobs, 15000);   // auto-refresh every 15s
   </script>
 </body>
 </html>
