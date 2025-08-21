@@ -2,418 +2,175 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>CaribCareerHub • Find Jobs Across the Caribbean</title>
-  <link rel="canonical" href="https://carribcareerhub.site/" />
-  <meta name="color-scheme" content="light dark" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CaribbCareerHub</title>
   <style>
-    :root{
-      --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
-      --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
-      --radius:18px; --shadow:0 10px 30px rgba(16,40,120,.12);
-      --ring:0 0 0 3px rgba(30,108,255,.12);
-      --link:#0A2458;
-      --toggle-bg:#ffffff; --toggle-ink:#0A2458; --toggle-ring:rgba(30,108,255,.18);
+    :root {
+      --bg: #f3f8ff;
+      --panel: #fff;
+      --ink: #0a2458;
+      --muted: #6b7a99;
+      --brand: #1E6CFF;
+      --brand-2: #3FA2FF;
+      --accent: #FFA03B;
+      --radius: 14px;
     }
-    body.dark{
-      --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6;
-      --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
-      --shadow:0 14px 40px rgba(0,0,0,.45); --ring:0 0 0 3px rgba(142,196,255,.22);
-      --link:#ecf2ff;
-      --toggle-bg:#0b1222; --toggle-ink:#ecf2ff; --toggle-ring:rgba(142,196,255,.28);
+    body.dark {
+      --bg: #0e1424;
+      --panel: #1c2333;
+      --ink: #f4f6fb;
+      --muted: #aab3cc;
+      --brand: #3FA2FF;
+      --brand-2: #1E6CFF;
+      --accent: #ffb44d;
     }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-      color:var(--ink);
+    *{box-sizing:border-box;margin:0;padding:0}
+    body {
+      font-family: system-ui, sans-serif;
       background: var(--bg);
-      overflow-x:hidden;
+      color: var(--ink);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
     }
-
-    /* Top banner (full-bleed) */
-    .highlight-banner{
+    header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 24px;
+      background:var(--panel);
+      box-shadow:0 4px 12px rgba(0,0,0,.08);
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
+    .logo {font-weight:700;font-size:20px;color:var(--brand);text-decoration:none;}
+    .right-rail {
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .login-btn {
+      padding:8px 16px;
+      border-radius:8px;
       background:linear-gradient(90deg,var(--brand),var(--brand-2));
       color:#fff;
-      text-align:center;
-      font-weight:800;
-      padding:10px 16px;
+      font-weight:600;
+      text-decoration:none;
       font-size:14px;
-      letter-spacing:.3px;
-      position:sticky; top:0; z-index:1000;
-      box-shadow:var(--shadow);
-      width:100%;
-    }
-
-    /* Header */
-    .header-wrap{display:flex;justify-content:center}
-    .header{
-      max-width:1100px; width:100%;
-      margin:12px auto 0; padding:0 16px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-    }
-    .brand{display:flex; align-items:center; gap:12px; min-width:0}
-    .brand .logo{
-      width:74px; height:74px; object-fit:contain; flex:0 0 auto;
-    }
-    .brand-name{
-      font-size:22px; font-weight:900; letter-spacing:4px; white-space:nowrap;
-      overflow:hidden; text-overflow:ellipsis;
-    }
-    .right-rail{
-      display:flex; align-items:center; gap:8px; flex:0 0 auto;
-    }
-    .login-btn{
-      display:inline-block; padding:8px 12px; border-radius:12px;
-      font-weight:800; text-decoration:none; color:#fff;
-      background:linear-gradient(90deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow);
       white-space:nowrap;
     }
-    .theme-toggle{
-      border:1px solid transparent; padding:8px 10px; border-radius:12px;
-      background:var(--toggle-bg); color:var(--toggle-ink); cursor:pointer; font-weight:900;
-      box-shadow:var(--ring);
+    .theme-toggle {
+      border:none;
+      background:var(--accent);
+      padding:8px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      color:#fff;
+      font-size:14px;
     }
-
-    /* Panel (hero + map) */
-    .panel{
-      max-width:1100px; margin:16px auto 32px; padding:16px; border-radius:var(--radius);
-      background:color-mix(in oklab, var(--panel) 90%, transparent); box-shadow:var(--shadow);
-      border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    .hero {
+      text-align:center;
+      padding:60px 20px 40px;
     }
-    .panel-content{
-      display:grid; grid-template-columns:1.1fr .9fr; gap:24px;
+    .hero h1 {font-size:32px;margin-bottom:12px;}
+    .hero p {color:var(--muted);max-width:600px;margin:0 auto 20px;}
+    .jobs {
+      max-width:900px;
+      margin:40px auto;
+      padding:0 20px;
     }
-
-    /* Hero */
-    .hero-title{
-      font-size: clamp(32px, 6vw, 48px);
-      font-weight:900; line-height:1.25; margin:6px 0 10px; text-align:center;
-      letter-spacing:.4px;
+    .job-card {
+      background:var(--panel);
+      padding:16px;
+      border-radius:var(--radius);
+      box-shadow:0 4px 12px rgba(0,0,0,.08);
+      margin-bottom:16px;
     }
-    .lede{
-      font-size:16px; line-height:1.7; color:var(--muted);
-      margin:0 auto 14px; text-align:center; max-width:720px;
+    .job-card h3 {margin-bottom:6px;font-size:18px;}
+    footer {
+      margin-top:40px;
+      padding:20px;
+      text-align:center;
+      background:var(--panel);
+      color:var(--muted);
+      font-size:14px;
     }
-    .lede-strong{color:var(--ink); font-weight:800}
-    .employer-callout{
-      margin:14px auto 0; padding:12px 14px; border-radius:12px;
-      background:#fff6e9; border:1px solid #ffd9a8; color:#b56a00; font-weight:700;
-      max-width:720px; text-align:center;
-    }
-    body.dark .employer-callout{ background:#2a1e0e; border-color:#5a3d13; color:#ffd9a8 }
-    .cta-mini{
-      display:inline-block; margin-left:10px; padding:8px 12px; border-radius:10px;
-      background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:#fff; text-decoration:none; font-weight:900;
-    }
-
-    /* Jobs list */
-    .jobs-list{ margin-top:16px }
-    .job-card{
-      display:grid; gap:6px; border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      border-radius:12px; padding:12px 14px; background:var(--panel); box-shadow:var(--shadow); margin-bottom:12px;
-    }
-    .job-title{ margin:0; font-size:18px; font-weight:900; line-height:1.25 }
-    .job-company{ margin:0; color:var(--muted); font-weight:700 }
-    .job-location{ margin:0; color:var(--brand); font-weight:800 }
-    .wrap{ word-break: break-word; overflow-wrap: anywhere }
-    .load-more{ display:inline-block; margin:12px auto 0; padding:10px 14px; font-weight:900; border:none; border-radius:12px;
-      background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:#fff; cursor:pointer; box-shadow:var(--shadow) }
-
-    /* Map side */
-    .map-wrap{ display:flex; align-items:center; justify-content:center; padding:4px }
-    .map-wrap img{ width:100%; max-width:520px; height:auto; object-fit:contain; opacity:.9; }
-
-    /* Footer */
-    .footer{
-      max-width:1100px; margin:10px auto 40px; padding:0 16px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
-    }
-    .footer .links{ display:flex; gap:22px; flex-wrap:wrap; justify-content:center; flex:1 }
-    .footer a{ color:var(--link); text-decoration:none; font-weight:900; border-bottom:2px solid transparent; padding-bottom:2px }
-    .footer a:hover{ border-color: color-mix(in oklab, var(--brand) 50%, transparent) }
-    .copy{ color:var(--muted); font-weight:700; white-space:nowrap }
-
-    /* Responsive */
-    @media (max-width: 900px){
-      .panel-content{ grid-template-columns: 1fr }
-      .brand .logo{ width:68px; height:68px }
-      .brand-name{ font-size:20px; letter-spacing:3px }
-    }
-    @media (max-width: 360px){
-      .brand-name{ font-size:18px; letter-spacing:2px }
-    }
+    footer nav {display:flex;justify-content:center;gap:24px;margin-top:10px;}
+    footer nav a {color:var(--muted);text-decoration:none;font-size:14px;}
+    footer nav a:hover {color:var(--brand);}
   </style>
 </head>
 <body>
-
-  <!-- Banner -->
-  <div class="highlight-banner">
-    🌴 CaribCareerHub — Real jobs across Jamaica 🇯🇲 • Barbados 🇧🇧 • Trinidad 🇹🇹
-  </div>
-
-  <!-- Header -->
-  <div class="header-wrap">
-    <header class="header">
-      <div class="brand">
-        <picture>
-          <source srcset="./assets/logo.svg" type="image/svg+xml" />
-          <img src="./assets/logo.png" alt="CaribCareerHub logo" class="logo" />
-        </picture>
-        <span class="brand-name">CARRIBCAREERHUB</span>
-      </div>
-      <div class="right-rail">
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-        <a href="login.html" class="login-btn">Login</a>
-      </div>
-    </header>
-  </div>
-
-  <!-- Main -->
-  <main class="panel">
-    <div class="panel-content">
-      <section>
-        <h1 class="hero-title">Find Your Next Role in the Caribbean</h1>
-        <p class="lede">
-          Job hunting is tough—<span class="lede-strong">we make it easier.</span> Discover fresh roles from trusted sources and local employers,
-          all in one place. Sign up, save favorites, and get moving toward your next opportunity.
-        </p>
-
-        <p class="employer-callout">
-          <strong>Employers:</strong> Need the right people fast? Post roles, track applicants, and hire confidently.
-          <a class="cta-mini" href="employer.html">Start here →</a>
-        </p>
-
-        <!-- Jobs -->
-        <div class="jobs-list" id="jobsList">
-          <h2 style="margin:14px 0 10px">Latest Jobs</h2>
-          <div id="jobsContainer" class="wrap">Loading jobs…</div>
-          <button id="loadMoreBtn" class="load-more" style="display:none">Load More</button>
-        </div>
-      </section>
-
-      <aside class="map-wrap">
-        <picture>
-          <source srcset="./assets/map.svg" type="image/svg+xml">
-          <img src="./assets/map.png" alt="Caribbean map" />
-        </picture>
-      </aside>
+  <header>
+    <a href="index.html" class="logo">CaribbCareerHub</a>
+    <div class="right-rail">
+      <button id="themeToggle" class="theme-toggle">🌙</button>
+      <a href="applicant.html" class="login-btn" id="accountLink" style="display:none">Account</a>
+      <a href="login.html" class="login-btn" id="loginLink">Login</a>
     </div>
-  </main>
+  </header>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="links">
+  <section class="hero">
+    <h1>Find Your Dream Job in the Caribbean</h1>
+    <p>We connect talented job seekers with top employers across the region. Start your journey today and discover opportunities that match your skills and passion.</p>
+  </section>
+
+  <section class="jobs" id="jobList">
+    <h2>Latest Updates</h2>
+    <!-- Jobs will load here -->
+  </section>
+
+  <footer>
+    <p>&copy; 2025 CaribbCareerHub. All rights reserved.</p>
+    <nav>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
       <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
-    </div>
-    <div class="copy">© 2025 CaribCareerHub</div>
+    </nav>
   </footer>
 
-  <!-- External Jobs Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ===== Theme =====
-    (function initTheme(){
-      const saved = localStorage.getItem('cch.theme');
-      if (saved === 'dark') document.body.classList.add('dark');
-      if (!saved){
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) document.body.classList.add('dark');
-        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
-      }
-      const btn = document.getElementById('themeToggle');
-      function paintToggle(){
-        btn.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
-        btn.style.borderColor = document.body.classList.contains('dark') ? 'rgba(255,255,255,.18)' : 'rgba(0,0,0,.08)';
-      }
-      paintToggle();
-      btn.addEventListener('click', ()=>{
-        document.body.classList.toggle('dark');
-        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
-        paintToggle();
-      });
-    })();
+    // Supabase setup
+    const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ===== Config =====
-    const PAGE_SIZE = 5;       // show at least 5
-    const AUTO_REFRESH_MS = 15000; // 15s
+    const loginLink = document.getElementById('loginLink');
+    const accountLink = document.getElementById('accountLink');
 
-    // ===== DOM =====
-    const list = document.getElementById('jobsContainer');
-    const moreBtn = document.getElementById('loadMoreBtn');
-
-    // ===== State =====
-    const state = {
-      q: sessionStorage.getItem('ext.q') || 'developer',
-      loc: sessionStorage.getItem('ext.loc') || 'Jamaica',
-      page: 1,
-      pill: 'all'
-    };
-
-    // ===== Utils =====
-    function esc(s){return (s??"").toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
-    function stripHtml(html){ const d = document.createElement('div'); d.innerHTML = html; return d.textContent || d.innerText || ""; }
-    function keyFor(job){ return [job.title, job.company, job.location].map(s=>(s||"").toLowerCase().trim()).join("|||"); }
-
-    // ===== Normalizer =====
-    function normalizeJob(j, meta){
-      return {
-        id: j.id || j.uuid || j.job_id || j.job_uuid || j.url || j.apply_url || crypto.randomUUID(),
-        internal_id: j.internal_id, // pass-through when it exists (for your own jobs)
-        title: j.title || j.job_title || "Untitled role",
-        company: j.company || j.employer_name || j.company_name || "",
-        location: j.location || j.job_city || j.job_country || j.candidate_required_location || "",
-        type: j.type || j.job_employment_type || j.contract_type || j.contract_time || "",
-        description: j.description || j.job_description || "",
-        apply_url: j.url || j.job_apply_link || j.redirect_url || j.job_posting_url || "#",
-        posted_at: j.created_at || j.created || j.posted_at || j.publication_date || null,
-        source: meta.source
-      };
-    }
-
-    // ===== Fetchers =====
-    async function fetchRemotive({ q, loc, page }){
-      const res = await fetch(`https://remotive.com/api/remote-jobs?search=${encodeURIComponent(q)}`);
-      if (!res.ok) throw new Error("Remotive error");
-      const json = await res.json();
-      const rows = (json.jobs||[])
-        .filter(j => !loc || (j.candidate_required_location||"").toLowerCase().includes(loc.toLowerCase()) || loc.toLowerCase()==="remote")
-        .slice((page-1)*PAGE_SIZE, page*PAGE_SIZE)
-        .map(r => normalizeJob({
-          id: r.id, title: r.title, company_name: r.company_name,
-          candidate_required_location: r.candidate_required_location, job_type: r.job_type,
-          description: stripHtml(r.description||""), url: r.url, publication_date: r.publication_date
-        }, { source: "Remotive" }));
-      return rows;
-    }
-
-    async function fetchAdzuna({ q, loc, page }){
-      const url = `/api/adzuna?what=${encodeURIComponent(q)}&where=${encodeURIComponent(loc)}&page=${page}&per_page=${PAGE_SIZE}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Adzuna error");
-      const json = await res.json();
-      const rows = (json.results||[]).map(r => normalizeJob({
-        id: r.id, title: r.title, company: r.company?.display_name,
-        location: r.location?.display_name, contract_type: r.contract_type || r.contract_time,
-        description: stripHtml(r.description||""), redirect_url: r.redirect_url, created: r.created
-      }, { source: "Adzuna" }));
-      return rows;
-    }
-
-    async function fetchJSearch({ q, loc, page }){
-      const url = `/api/jsearch?query=${encodeURIComponent(q + " " + loc)}&page=${page}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("JSearch error");
-      const json = await res.json();
-      const rows = (json.data||[]).map(r => normalizeJob({
-        job_id: r.job_id, job_title: r.job_title, employer_name: r.employer_name,
-        job_city: r.job_city || r.job_country, job_employment_type: r.job_employment_type,
-        job_description: r.job_description, job_apply_link: r.job_apply_link || r.job_posting_url,
-        posted_at: r.job_posted_at_datetime_utc || r.job_posted_at
-      }, { source: "JSearch" }));
-      return rows;
-    }
-
-    const fetchers = { remotive: fetchRemotive, adzuna: fetchAdzuna, jsearch: fetchJSearch };
-
-    // ===== Engine =====
-    async function loadExternalPage({ q, loc, page }){
-      const active = ['remotive','adzuna','jsearch']; // all three
-      const tasks = active.map(name => fetchers[name]({ q, loc, page }).catch(()=>[]));
-      const chunks = await Promise.all(tasks);
-      const merged = [].concat(...chunks);
-
-      // De-dupe
-      const seen = new Set(); const deduped = [];
-      for (const j of merged){
-        const k = keyFor(j);
-        if (seen.has(k)) continue;
-        seen.add(k); deduped.push(j);
-      }
-
-      // Sort by recency when available
-      deduped.sort((a,b)=>{
-        const da = a.posted_at ? Date.parse(a.posted_at) : 0;
-        const db = b.posted_at ? Date.parse(b.posted_at) : 0;
-        return db - da;
-      });
-
-      return deduped;
-    }
-
-    // ===== UPDATED renderCard (internal → job.html, external → open source) =====
-    function renderCard(j){
-      const isInternal = !!j.internal_id || j.source === 'Internal' || j.from_supabase === true;
-      const applyHref  = isInternal
-        ? `job.html?id=${encodeURIComponent(j.internal_id || j.id)}`
-        : (j.apply_url || '#');
-
-      const applyAttrs = isInternal ? '' : ' target="_blank" rel="noopener"';
-
-      const card = document.createElement('div');
-      card.className = "job-card wrap";
-      card.innerHTML = `
-        <div class="job-title">${esc(j.title)}</div>
-        <div class="job-company">${esc(j.company)}</div>
-        <div class="job-location">${esc([j.location, j.type].filter(Boolean).join(" • "))}</div>
-        <p class="wrap" style="margin:8px 0 10px">
-          ${esc((j.description||"").slice(0,220))}${j.description && j.description.length>220 ? "…" : ""}
-        </p>
-        <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
-          <a href="${applyHref}" class="login-btn" style="padding:8px 12px"${applyAttrs}>Apply</a>
-          <span class="wrap" style="font-size:12px;color:var(--muted);font-weight:800">
-            Source: ${esc(j.source || (isInternal ? 'CaribCareerHub' : ''))}
-          </span>
-        </div>
-      `;
-      list.appendChild(card);
-    }
-
-    async function runSearch(reset=true){
-      try{
-        if (reset){
-          state.page = 1;
-          list.textContent = "Loading jobs…";
-        }
-        const q = state.q;
-        const loc = state.loc;
-        const results = await loadExternalPage({ q, loc, page: state.page });
-
-        if (reset) list.innerHTML = "";
-        if (!results.length && reset){
-          list.textContent = "No jobs found yet.";
-          moreBtn.style.display = "none";
-          return;
-        }
-
-        results.slice(0, PAGE_SIZE).forEach(renderCard);
-        moreBtn.style.display = results.length >= PAGE_SIZE ? "inline-block" : "none";
-      }catch(err){
-        console.error(err);
-        list.textContent = "Failed to load external jobs.";
-        moreBtn.style.display = "none";
-      }
-    }
-
-    // Load more (next page across sources)
-    moreBtn.addEventListener('click', ()=>{
-      state.page += 1;
-      runSearch(false);
+    // Toggle Login/Account button
+    supabase.auth.getSession().then(({ data:{ session } })=>{
+      const loggedIn = !!session;
+      loginLink.style.display = loggedIn ? 'none':'inline-block';
+      accountLink.style.display = loggedIn ? 'inline-block':'none';
+    });
+    supabase.auth.onAuthStateChange((_e, session)=>{
+      const loggedIn = !!session;
+      loginLink.style.display = loggedIn ? 'none':'inline-block';
+      accountLink.style.display = loggedIn ? 'inline-block':'none';
     });
 
-    // Auto-refresh latest jobs every 15s (only when not interacting)
-    let typing = false;
-    window.addEventListener('keydown', ()=>{ typing = true; setTimeout(()=>typing=false, 2000); });
-    setInterval(()=>{ if (!typing) runSearch(true); }, AUTO_REFRESH_MS);
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', ()=>{
+      document.body.classList.toggle('dark');
+      themeToggle.textContent = document.body.classList.contains('dark') ? "☀️" : "🌙";
+    });
 
-    // Initial load
-    runSearch(true);
+    // Fake job updates
+    const jobList = document.getElementById('jobList');
+    function loadJobs(){
+      jobList.innerHTML = `
+        <div class="job-card"><h3>Frontend Developer</h3><p>Remote · TechCorp</p></div>
+        <div class="job-card"><h3>Backend Engineer</h3><p>Kingston · CodeBase</p></div>
+        <div class="job-card"><h3>UI/UX Designer</h3><p>Remote · DesignHub</p></div>
+        <div class="job-card"><h3>Project Manager</h3><p>Barbados · BuildIt</p></div>
+        <div class="job-card"><h3>Data Analyst</h3><p>Trinidad · DataWorks</p></div>
+      `;
+    }
+    loadJobs();
+    setInterval(loadJobs, 15000); // refresh every 15s
   </script>
 </body>
 </html>
