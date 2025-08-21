@@ -1,4 +1,8 @@
-<!-- /index.html — polished header (toggle + login), appealing copy, auto-refresh jobs, strong dark mode -->
+<!-- ============================
+File: index.html
+Adds: "Featured Updates" (4 rotating cards, auto-refresh every 45s)
+Keeps: Latest Jobs list (auto-refresh every 12 minutes), dark mode, compact Login/toggle
+============================ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,153 +11,97 @@
   <title>CaribCareerHub • Find Jobs Across the Caribbean</title>
   <link rel="canonical" href="https://carribcareerhub.site/" />
   <meta name="color-scheme" content="light dark" />
-  <meta name="theme-color" content="#1E6CFF"/>
 
   <style>
     :root{
-      --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
+      --bg:#F5F7FB; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
       --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
       --radius:18px; --shadow:0 10px 30px rgba(16,40,120,0.12);
-      --ring:0 0 0 3px rgba(30,108,255,.12);
+      --ring:0 0 0 3px rgba(30,108,255,.14);
+      --banner-grad: linear-gradient(90deg,var(--brand),var(--brand-2));
+      --link:#0A2458;
     }
     body.dark{
-      --bg:#0f1525; --panel:#101826; --ink:#edf2ff; --muted:#b8c3d9;
-      --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
-      --shadow:0 14px 40px rgba(0,0,0,.45); --ring:0 0 0 3px rgba(142,196,255,.22);
+      --bg:#0d1322; --panel:#111a2e; --ink:#E9EEFD; --muted:#B5C3E0;
+      --brand:#6DA3FF; --brand-2:#9ED0FF; --accent:#FFB86C;
+      --shadow:0 16px 44px rgba(0,0,0,.55); --ring:0 0 0 3px rgba(157,197,255,.25);
+      --banner-grad: linear-gradient(90deg,#244F9D,#3F84E5);
+      --link:#E9EEFD;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{
-      margin:0;
-      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-      color:var(--ink);
-      background:var(--bg);
-      overflow-x:hidden;
-    }
+    body{ margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif; color:var(--ink); background: var(--bg); overflow-x:hidden }
 
-    /* Top banner — true full-bleed */
-    .highlight-banner{
-      width:100vw; margin-left:calc(50% - 50vw);
-      background:linear-gradient(90deg,var(--brand),var(--brand-2));
-      color:#fff; text-align:center; font-weight:800;
-      padding:10px 16px; font-size:14px; letter-spacing:.3px;
-      position:sticky; top:0; z-index:1000; box-shadow:var(--shadow);
-    }
+    /* Banner */
+    .highlight-banner{ width:100%; background:var(--banner-grad); color:#fff; text-align:center; font-weight:800; padding:10px 16px; font-size:14px; letter-spacing:.3px; position:sticky; top:0; z-index:1000; box-shadow:var(--shadow) }
 
     /* Header */
-    .header{
-      max-width:1100px; margin:14px auto 0; padding:0 16px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-    }
-    .brand{display:flex; align-items:center; gap:12px; min-width:0}
-    .brand .logo{width:86px;height:86px;object-fit:contain}
-    .brand-name{font-size:24px;font-weight:900;letter-spacing:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .header{ max-width:1100px; margin:14px auto 0; padding:0 16px; position:relative; display:flex; align-items:center; justify-content:center; gap:12px }
+    .brand{ display:flex; align-items:center; gap:12px }
+    .brand .logo{ width:86px;height:86px;object-fit:contain }
+    .brand-name{ font-size:24px;font-weight:900;letter-spacing:4px;white-space:nowrap }
+    .right-rail{ position:absolute; right:16px; top:50%; transform:translateY(-50%); display:flex; align-items:center; gap:10px }
+    .login-btn{ display:inline-block; padding:8px 12px; border-radius:12px; font-weight:800; font-size:14px; text-decoration:none; color:#fff; background:linear-gradient(90deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow); white-space:nowrap }
+    .theme-toggle{ border:1px solid rgba(0,0,0,.08); padding:8px 10px; border-radius:12px; background: var(--panel); color: var(--ink); cursor:pointer; font-weight:900; line-height:1; box-shadow: var(--ring); display:flex; align-items:center; gap:6px }
+    .theme-toggle .label{ font-size:13px }
+    body.dark .theme-toggle{ border-color:rgba(255,255,255,.22) }
 
-    /* Right rail: toggle + login aligned side-by-side, non-overflowing */
-    .right-rail{
-      display:inline-flex; align-items:center; gap:10px; flex-shrink:0;
-      max-width:60%; justify-content:flex-end;
-    }
-    .theme-toggle{
-      border:1px solid rgba(0,0,0,.1); padding:8px 10px; border-radius:12px;
-      background:var(--panel); color:var(--ink); cursor:pointer; font-weight:900;
-      box-shadow:var(--shadow); flex:0 0 auto;
-    }
-    body.dark .theme-toggle{ background:#0d1422; color:#fff; border-color:rgba(255,255,255,.18) }
-
-    .login-btn{
-      display:inline-block; padding:10px 14px; border-radius:12px;
-      font-weight:800; text-decoration:none; color:#fff;
-      background:linear-gradient(90deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow);
-      max-width:140px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      flex:0 0 auto;
-    }
-
-    /* Panel (hero + map) */
-    .panel{
-      max-width:1100px; margin:16px auto 32px; padding:24px; border-radius:var(--radius);
-      background:color-mix(in oklab, var(--panel) 94%, transparent);
-      box-shadow:var(--shadow);
-      border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    }
-    .panel-content{ display:grid; grid-template-columns:1.1fr .9fr; gap:24px; }
+    /* Panel */
+    .panel{ max-width:1100px; margin:16px auto 32px; padding:24px; border-radius:var(--radius); background:color-mix(in oklab, var(--panel) 92%, transparent); box-shadow:var(--shadow); border:1px solid color-mix(in oklab, var(--ink) 10%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px) }
+    .panel-content{ display:grid; grid-template-columns:1.1fr .9fr; gap:24px }
 
     /* Hero */
-    .hero-title{
-      font-size: clamp(32px, 6vw, 54px);
-      font-weight:900; line-height:1.2; margin:10px 0 10px; text-align:center;
-      letter-spacing:.4px;
-    }
-    .lede{
-      font-size:17px; line-height:1.75; color:var(--muted);
-      margin:0 auto 10px; text-align:center; max-width:720px;
-    }
-    .lede-boost{
-      margin:6px auto 0; text-align:center; max-width:760px; font-weight:800;
-      color:var(--ink);
-    }
-
-    .employer-callout{
-      margin:16px auto 0; padding:12px 14px; border-radius:12px;
-      background:#fff6e9; border:1px solid #ffd9a8; color:#7a4d00; font-weight:700;
-      max-width:760px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-    }
+    .hero-title{ font-size: clamp(32px, 6vw, 54px); font-weight:900; line-height:1.2; margin:10px 0 12px; text-align:center; letter-spacing:.4px }
+    .lede{ font-size:17px; line-height:1.8; color:var(--muted); margin:0 auto 10px; text-align:center; max-width:760px }
+    .lede-2{ font-size:16px; line-height:1.7; color:var(--muted); margin:0 auto 18px; text-align:center; max-width:760px }
+    .employer-callout{ margin:16px auto 0; padding:12px 14px; border-radius:12px; background:#fff6e9; border:1px solid #ffd9a8; color:#a65f00; font-weight:700; max-width:760px; display:flex; align-items:center; gap:10px; justify-content:center; flex-wrap:wrap }
     body.dark .employer-callout{ background:#2a1e0e; border-color:#5a3d13; color:#ffd9a8 }
-    .start-here{
-      display:inline-block; padding:8px 12px; border-radius:12px; font-weight:900; text-decoration:none; color:#fff;
-      background:linear-gradient(90deg,#FFB44D,#FF8A00); box-shadow:var(--shadow);
-      white-space:nowrap;
-    }
+    .cta-small{ display:inline-block; padding:8px 12px; border-radius:10px; font-size:13px; font-weight:900; text-decoration:none; color:#fff; background:linear-gradient(90deg,var(--brand),var(--brand-2)); white-space:nowrap }
+
+    /* Featured (4 cards) */
+    .featured{ margin-top:18px }
+    .featured h2{ margin:14px 0 10px; text-align:center }
+    .featured-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:12px }
+    .feat-card{ border:1px solid color-mix(in oklab, var(--ink) 10%, transparent); border-radius:12px; background:var(--panel); box-shadow:var(--shadow); padding:12px 14px; display:grid; gap:6px; min-height:130px }
+    .feat-title{ margin:0; font-weight:900; font-size:15px; line-height:1.35 }
+    .feat-meta{ margin:0; font-size:13px; color:var(--muted); font-weight:700 }
+    .feat-apply{ margin-top:auto; display:flex; justify-content:space-between; align-items:center; gap:10px }
+    .apply-mini{ display:inline-block; padding:6px 10px; border-radius:10px; font-size:12px; font-weight:900; text-decoration:none; color:#fff; background:linear-gradient(90deg,var(--brand),var(--brand-2)) }
 
     /* Jobs list */
     .jobs-list{ margin-top:18px }
-    .jobs-list h2{ margin:14px 0 10px; text-align:left }
-    .job-card{
-      display:grid; gap:6px; border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      border-radius:12px; padding:12px 14px; background:var(--panel); box-shadow:var(--shadow); margin-bottom:12px;
-    }
+    .job-card{ display:grid; gap:6px; border:1px solid color-mix(in oklab, var(--ink) 10%, transparent); border-radius:12px; padding:12px 14px; background:var(--panel); box-shadow:var(--shadow); margin-bottom:12px }
     .job-title{ margin:0; font-size:18px; font-weight:900; line-height:1.25 }
     .job-company{ margin:0; color:var(--muted); font-weight:700 }
     .job-location{ margin:0; color:var(--brand); font-weight:800 }
     .wrap{ word-break: break-word; overflow-wrap: anywhere }
-    .load-more{
-      display:none; margin:12px auto 0; padding:10px 14px; font-weight:900; border:none; border-radius:12px;
-      background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:#fff; cursor:pointer; box-shadow:var(--shadow)
-    }
+    .load-more{ display:inline-block; margin:12px auto 0; padding:10px 14px; font-weight:900; border:none; border-radius:12px; background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:#fff; cursor:pointer; box-shadow:var(--shadow) }
 
     /* Map */
     .map-wrap{ display:flex; align-items:center; justify-content:center }
-    .map-wrap img{ width:100%; max-width:520px; height:auto; object-fit:contain; opacity:.9; }
+    .map-wrap img{ width:100%; max-width:520px; height:auto; object-fit:contain; opacity:.9 }
 
     /* Footer */
-    .footer{
-      max-width:1100px; margin:10px auto 40px; padding:0 16px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
-    }
-    .footer .links{
-      display:flex; gap:24px; flex-wrap:wrap; width:100%;
-      justify-content:space-between; /* evenly spread across */
-      max-width:520px; /* keeps balance */
-      font-weight:900;
-    }
-    .footer a{ color:var(--ink); text-decoration:none; border-bottom:2px solid transparent; padding-bottom:2px }
+    .footer{ max-width:1100px; margin:10px auto 40px; padding:0 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap }
+    .footer .links{ display:flex; gap:24px; flex-wrap:wrap; justify-content:center; width:100% }
+    .footer a{ color:var(--link); text-decoration:none; font-weight:900; border-bottom:2px solid transparent; padding-bottom:2px }
     .footer a:hover{ border-color: color-mix(in oklab, var(--brand) 50%, transparent) }
-    .copy{ color:var(--muted); font-weight:700 }
+    .copy{ color:var(--muted); font-weight:700; width:100%; text-align:center; margin-top:6px }
 
     /* Responsive */
     @media (max-width: 900px){
-      .panel-content{ grid-template-columns:1fr }
+      .panel-content{ grid-template-columns: 1fr }
       .brand .logo{ width:76px; height:76px }
-      .footer .links{ justify-content:space-around }
+      .right-rail{ position:static; transform:none; margin-left:auto }
+      .header{ justify-content:space-between }
+      .featured-grid{ grid-template-columns: repeat(2, 1fr) }
     }
     @media (max-width: 420px){
-      .right-rail{ gap:8px }
-      .login-btn{ max-width:112px; padding:9px 12px }
-    }
-    @media (max-width: 360px){
       .brand-name{ font-size:18px; letter-spacing:2px }
+      .login-btn{ padding:7px 10px; font-size:13px }
+      .theme-toggle{ padding:7px 9px }
+      .featured-grid{ grid-template-columns: 1fr }
     }
   </style>
 </head>
@@ -173,8 +121,12 @@
       </picture>
       <span class="brand-name">CARRIBCAREERHUB</span>
     </div>
+
     <div class="right-rail">
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="icon" id="themeIcon">🌙</span>
+        <span class="label">Theme</span>
+      </button>
       <a href="login.html" class="login-btn">Login</a>
     </div>
   </header>
@@ -183,29 +135,33 @@
   <main class="panel">
     <div class="panel-content">
       <section>
-        <h1 class="hero-title">Find Your Dream Job in the Caribbean</h1>
+        <h1 class="hero-title">Find Your Dream Job</h1>
+        <p class="lede">Finding work can be tough — we make it easier.</p>
+        <p class="lede-2">CaribCareerHub curates fresh, real listings across the region so you can spend less time hunting and more time winning. Create your free account and get matched to roles that fit your skills.</p>
 
-        <!-- Appealing, concise copy -->
-        <p class="lede">Job hunting is hard — we make it easier.</p>
-        <p class="lede lede-boost">
-          Discover fresh roles across Jamaica, Barbados, and Trinidad. Save your favorites, apply fast,
-          and let CaribCareerHub guide you every step of the way.
+        <p class="employer-callout">
+          <span>Employers: post your roles and meet qualified Caribbean talent — fast.</span>
+          <a class="cta-small" href="employer.html">Start here</a>
         </p>
 
-        <!-- Employer callout + Start Here -->
-        <div class="employer-callout">
-          <span>
-            <strong>Employers:</strong> Post your openings and reach qualified Caribbean talent.
-            We’ll help you hire faster with clean listings and real applicants.
-          </span>
-          <a class="start-here" href="employer.html">Start here</a>
+        <!-- Featured Updates (4 rotating cards) -->
+        <div class="featured" aria-live="polite">
+          <h2>Featured Updates</h2>
+          <div id="featuredGrid" class="featured-grid">
+            <!-- 4 rotating cards injected here -->
+          </div>
         </div>
 
-        <!-- Jobs -->
+        <!-- Latest Jobs (paged list) -->
         <div class="jobs-list" id="jobsList">
-          <h2>Latest Jobs</h2>
-          <div id="jobsContainer" class="wrap">Loading jobs…</div>
-          <button id="loadMoreBtn" class="load-more">Load More</button>
+          <h2 style="margin:14px 0 10px; text-align:center">Latest Jobs</h2>
+          <div id="jobsContainer" class="wrap" style="min-height:40px">Loading jobs…</div>
+          <div style="text-align:center">
+            <button id="loadMoreBtn" class="load-more" style="display:none">Load More</button>
+          </div>
+          <p id="refreshNote" class="lede-2" style="text-align:center; margin-top:12px; font-size:13px">
+            Latest updates refresh automatically.
+          </p>
         </div>
       </section>
 
@@ -229,7 +185,7 @@
     <div class="copy">© 2025 CaribCareerHub</div>
   </footer>
 
-  <!-- External Jobs Loader -->
+  <!-- Script -->
   <script>
     // ===== Theme =====
     (function initTheme(){
@@ -240,64 +196,65 @@
         if (prefersDark) document.body.classList.add('dark');
         localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
       }
-      const btn = document.getElementById('themeToggle');
-      const setIcon = () => btn.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
-      setIcon();
-      btn.addEventListener('click', ()=>{
+      const icon = document.getElementById('themeIcon');
+      icon.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
+      document.getElementById('themeToggle').addEventListener('click', ()=>{
         document.body.classList.toggle('dark');
         localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
-        setIcon();
+        icon.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
       });
     })();
 
+    // ===== Jobs (shared) =====
     const PAGE_SIZE = 10;
     const list = document.getElementById('jobsContainer');
     const moreBtn = document.getElementById('loadMoreBtn');
+    const featuredGrid = document.getElementById('featuredGrid');
+
     let page = 1;
-    let cache = [];
+    let cache = [];          // full merged list
+    let featuredIdx = 0;     // where the 4-card window starts
 
     function esc(s){return (s??"").toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
     function stripHtml(html){ const d = document.createElement('div'); d.innerHTML = html; return d.textContent || d.innerText || ""; }
     function keyFor(job){ return [job.title, job.company, job.location].map(s=>(s||"").toLowerCase().trim()).join("|||"); }
 
-    function normalizeJob(j, source){
+    function normalizeJob(j, meta){
       return {
-        id: j.id || j.job_id || j.uuid || j.url || j.redirect_url || crypto.randomUUID(),
+        id: j.id || j.uuid || j.job_id || j.url || crypto.randomUUID(),
         title: j.title || j.job_title || "Untitled role",
-        company: j.company || j.company_name || j.employer_name || "",
-        location: j.location || j.candidate_required_location || j.job_city || j.job_country || "",
-        type: j.type || j.contract_type || j.contract_time || j.job_employment_type || "",
+        company: j.company || j.employer_name || j.company_name || "",
+        location: j.location || j.job_city || j.job_country || j.candidate_required_location || "",
+        type: j.type || j.job_employment_type || j.contract_type || j.contract_time || "",
         description: j.description || j.job_description || "",
         apply_url: j.url || j.job_apply_link || j.redirect_url || j.job_posting_url || "#",
-        posted_at: j.created || j.created_at || j.publication_date || j.job_posted_at || null,
-        source
+        posted_at: j.created_at || j.created || j.posted_at || j.publication_date || null,
+        source: meta.source
       };
     }
 
     async function fetchRemotive(){
-      const res = await fetch('https://remotive.com/api/remote-jobs?search=caribbean');
-      if (!res.ok) return [];
+      const q = " ";
+      const res = await fetch(`https://remotive.com/api/remote-jobs?search=${encodeURIComponent(q)}`);
+      if (!res.ok) throw new Error("Remotive error");
       const json = await res.json();
-      return (json.jobs||[]).map(r => normalizeJob({
-        id:r.id, title:r.title, company_name:r.company_name,
-        candidate_required_location:r.candidate_required_location,
-        job_type:r.job_type, description:stripHtml(r.description||""),
-        url:r.url, publication_date:r.publication_date, location:r.candidate_required_location
-      }, 'Remotive'));
+      return (json.jobs||[]).slice(0, 60).map(r => normalizeJob({
+        id: r.id, title: r.title, company_name: r.company_name,
+        candidate_required_location: r.candidate_required_location, job_type: r.job_type,
+        description: stripHtml(r.description||""), url: r.url, publication_date: r.publication_date
+      }, { source: "Remotive" }));
     }
 
     async function fetchAdzuna(){
-      try{
-        const url = `/api/adzuna?what=&where=Jamaica&page=1&per_page=20`;
-        const res = await fetch(url);
-        if (!res.ok) return [];
-        const json = await res.json();
-        return (json.results||[]).map(r => normalizeJob({
-          id:r.id, title:r.title, company:r.company?.display_name,
-          location:r.location?.display_name, contract_type:r.contract_type||r.contract_time,
-          description:stripHtml(r.description||""), redirect_url:r.redirect_url, created:r.created
-        }, 'Adzuna'));
-      }catch{ return []; }
+      const country = "us"; // change if you prefer
+      const r = await fetch(`/api/adzuna?country=${country}&what=&where=Caribbean&page=1&per_page=25`);
+      if (!r.ok) throw new Error("Adzuna error");
+      const json = await r.json();
+      return (json.results||[]).map(r => normalizeJob({
+        id: r.id, title: r.title, company: r.company?.display_name,
+        location: r.location?.display_name, contract_type: r.contract_type || r.contract_time,
+        description: stripHtml(r.description||""), redirect_url: r.redirect_url, created: r.created
+      }, { source: "Adzuna" }));
     }
 
     function renderCard(j){
@@ -316,52 +273,83 @@
       list.appendChild(card);
     }
 
-    function renderPage(){
-      const start = (page-1)*PAGE_SIZE;
-      const end = start + PAGE_SIZE;
-      const slice = cache.slice(start, end);
-      slice.forEach(renderCard);
-      moreBtn.style.display = cache.length > end ? "inline-block" : "none";
+    function renderFeatured(){
+      // Show 4 cards from cache, sliding window
+      featuredGrid.innerHTML = "";
+      if (!cache.length){ featuredGrid.innerHTML = ""; return; }
+      const items = [];
+      for (let i=0;i<4;i++){
+        const idx = (featuredIdx + i) % cache.length;
+        items.push(cache[idx]);
+      }
+      for (const j of items){
+        const el = document.createElement('div');
+        el.className = "feat-card";
+        el.innerHTML = `
+          <p class="feat-title">${esc(j.title)}</p>
+          <p class="feat-meta">${esc(j.company)} ${j.location ? "• " + esc(j.location) : ""}</p>
+          <div class="feat-apply">
+            <a class="apply-mini" href="${j.apply_url}" target="_blank" rel="noopener">Apply</a>
+            <span class="feat-meta">Source: ${esc(j.source)}</span>
+          </div>
+        `;
+        featuredGrid.appendChild(el);
+      }
+      featuredIdx = (featuredIdx + 4) % Math.max(cache.length, 1);
     }
 
-    async function loadJobs(reset=true){
-      if (reset){
-        list.textContent = "Loading jobs…";
-        page = 1;
-      }
-      const [r1, r2] = await Promise.all([fetchRemotive(), fetchAdzuna()]);
-      const merged = [...r1, ...r2];
-      // dedupe
-      const seen = new Set(); const deduped = [];
-      for (const j of merged){
-        const k = keyFor(j);
-        if (seen.has(k)) continue;
-        seen.add(k); deduped.push(j);
-      }
-      // sort by recency when available
-      deduped.sort((a,b)=>{
-        const da = a.posted_at ? Date.parse(a.posted_at) : 0;
-        const db = b.posted_at ? Date.parse(b.posted_at) : 0;
-        return db - da;
-      });
-
-      cache = deduped;
+    function showPage(p){
       list.innerHTML = "";
-      if (!cache.length){
-        list.textContent = "No jobs found yet.";
-        moreBtn.style.display = "none";
-        return;
-      }
-      renderPage();
+      const start = (p-1)*PAGE_SIZE;
+      const slice = cache.slice(start, start+PAGE_SIZE);
+      slice.forEach(renderCard);
+      moreBtn.style.display = (start + PAGE_SIZE) < cache.length ? "inline-block" : "none";
     }
 
-    moreBtn.addEventListener('click', ()=>{ page += 1; renderPage(); });
+    async function loadLatest(){
+      list.textContent = "Loading jobs…";
+      moreBtn.style.display = "none";
+      try{
+        const [rmt, adz] = await Promise.allSettled([fetchRemotive(), fetchAdzuna()]);
+        const merged = [].concat(
+          rmt.status === 'fulfilled' ? rmt.value : [],
+          adz.status === 'fulfilled' ? adz.value : []
+        );
+
+        const seen = new Set(); const deduped = [];
+        for (const j of merged){
+          const k = keyFor(j); if (seen.has(k)) continue; seen.add(k); deduped.push(j);
+        }
+        deduped.sort((a,b)=>{
+          const da = a.posted_at ? Date.parse(a.posted_at) : 0;
+          const db = b.posted_at ? Date.parse(b.posted_at) : 0;
+          return db - da;
+        });
+
+        cache = deduped;
+        if (!cache.length){ list.textContent = "No jobs found yet."; featuredGrid.innerHTML = ""; return; }
+
+        // Reset paging + featured window and render
+        page = 1;
+        featuredIdx = 0;
+        renderFeatured();
+        showPage(page);
+      }catch(e){
+        console.error(e);
+        list.textContent = "Failed to load jobs.";
+      }
+    }
+
+    moreBtn.addEventListener('click', ()=>{ page += 1; showPage(page); });
 
     // Initial load
-    loadJobs(true);
+    loadLatest();
 
-    // Auto-refresh Latest Jobs every 10 minutes
-    setInterval(()=> loadJobs(true), 10 * 60 * 1000);
+    // Auto refresh:
+    // - Featured rotates every 45s (uses current cache)
+    // - Full fetch refresh every 12 minutes
+    setInterval(renderFeatured, 45 * 1000);
+    setInterval(loadLatest, 12 * 60 * 1000);
   </script>
 </body>
 </html>
