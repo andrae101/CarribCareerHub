@@ -1,4 +1,4 @@
-<!-- /dashboard.html — User Dashboard with External Job Search (Adzuna/JSearch/Remotive), dark-mode sync, save ⭐ -->
+<!-- /dashboard.html — External Job Search + Applicants (Supabase), dark-mode sync, save ⭐ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,32 +52,37 @@
     .card h2{margin:0 0 10px;font-size:20px}
     .hidden{display:none}
     .wrap{word-break:break-word;overflow-wrap:anywhere}
-
-    /* Search UI */
-    .search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .input{flex:1;min-width:210px;display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:transparent}
-    .input input{border:none;outline:none;background:transparent;color:var(--ink);width:100%;font-size:16px}
-    .btn{border:none;border-radius:12px;padding:10px 14px;font-weight:900;cursor:pointer}
-    .btn-primary{color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-2))}
-    .btn-line{background:transparent;border:1px solid var(--line);color:var(--ink)}
-
-    .switcher{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .pill{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font-weight:800;cursor:pointer}
-    .pill.active{background: color-mix(in oklab, var(--brand) 18%, transparent); border-color: color-mix(in oklab, var(--brand) 38%, transparent)}
-
-    .list{display:grid;gap:10px;margin-top:12px}
-    .rowline{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:12px}
     .meta{color:var(--muted);font-size:14px}
-    .save-btn{background:transparent;border:none;font-size:20px;cursor:pointer;color:var(--muted)}
-    .save-btn.saved{color:var(--accent);transform:scale(1.08)}
 
-    /* Profile */
+    /* Inputs / Buttons */
     .grid{display:grid;gap:10px}
     .two{grid-template-columns:1fr 1fr}
     @media (max-width:640px){.two{grid-template-columns:1fr}}
     .field label{display:block;font-size:13px;font-weight:900;color:var(--muted);margin-bottom:6px}
     .field input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);font:16px/1.4 inherit;outline:none}
     .field input:focus{box-shadow:var(--ring)}
+    .btn{border:none;border-radius:12px;padding:10px 14px;font-weight:900;cursor:pointer}
+    .btn-primary{color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-2))}
+    .btn-line{background:transparent;border:1px solid var(--line);color:var(--ink)}
+
+    /* Jobs Search */
+    .search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .input{flex:1;min-width:210px;display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:transparent}
+    .input input{border:none;outline:none;background:transparent;color:var(--ink);width:100%;font-size:16px}
+    .switcher{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .pill{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font-weight:800;cursor:pointer}
+    .pill.active{background: color-mix(in oklab, var(--brand) 18%, transparent); border-color: color-mix(in oklab, var(--brand) 38%, transparent)}
+    .list{display:grid;gap:10px;margin-top:12px}
+    .rowline{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:12px}
+    .save-btn{background:transparent;border:none;font-size:20px;cursor:pointer;color:var(--muted)}
+    .save-btn.saved{color:var(--accent);transform:scale(1.08)}
+
+    /* Badges */
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900}
+    .b-applied{background:color-mix(in oklab,var(--brand) 22%, transparent);color:var(--ink)}
+    .b-interview{background:color-mix(in oklab,#ffd600 28%, transparent);color:#23210a}
+    .b-offer{background:color-mix(in oklab,#4BE38D 34%, transparent);color:#0c2a17}
+    .b-rejected{background:color-mix(in oklab,#ff5a5a 30%, transparent);color:#fff}
   </style>
 </head>
 <body>
@@ -160,7 +165,9 @@
         <!-- Applications -->
         <div id="tab-applications" class="card hidden">
           <h2>My Applications</h2>
-          <div id="appsList" class="list"><div class="meta">Not wired yet.</div></div>
+          <div id="appsList" class="list">
+            <div class="meta">Loading…</div>
+          </div>
         </div>
       </section>
     </div>
@@ -178,7 +185,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // === Theme sync (shared 'cch.theme') ===
+    // === Theme sync
     (function(){
       const saved = localStorage.getItem('cch.theme');
       if (saved === 'dark') document.body.classList.add('dark');
@@ -197,16 +204,20 @@
       });
     })();
 
-    // === Supabase (session guard & profile bits) ===
+    // === Supabase init
     const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUser = null;
+
     (async ()=>{
       const { data:{ session } } = await sb.auth.getSession();
       if (!session){ window.location.href = "login.html"; return; }
-      const u = session.user;
-      document.getElementById('emailInput').value = u.email || "";
-      document.getElementById('nameInput').value = u.user_metadata?.full_name || "";
+      currentUser = session.user;
+      document.getElementById('emailInput').value = currentUser.email || "";
+      document.getElementById('nameInput').value = currentUser.user_metadata?.full_name || "";
+      // load applications once we know the user
+      loadApplications();
     })();
     document.getElementById('logoutBtn').addEventListener('click', async (e)=>{ e.preventDefault(); await sb.auth.signOut(); window.location.href="login.html"; });
 
@@ -218,18 +229,19 @@
       msg.textContent = error ? ("❌ "+error.message) : "✅ Saved";
     });
 
-    // === Tabs ===
+    // === Tabs
     const tabBtns = Array.from(document.querySelectorAll('.tab'));
     function showTab(id){
       tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab===id));
       document.querySelectorAll('[id^="tab-"]').forEach(p => p.classList.add('hidden'));
       document.getElementById('tab-'+id).classList.remove('hidden');
       localStorage.setItem('user.tab', id);
+      if (id==='applications') loadApplications(); // refresh when visiting
     }
     tabBtns.forEach(b => b.addEventListener('click', ()=> showTab(b.dataset.tab)));
     showTab(localStorage.getItem('user.tab') || 'profile');
 
-    // === Jobs: External Search Engine ===
+    // === Jobs: External Search Engine
     const PAGE_SIZE = 5;
     const titleInput = document.getElementById('jobTitle');
     const locInput   = document.getElementById('jobLocation');
@@ -303,7 +315,7 @@
     }
     const fetchers = { remotive: fetchRemotive, adzuna: fetchAdzuna, jsearch: fetchJSearch };
 
-    function renderRow(j){
+    function renderJobRow(j){
       const row = document.createElement('div');
       row.className = 'rowline wrap';
       row.innerHTML = `
@@ -313,17 +325,33 @@
           <div class="meta">${esc((j.description||"").slice(0,180))}${j.description && j.description.length>180 ? "…" : ""}</div>
           <div class="meta">Source: ${esc(j.source)}</div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <a class="btn btn-primary" href="${j.apply_url}" target="_blank" rel="noopener">Apply</a>
+          <button class="btn btn-line" data-apply>Add to Applications</button>
           <button class="save-btn" aria-label="Save job">⭐</button>
         </div>
       `;
-      const btn = row.querySelector('.save-btn');
+      // Save ⭐
+      const saveBtn = row.querySelector('.save-btn');
       const id = j.id;
-      if (isSaved(id)) btn.classList.add('saved');
-      btn.addEventListener('click', ()=>{
+      if (isSaved(id)) saveBtn.classList.add('saved');
+      saveBtn.addEventListener('click', ()=>{
         toggleSave({ id, title:j.title, company:j.company, location:j.location });
-        btn.classList.toggle('saved', isSaved(id));
+        saveBtn.classList.toggle('saved', isSaved(id));
+      });
+      // Add to Applications (insert into Supabase)
+      row.querySelector('[data-apply]').addEventListener('click', async ()=>{
+        if (!currentUser) return alert('Please log in again.');
+        const { error } = await sb.from('applications').insert([{
+          user_id: currentUser.id,
+          job_title: j.title,
+          company: j.company || null,
+          location: j.location || null,
+          status: 'Applied'
+        }]);
+        if (error) { alert('Could not add: ' + error.message); return; }
+        alert('Added to Applications ✅');
+        loadApplications(); // refresh list
       });
       jobsList.appendChild(row);
     }
@@ -352,7 +380,7 @@
         if (reset) jobsList.innerHTML = '';
         if (!results.length){ jobsList.innerHTML = '<div class="meta">No jobs found.</div>'; btnMore.style.display='none'; return; }
 
-        results.slice(0, PAGE_SIZE).forEach(renderRow);
+        results.slice(0, PAGE_SIZE).forEach(renderJobRow);
         btnMore.style.display = results.length >= PAGE_SIZE ? 'inline-block' : 'none';
       }catch(e){
         console.error(e);
@@ -361,8 +389,8 @@
       }
     }
 
-    btnSearch.addEventListener('click', ()=> runSearch(true));
-    btnMore.addEventListener('click', ()=>{ state.page += 1; runSearch(false); });
+    document.getElementById('btnSearch').addEventListener('click', ()=> runSearch(true));
+    document.getElementById('btnMore').addEventListener('click', ()=>{ state.page += 1; runSearch(false); });
     pills.forEach(p=>{
       p.addEventListener('click', ()=>{
         pills.forEach(x=>x.classList.remove('active'));
@@ -372,7 +400,7 @@
       });
     });
 
-    // === Saved ⭐ ===
+    // === Saved ⭐
     let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || "[]");
     const savedList = document.getElementById('savedList');
     const savedEmpty = document.getElementById('savedEmpty');
@@ -398,8 +426,77 @@
     }
     renderSaved();
 
-    // Initial suggestion view in Jobs
-    // (Don’t auto-run; user can click Search)
+    // === Applications tab ===
+    const appsList = document.getElementById('appsList');
+
+    function badge(status){
+      const s = (status||'Applied').toLowerCase();
+      if (s.includes('interview')) return 'b-interview';
+      if (s.includes('offer')) return 'b-offer';
+      if (s.includes('reject')) return 'b-rejected';
+      return 'b-applied';
+    }
+
+    async function loadApplications(){
+      if (!currentUser) { appsList.innerHTML = '<div class="meta">Loading…</div>'; return; }
+      const { data, error } = await sb.from('applications')
+        .select('*').eq('user_id', currentUser.id).order('applied_at', { ascending:false });
+      if (error){ appsList.innerHTML = `<div class="meta">❌ ${error.message}</div>`; return; }
+
+      if (!data || data.length===0){
+        appsList.innerHTML = `<div class="meta">No applications yet. Use “Add to Applications” in the Jobs tab.</div>`;
+        return;
+      }
+
+      appsList.innerHTML = '';
+      data.forEach(a=>{
+        const row = document.createElement('div');
+        row.className = 'rowline wrap';
+        row.innerHTML = `
+          <div>
+            <div style="font-weight:900">${esc(a.job_title)}</div>
+            <div class="meta">${esc(a.company||'')} ${a.location? '• '+esc(a.location):''} • ${a.applied_at ? new Date(a.applied_at).toLocaleDateString() : ''}</div>
+            <div style="margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <span class="badge ${badge(a.status)}">${esc(a.status||'Applied')}</span>
+              <label class="meta">Update:
+                <select data-status="${a.id}" style="margin-left:6px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink);padding:6px 8px">
+                  <option ${a.status==='Applied'?'selected':''}>Applied</option>
+                  <option ${a.status==='Interview'?'selected':''}>Interview</option>
+                  <option ${a.status==='Offer'?'selected':''}>Offer</option>
+                  <option ${a.status==='Rejected'?'selected':''}>Rejected</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <button class="btn btn-line" data-del="${a.id}">Withdraw</button>
+          </div>
+        `;
+        // Update status
+        row.querySelector('[data-status]').addEventListener('change', async (e)=>{
+          const id = e.target.getAttribute('data-status');
+          const newStatus = e.target.value;
+          const { error } = await sb.from('applications').update({ status:newStatus }).eq('id', id).eq('user_id', currentUser.id);
+          if (error) return alert('Update failed: ' + error.message);
+          loadApplications();
+        });
+        // Delete
+        row.querySelector('[data-del]').addEventListener('click', async ()=>{
+          if (!confirm('Withdraw this application?')) return;
+          const id = row.querySelector('[data-del]').getAttribute('data-del');
+          const { error } = await sb.from('applications').delete().eq('id', id).eq('user_id', currentUser.id);
+          if (error) return alert('Delete failed: ' + error.message);
+          loadApplications();
+        });
+
+        appsList.appendChild(row);
+      });
+    }
+
+    // Note: you can also subscribe for realtime updates later if you like.
+    // sb.channel('apps').on('postgres_changes', { event:'*', schema:'public', table:'applications', filter:`user_id=eq.${currentUser?.id}` }, loadApplications).subscribe();
+
+    // Done.
   </script>
 </body>
 </html>
