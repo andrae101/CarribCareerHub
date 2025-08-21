@@ -1,0 +1,430 @@
+<!-- employer-ats.html — Employers see their jobs and applicants (ATS)
+     - Dark/Light theme toggle (persists)
+     - Lists employer's jobs (from Supabase `jobs` table, filtered by user_id)
+     - Click a job -> see applicants (from Supabase `applications` table)
+     - Update applicant status (+ optional notes), download CV, export CSV
+     - Mobile‑first + desktop polished
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Employer ATS • CaribCareerHub</title>
+<meta name="color-scheme" content="light dark" />
+<style>
+  :root{
+    --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
+    --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
+    --radius:16px; --shadow:0 10px 30px rgba(16,40,120,.10);
+    --ring:0 0 0 3px rgba(30,108,255,.12);
+    --ok:#2ad06f; --warn:#ffb44d; --bad:#ff5a5a;
+  }
+  body.dark{
+    --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6;
+    --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
+    --shadow:0 14px 40px rgba(0,0,0,.45);
+    --ring:0 0 0 3px rgba(142,196,255,.22);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+    overflow-x:hidden; transition:background .25s,color .25s;
+  }
+
+  .wrap{word-break:break-word;overflow-wrap:anywhere}
+
+  /* Header */
+  .header{max-width:1100px;margin:12px auto 0;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand .logo{width:44px;height:44px;object-fit:contain}
+  .brand-name{font-weight:900;letter-spacing:3px}
+  .rail{display:flex;align-items:center;gap:8px}
+  .btn, .chip{
+    border:none;border-radius:12px;padding:10px 12px;font-weight:800;cursor:pointer
+  }
+  .btn-primary{color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-2));box-shadow:var(--shadow)}
+  .btn-line{background:transparent;border:1px solid color-mix(in oklab,var(--ink) 14%, transparent);color:var(--ink)}
+  .theme-toggle{background:var(--panel);border:1px solid color-mix(in oklab,var(--ink) 14%, transparent)}
+  .logout{background:transparent;border:1px solid color-mix(in oklab,var(--ink) 14%, transparent)}
+
+  /* Layout */
+  .grid{
+    max-width:1100px;margin:14px auto 22px;padding:0 16px;
+    display:grid;grid-template-columns:320px 1fr;gap:16px
+  }
+  @media (max-width:900px){ .grid{grid-template-columns:1fr} }
+
+  .panel{
+    background:color-mix(in oklab,var(--panel) 92%, transparent);
+    border:1px solid color-mix(in oklab,var(--ink) 10%, transparent);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+  }
+
+  /* Sidebar (Jobs list) */
+  .side{padding:14px}
+  .side-title{margin:0 0 10px;font-size:14px;font-weight:900;opacity:.9}
+  .search{display:flex;gap:8px;margin:0 0 10px}
+  .search input{
+    flex:1;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in oklab,var(--ink) 14%, transparent);
+    background:transparent;color:var(--ink)
+  }
+  .job-list{display:flex;flex-direction:column;gap:10px;max-height:64vh;overflow:auto;padding-right:4px}
+  .row{
+    display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;
+    padding:12px;border-radius:12px;border:1px solid color-mix(in oklab,var(--ink) 10%, transparent);
+    background:var(--panel);cursor:pointer
+  }
+  .row:hover{box-shadow:var(--ring)}
+  .row.active{background: color-mix(in oklab,var(--brand) 18%, transparent); border-color: color-mix(in oklab,var(--brand) 38%, transparent)}
+  .meta{font-size:13px;color:var(--muted);margin:2px 0 0}
+  .count{font-size:12px;font-weight:900;color:var(--brand)}
+
+  /* Main (Applicants) */
+  .main{padding:14px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+  .title{margin:0;font-weight:900}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .apps{display:grid;gap:10px}
+  .card{
+    padding:12px;border-radius:12px;border:1px solid color-mix(in oklab,var(--ink) 10%, transparent);
+    background:var(--panel)
+  }
+  .card h4{margin:0 0 2px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:700px){ .grid2{grid-template-columns:1fr} }
+
+  .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900}
+  .b-applied{background:color-mix(in oklab,var(--brand) 20%, transparent);color:var(--ink)}
+  .b-review{background:color-mix(in oklab,#ffd600 26%, transparent);color:#2b2b2b}
+  .b-interview{background:color-mix(in oklab,#59d985 30%, transparent);color:#0b2a16}
+  .b-rejected{background:color-mix(in oklab,#ff5a5a 26%, transparent);color:#fff}
+
+  .small{font-size:12px;color:var(--muted);margin:0}
+  .inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  select,input,textarea{
+    width:100%;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in oklab,var(--ink) 14%, transparent);
+    background:transparent;color:var(--ink);font:inherit
+  }
+  textarea{min-height:90px;resize:vertical}
+  a.link{color:var(--brand);text-decoration:none;font-weight:800}
+  .empty{padding:14px;text-align:center;color:var(--muted);border:1px dashed color-mix(in oklab,var(--ink) 16%, transparent);border-radius:12px}
+</style>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <img src="./assets/logo.svg" class="logo" alt="logo">
+      <div class="brand-name">CARRIBCAREERHUB</div>
+    </div>
+    <div class="rail">
+      <button id="themeToggle" class="btn theme-toggle" title="Toggle theme">🌙</button>
+      <a class="btn btn-line" href="dashboard.html">Dashboard</a>
+      <button id="logoutBtn" class="btn logout">Log out</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <!-- Sidebar: Jobs this employer posted -->
+    <aside class="panel side">
+      <p class="side-title">My Job Posts</p>
+      <div class="search">
+        <input id="jobFilter" placeholder="Filter by title/company…" />
+        <button id="refreshJobs" class="btn btn-line">Refresh</button>
+      </div>
+      <div id="jobsList" class="job-list"></div>
+      <div class="empty" id="noJobs" style="display:none">No jobs yet. Post one from your dashboard.</div>
+    </aside>
+
+    <!-- Main: Applicants for selected job -->
+    <section class="panel main">
+      <div class="topbar">
+        <h2 class="title wrap" id="jobTitle">Select a job to view applicants</h2>
+        <div class="actions">
+          <button id="exportCsv" class="btn btn-line" disabled>Export CSV</button>
+          <button id="refreshApps" class="btn btn-line" disabled>Refresh</button>
+        </div>
+      </div>
+
+      <div id="appsWrap">
+        <div class="empty">No job selected.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="max-width:1100px;margin:0 auto 24px;padding:0 16px;color:var(--muted);text-align:center">
+    © 2025 CaribCareerHub
+  </footer>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  // ====== CONFIG (uses your real Supabase project) ======
+  const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ====== THEME ======
+  (function initTheme(){
+    const saved = localStorage.getItem('cch.theme');
+    if (saved === 'dark') document.body.classList.add('dark');
+    if (!saved){
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) document.body.classList.add('dark');
+      localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    const btn = document.getElementById('themeToggle');
+    const setIcon = ()=> btn.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
+    setIcon();
+    btn.addEventListener('click', ()=>{
+      document.body.classList.toggle('dark');
+      localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      setIcon();
+    });
+  })();
+
+  // ====== AUTH GUARD ======
+  let currentUser = null;
+  (async ()=>{
+    const { data:{ session } } = await supabase.auth.getSession();
+    if (!session) { window.location.href = "login.html"; return; }
+    currentUser = session.user;
+    boot();
+  })();
+  supabase.auth.onAuthStateChange((ev)=>{ if (ev==="SIGNED_OUT") window.location.href = "login.html"; });
+  document.getElementById('logoutBtn').addEventListener('click', async ()=>{ await supabase.auth.signOut(); });
+
+  // ====== STATE ======
+  let jobs = [];
+  let filtered = [];
+  let selectedJob = null;
+  let applicants = [];
+
+  const els = {
+    jobsList: document.getElementById('jobsList'),
+    noJobs: document.getElementById('noJobs'),
+    jobFilter: document.getElementById('jobFilter'),
+    jobTitle: document.getElementById('jobTitle'),
+    appsWrap: document.getElementById('appsWrap'),
+    exportCsv: document.getElementById('exportCsv'),
+    refreshApps: document.getElementById('refreshApps'),
+    refreshJobs: document.getElementById('refreshJobs'),
+  };
+
+  // ====== BOOT ======
+  async function boot(){
+    wireEvents();
+    await loadJobs();
+    // realtime: refresh jobs/applicants when data changes
+    supabase
+      .channel('ats-jobs')
+      .on('postgres_changes', { event:'*', schema:'public', table:'jobs', filter:`user_id=eq.${currentUser.id}` }, loadJobs)
+      .subscribe();
+    supabase
+      .channel('ats-apps')
+      .on('postgres_changes', { event:'*', schema:'public', table:'applications' }, ()=>{ if (selectedJob) loadApplicants(selectedJob.id); })
+      .subscribe();
+  }
+
+  // ====== EVENTS ======
+  function wireEvents(){
+    els.jobFilter.addEventListener('input', ()=> renderJobs());
+    els.refreshJobs.addEventListener('click', loadJobs);
+    els.refreshApps.addEventListener('click', ()=> selectedJob && loadApplicants(selectedJob.id));
+    els.exportCsv.addEventListener('click', ()=>{
+      if (!applicants.length) return;
+      const csv = toCSV(applicants);
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${slugify(selectedJob.title || 'job')}-applicants.csv`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  }
+
+  // ====== LOAD JOBS ======
+  async function loadJobs(){
+    els.jobsList.innerHTML = `<div class="small">Loading jobs…</div>`;
+    const { data, error } = await supabase
+      .from('jobs')
+      .select('id,title,company,location,created_at')
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending:false });
+    if (error){ els.jobsList.innerHTML = `<div class="small">Failed to load jobs.</div>`; console.error(error); return; }
+    jobs = data || [];
+    // augment with counts (async)
+    for (const j of jobs){
+      getApplicantCount(j.id).then(cnt=>{
+        const badge = document.querySelector(`[data-job="${j.id}"] .count`);
+        if (badge) badge.textContent = `${cnt} ${cnt===1?'applicant':'applicants'}`;
+      });
+    }
+    renderJobs();
+  }
+
+  function renderJobs(){
+    const q = (els.jobFilter.value || "").toLowerCase();
+    filtered = jobs.filter(j => !q || (j.title||"").toLowerCase().includes(q) || (j.company||"").toLowerCase().includes(q));
+    els.jobsList.innerHTML = "";
+    if (!filtered.length){
+      els.noJobs.style.display = "block";
+      return;
+    }
+    els.noJobs.style.display = "none";
+    filtered.forEach(j=>{
+      const row = document.createElement('div');
+      row.className = "row";
+      row.dataset.job = j.id;
+      row.innerHTML = `
+        <div>
+          <div class="wrap" style="font-weight:900">${esc(j.title || 'Untitled role')}</div>
+          <p class="meta wrap">${esc(j.company||'')} ${j.location? '• '+esc(j.location):''}</p>
+        </div>
+        <div class="count">…</div>
+      `;
+      row.addEventListener('click', ()=> selectJob(j, row));
+      els.jobsList.appendChild(row);
+    });
+    // keep selection highlighted if still present
+    if (selectedJob){
+      const el = els.jobsList.querySelector(`[data-job="${selectedJob.id}"]`);
+      if (el) el.classList.add('active');
+    }
+  }
+
+  async function getApplicantCount(job_id){
+    const { count } = await supabase.from('applications').select('id', { count:'exact', head:true }).eq('job_id', job_id);
+    return count || 0;
+  }
+
+  // ====== SELECT JOB / LOAD APPLICANTS ======
+  function selectJob(job, rowEl){
+    selectedJob = job;
+    els.jobsList.querySelectorAll('.row').forEach(r=>r.classList.remove('active'));
+    rowEl.classList.add('active');
+    els.jobTitle.textContent = `${job.title || 'Job'} — Applicants`;
+    els.exportCsv.disabled = false;
+    els.refreshApps.disabled = true;
+    loadApplicants(job.id);
+  }
+
+  async function loadApplicants(job_id){
+    els.appsWrap.innerHTML = `<div class="card"><p class="small">Loading applicants…</p></div>`;
+    els.refreshApps.disabled = true;
+    const { data, error } = await supabase
+      .from('applications')
+      .select('*')
+      .eq('job_id', job_id)
+      .order('applied_at', { ascending:false });
+    els.refreshApps.disabled = false;
+    if (error){ els.appsWrap.innerHTML = `<div class="card"><p class="small">Failed to load applicants.</p></div>`; console.error(error); return; }
+    applicants = data || [];
+    renderApplicants();
+  }
+
+  function renderApplicants(){
+    if (!applicants.length){
+      els.appsWrap.innerHTML = `<div class="empty">No applicants yet.</div>`;
+      return;
+    }
+    const frag = document.createDocumentFragment();
+    const wrap = document.createElement('div'); wrap.className="apps";
+    applicants.forEach(a=>{
+      const card = document.createElement('div');
+      card.className = "card";
+      const statusBadge = badgeFor(a.status);
+      const when = a.applied_at ? new Date(a.applied_at).toLocaleString() : '';
+      card.innerHTML = `
+        <div class="grid2">
+          <div>
+            <h4 class="wrap">${esc(a.full_name || a.name || 'Unnamed candidate')}</h4>
+            <p class="small wrap">${esc(a.email || '')}${a.phone ? ' • '+esc(a.phone):''}${a.location ? ' • '+esc(a.location):''}</p>
+            <p class="small">Applied: ${when}</p>
+            <div class="inline" style="margin-top:6px">
+              <span class="badge ${statusBadge.class}">${statusBadge.text}</span>
+              ${a.cv_url ? `<a class="link" href="${escUrl(a.cv_url)}" target="_blank" rel="noopener">Download CV</a>`:''}
+              ${a.apply_url ? `<a class="link" href="${escUrl(a.apply_url)}" target="_blank" rel="noopener">Job Link</a>`:''}
+            </div>
+          </div>
+          <div>
+            <label class="small" for="st-${a.id}">Update status</label>
+            <select id="st-${a.id}">
+              ${opt('Applied', a.status)}
+              ${opt('In Review', a.status)}
+              ${opt('Interview', a.status)}
+              ${opt('Offer', a.status)}
+              ${opt('Rejected', a.status)}
+            </select>
+            <label class="small" for="nt-${a.id}" style="margin-top:6px;display:block">Notes (private)</label>
+            <textarea id="nt-${a.id}" placeholder="Add a quick note…">${a.notes || ''}</textarea>
+            <div class="inline" style="justify-content:flex-end;margin-top:8px">
+              <button class="btn btn-line" data-save="${a.id}">Save</button>
+            </div>
+          </div>
+        </div>
+        ${a.cover_letter ? `<div style="margin-top:10px"><div class="small" style="margin-bottom:6px">Cover Letter</div><div class="wrap">${esc(a.cover_letter)}</div></div>`:''}
+      `;
+      // Save handler
+      card.querySelector(`[data-save="${a.id}"]`).addEventListener('click', async ()=>{
+        const status = card.querySelector(`#st-${a.id}`).value;
+        const notes = card.querySelector(`#nt-${a.id}`).value;
+        await updateApplication(a.id, { status, notes });
+      });
+      wrap.appendChild(card);
+    });
+    frag.appendChild(wrap);
+    els.appsWrap.innerHTML = "";
+    els.appsWrap.appendChild(frag);
+  }
+
+  function opt(label, current){
+    const sel = (current||'Applied').toLowerCase() === label.toLowerCase() ? 'selected' : '';
+    return `<option ${sel}>${label}</option>`;
+  }
+
+  function badgeFor(status){
+    const s = (status||'Applied').toLowerCase();
+    if (s.includes('interview')) return { class:'b-interview', text:'Interview' };
+    if (s.includes('offer')) return { class:'b-interview', text:'Offer' };
+    if (s.includes('review')) return { class:'b-review', text:'In Review' };
+    if (s.includes('reject')) return { class:'b-rejected', text:'Rejected' };
+    return { class:'b-applied', text:'Applied' };
+  }
+
+  async function updateApplication(id, patch){
+    try{
+      const { error } = await supabase.from('applications').update(patch).eq('id', id);
+      if (error) throw error;
+      // optimistic refresh
+      const idx = applicants.findIndex(a=>a.id===id);
+      if (idx>=0) applicants[idx] = { ...applicants[idx], ...patch };
+      renderApplicants();
+    }catch(e){
+      alert('Save failed: ' + (e.message||e));
+      console.error(e);
+    }
+  }
+
+  // ====== HELPERS ======
+  function esc(s){ return (s??"").toString().replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+  function escUrl(s){ try{ new URL(s); return s; }catch{ return "#"; } }
+  function slugify(s){ return (s||"").toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
+  function toCSV(rows){
+    const cols = ["id","full_name","email","phone","location","status","notes","applied_at","cv_url"];
+    const head = cols.join(",") + "\n";
+    const body = rows.map(r=> cols.map(c=> csvCell(r[c])).join(",")).join("\n");
+    return head + body;
+  }
+  function csvCell(v){
+    if (v==null) return "";
+    const s = String(v).replace(/"/g,'""');
+    if (/[",\n]/.test(s)) return `"${s}"`;
+    return s;
+  }
+  </script>
+</body>
+</html>
