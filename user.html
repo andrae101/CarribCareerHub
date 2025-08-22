@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard - Caribbean Jobs</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+  <header class="dash-header">
+    <div class="dash-logo"><h1>Caribbean Jobs</h1></div>
+    <nav>
+      <button id="logout-btn" class="btn-primary">Logout</button>
+    </nav>
+  </header>
+
+  <aside class="sidebar">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">My Profile</a></li>
+      <li><a href="#">CV Manager</a></li>
+      <li><a href="#">Job Applications</a></li>
+      <li><a href="#">Saved Jobs</a></li>
+      <li><a href="#">AI Assistant</a></li>
+    </ul>
+  </aside>
+
+  <main class="dashboard-main">
+    <section class="welcome">
+      <h2>Welcome, [User Name]</h2>
+      <p>Your AI assistant is ready to help find the best jobs for you!</p>
+    </section>
+
+    <section class="dashboard-cards">
+      <div class="card">
+        <h3>Recent Jobs</h3>
+        <ul>
+          <li>Marketing Manager - Company A</li>
+          <li>Software Engineer - Company B</li>
+          <li>HR Specialist - Company C</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Applications Status</h3>
+        <ul>
+          <li>Pending - 2</li>
+          <li>Reviewed - 5</li>
+          <li>Interview Scheduled - 1</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>AI Suggestions</h3>
+        <p>Check out these recommended jobs based on your profile!</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="../main.js"></script>
+</body>
+</html>
