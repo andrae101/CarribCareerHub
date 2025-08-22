@@ -1,502 +1,117 @@
-<!-- /dashboard.html — External Job Search + Applicants (Supabase), dark-mode sync, save ⭐ -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>User Dashboard • CaribCareerHub</title>
-  <meta name="color-scheme" content="light dark" />
-  <style>
-    :root{
-      --bg:#F3F8FF; --panel:#ffffff; --ink:#0A2458; --muted:#6B7A99;
-      --brand:#1E6CFF; --brand-2:#3FA2FF; --accent:#FFA03B;
-      --radius:18px; --shadow:0 10px 30px rgba(16,40,120,.12); --line: color-mix(in oklab, var(--ink) 12%, transparent);
-      --ring:0 0 0 3px rgba(30,108,255,.14);
-    }
-    body.dark{
-      --bg:#0f1525; --panel:#111a2e; --ink:#ecf2ff; --muted:#b7c1d6;
-      --brand:#5a8fff; --brand-2:#8ec4ff; --accent:#ffb86c;
-      --shadow:0 14px 40px rgba(0,0,0,.45); --line: color-mix(in oklab, var(--ink) 18%, transparent);
-      --ring:0 0 0 3px rgba(142,196,255,.20);
-    }
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;overflow-x:hidden}
+body {
+    display: flex;
+    background: #f4f7f9;
+}
 
-    /* Header */
-    .header{max-width:1100px;margin:14px auto 0;padding:0 16px;display:flex;align-items:center;justify-content:center;gap:12px;position:relative}
-    .brand{display:flex;align-items:center;gap:12px;min-width:0}
-    .logo{width:min(88px,20vw);height:auto;object-fit:contain}
-    .brand-name{font-size:22px;font-weight:900;letter-spacing:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .right-rail{position:absolute;right:16px;top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .theme-toggle{border:1px solid var(--line);padding:8px 10px;border-radius:12px;background:var(--panel);color:var(--ink);cursor:pointer;font-weight:900}
-    .ghost{display:inline-block;padding:8px 12px;border-radius:12px;text-decoration:none;font-weight:800;background:transparent;color:var(--ink);border:1px solid var(--line)}
+/* Header */
+.dash-header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 60px;
+    background: #2b7a78;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    z-index: 1000;
+}
 
-    /* Layout */
-    .shell{max-width:1100px;margin:16px auto 32px;padding:16px}
-    .dashboard{display:grid;grid-template-columns:240px 1fr;gap:16px}
-    @media (max-width:900px){.dashboard{grid-template-columns:1fr}}
+.dash-logo h1 {
+    font-size: 1.5rem;
+}
 
-    /* Sidebar */
-    .sidebar{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
-    .tabs{display:flex;flex-direction:column;gap:8px}
-    .tab{display:flex;gap:8px;align-items:center;padding:10px 12px;border-radius:12px;font-weight:800;cursor:pointer;border:1px solid transparent}
-    .tab:hover{border-color:var(--line)}
-    .tab.active{background: color-mix(in oklab, var(--brand) 18%, transparent); border-color: color-mix(in oklab, var(--brand) 38%, transparent)}
-    .tab .i{width:22px;text-align:center}
+.dash-header .btn-primary {
+    padding: 8px 20px;
+    border: none;
+    background: #3aafa9;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-    /* Main */
-    .main{display:grid;gap:14px}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow)}
-    .card h2{margin:0 0 10px;font-size:20px}
-    .hidden{display:none}
-    .wrap{word-break:break-word;overflow-wrap:anywhere}
-    .meta{color:var(--muted);font-size:14px}
+.dash-header .btn-primary:hover {
+    background: #def2f1;
+    color: #2b7a78;
+}
 
-    /* Inputs / Buttons */
-    .grid{display:grid;gap:10px}
-    .two{grid-template-columns:1fr 1fr}
-    @media (max-width:640px){.two{grid-template-columns:1fr}}
-    .field label{display:block;font-size:13px;font-weight:900;color:var(--muted);margin-bottom:6px}
-    .field input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);font:16px/1.4 inherit;outline:none}
-    .field input:focus{box-shadow:var(--ring)}
-    .btn{border:none;border-radius:12px;padding:10px 14px;font-weight:900;cursor:pointer}
-    .btn-primary{color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-2))}
-    .btn-line{background:transparent;border:1px solid var(--line);color:var(--ink)}
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    margin-top: 60px;
+    background: #17252a;
+    color: white;
+    min-height: 100vh;
+    padding-top: 20px;
+}
 
-    /* Jobs Search */
-    .search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .input{flex:1;min-width:210px;display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:transparent}
-    .input input{border:none;outline:none;background:transparent;color:var(--ink);width:100%;font-size:16px}
-    .switcher{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .pill{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font-weight:800;cursor:pointer}
-    .pill.active{background: color-mix(in oklab, var(--brand) 18%, transparent); border-color: color-mix(in oklab, var(--brand) 38%, transparent)}
-    .list{display:grid;gap:10px;margin-top:12px}
-    .rowline{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:12px}
-    .save-btn{background:transparent;border:none;font-size:20px;cursor:pointer;color:var(--muted)}
-    .save-btn.saved{color:var(--accent);transform:scale(1.08)}
+.sidebar ul {
+    list-style: none;
+}
 
-    /* Badges */
-    .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900}
-    .b-applied{background:color-mix(in oklab,var(--brand) 22%, transparent);color:var(--ink)}
-    .b-interview{background:color-mix(in oklab,#ffd600 28%, transparent);color:#23210a}
-    .b-offer{background:color-mix(in oklab,#4BE38D 34%, transparent);color:#0c2a17}
-    .b-rejected{background:color-mix(in oklab,#ff5a5a 30%, transparent);color:#fff}
-  </style>
-</head>
-<body>
-  <!-- Header -->
-  <header class="header">
-    <div class="brand">
-      <picture>
-        <source srcset="./assets/logo.svg" type="image/svg+xml" />
-        <img src="./assets/logo.png" alt="CaribCareerHub logo" class="logo" />
-      </picture>
-      <span class="brand-name">CARRIBCAREERHUB</span>
-    </div>
-    <div class="right-rail">
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-      <a class="ghost" href="index.html">Home</a>
-      <a class="ghost" href="#" id="logoutBtn">Log out</a>
-    </div>
-  </header>
+.sidebar ul li {
+    padding: 15px 20px;
+}
 
-  <!-- App -->
-  <main class="shell">
-    <div class="dashboard">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <nav class="tabs">
-          <button class="tab active" data-tab="profile"><span class="i">👤</span><span>Profile</span></button>
-          <button class="tab" data-tab="jobs"><span class="i">💼</span><span>Jobs</span></button>
-          <button class="tab" data-tab="saved"><span class="i">⭐</span><span>Saved</span></button>
-          <button class="tab" data-tab="applications"><span class="i">📝</span><span>Applications</span></button>
-        </nav>
-      </aside>
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
 
-      <!-- Main -->
-      <section class="main">
-        <!-- Profile -->
-        <div id="tab-profile" class="card">
-          <h2>Profile</h2>
-          <div class="grid two">
-            <div class="field">
-              <label>Display Name</label>
-              <input id="nameInput" placeholder="Your name" />
-            </div>
-            <div class="field">
-              <label>Email</label>
-              <input id="emailInput" placeholder="you@example.com" disabled />
-            </div>
-          </div>
-          <p class="meta" id="profileMsg"></p>
-        </div>
+.sidebar ul li a:hover {
+    background: #3aafa9;
+    border-radius: 5px;
+}
 
-        <!-- Jobs (External Search) -->
-        <div id="tab-jobs" class="card hidden">
-          <h2>Find Jobs</h2>
-          <div class="search-row">
-            <label class="input"><span>🔎</span><input id="jobTitle" placeholder="Job title or keyword" /></label>
-            <label class="input"><span>📍</span><input id="jobLocation" placeholder="Location (e.g. Jamaica, Barbados, 'Remote')" /></label>
-            <button class="btn btn-primary" id="btnSearch">Search</button>
-          </div>
-          <div class="switcher" role="tablist" aria-label="Job Sources">
-            <button class="pill active" data-src="all">All</button>
-            <button class="pill" data-src="remotive">Remotive</button>
-            <button class="pill" data-src="adzuna">Adzuna</button>
-            <button class="pill" data-src="jsearch">JSearch</button>
-          </div>
-          <div id="jobsList" class="list">
-            <div class="meta">Type a role and press Search.</div>
-          </div>
-          <div style="text-align:center;margin-top:6px">
-            <button id="btnMore" class="btn btn-line" style="display:none">Load More</button>
-          </div>
-        </div>
+/* Main */
+.dashboard-main {
+    margin-left: 220px;
+    margin-top: 60px;
+    padding: 30px;
+    flex-grow: 1;
+}
 
-        <!-- Saved -->
-        <div id="tab-saved" class="card hidden">
-          <h2>Saved Jobs</h2>
-          <div id="savedList" class="list"></div>
-          <p id="savedEmpty" class="meta">No saved jobs yet.</p>
-        </div>
+.welcome h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #2b7a78;
+}
 
-        <!-- Applications -->
-        <div id="tab-applications" class="card hidden">
-          <h2>My Applications</h2>
-          <div id="appsList" class="list">
-            <div class="meta">Loading…</div>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
+.dashboard-cards {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+}
 
-  <footer style="max-width:1100px;margin:0 auto 24px;padding:0 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;color:var(--muted)">
-    <div style="display:flex;gap:18px;flex-wrap:wrap">
-      <a href="about.html" style="text-decoration:none;color:inherit;font-weight:900;border-bottom:2px solid transparent;padding-bottom:2px">About</a>
-      <a href="contact.html" style="text-decoration:none;color:inherit;font-weight:900;border-bottom:2px solid transparent;padding-bottom:2px">Contact</a>
-      <a href="privacy.html" style="text-decoration:none;color:inherit;font-weight:900;border-bottom:2px solid transparent;padding-bottom:2px">Privacy</a>
-      <a href="terms.html" style="text-decoration:none;color:inherit;font-weight:900;border-bottom:2px solid transparent;padding-bottom:2px">Terms</a>
-    </div>
-    <div>© 2025 CaribCareerHub</div>
-  </footer>
+.card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    // === Theme sync
-    (function(){
-      const saved = localStorage.getItem('cch.theme');
-      if (saved === 'dark') document.body.classList.add('dark');
-      if (!saved){
-        const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefers) document.body.classList.add('dark');
-        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
-      }
-      const btn = document.getElementById('themeToggle');
-      const setIcon = ()=> btn.textContent = document.body.classList.contains('dark') ? '🌞' : '🌙';
-      setIcon();
-      btn.addEventListener('click', ()=>{
-        document.body.classList.toggle('dark');
-        localStorage.setItem('cch.theme', document.body.classList.contains('dark') ? 'dark':'light');
-        setIcon();
-      });
-    })();
+.card h3 {
+    color: #17252a;
+    margin-bottom: 15px;
+}
 
-    // === Supabase init
-    const SUPABASE_URL = "https://fpytvfhynleaivkvuedt.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZweXR2Zmh5bmxlYWl2a3Z1ZWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzU1OTAsImV4cCI6MjA3MTI1MTU5MH0.Q7UHLIA_3_o7zCdV-IOthWOYGVVlINDXjp1uF4sdBRk";
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    let currentUser = null;
+.card ul li {
+    padding: 5px 0;
+    color: #555;
+}
 
-    (async ()=>{
-      const { data:{ session } } = await sb.auth.getSession();
-      if (!session){ window.location.href = "login.html"; return; }
-      currentUser = session.user;
-      document.getElementById('emailInput').value = currentUser.email || "";
-      document.getElementById('nameInput').value = currentUser.user_metadata?.full_name || "";
-      // load applications once we know the user
-      loadApplications();
-    })();
-    document.getElementById('logoutBtn').addEventListener('click', async (e)=>{ e.preventDefault(); await sb.auth.signOut(); window.location.href="login.html"; });
-
-    // Save profile name
-    document.getElementById('nameInput').addEventListener('change', async (e)=>{
-      const v = (e.target.value||"").trim(); if (!v) return;
-      const msg = document.getElementById('profileMsg');
-      const { error } = await sb.auth.updateUser({ data:{ full_name: v }});
-      msg.textContent = error ? ("❌ "+error.message) : "✅ Saved";
-    });
-
-    // === Tabs
-    const tabBtns = Array.from(document.querySelectorAll('.tab'));
-    function showTab(id){
-      tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab===id));
-      document.querySelectorAll('[id^="tab-"]').forEach(p => p.classList.add('hidden'));
-      document.getElementById('tab-'+id).classList.remove('hidden');
-      localStorage.setItem('user.tab', id);
-      if (id==='applications') loadApplications(); // refresh when visiting
-    }
-    tabBtns.forEach(b => b.addEventListener('click', ()=> showTab(b.dataset.tab)));
-    showTab(localStorage.getItem('user.tab') || 'profile');
-
-    // === Jobs: External Search Engine
-    const PAGE_SIZE = 5;
-    const titleInput = document.getElementById('jobTitle');
-    const locInput   = document.getElementById('jobLocation');
-    const btnSearch  = document.getElementById('btnSearch');
-    const btnMore    = document.getElementById('btnMore');
-    const jobsList   = document.getElementById('jobsList');
-    const pills      = Array.from(document.querySelectorAll('.pill'));
-
-    const state = {
-      q: sessionStorage.getItem('dash.q') || '',
-      loc: sessionStorage.getItem('dash.loc') || 'Jamaica',
-      page: 1,
-      pill: 'all'
-    };
-    if (state.q)  titleInput.value = state.q;
-    if (state.loc) locInput.value = state.loc;
-
-    function esc(s){return (s??"").toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
-    function stripHtml(html){ const d = document.createElement('div'); d.innerHTML = html; return d.textContent || d.innerText || ""; }
-    function keyFor(j){ return [j.title,j.company,j.location].map(x=>(x||'').toLowerCase().trim()).join('|||'); }
-
-    function normalizeJob(j, meta){
-      return {
-        id: j.id || j.uuid || j.job_id || j.job_uuid || j.url || j.apply_url || crypto.randomUUID(),
-        title: j.title || j.job_title || "Untitled role",
-        company: j.company || j.employer_name || j.company_name || "",
-        location: j.location || j.job_city || j.job_country || j.candidate_required_location || "",
-        type: j.type || j.job_employment_type || j.contract_type || j.contract_time || "",
-        description: j.description || j.job_description || "",
-        apply_url: j.url || j.job_apply_link || j.redirect_url || j.job_posting_url || "#",
-        posted_at: j.created_at || j.created || j.posted_at || j.publication_date || null,
-        source: meta.source
-      };
-    }
-
-    async function fetchRemotive({ q, loc, page }){
-      const res = await fetch(`https://remotive.com/api/remote-jobs?search=${encodeURIComponent(q)}`);
-      if (!res.ok) throw new Error("Remotive error");
-      const json = await res.json();
-      return (json.jobs||[])
-        .filter(j => !loc || (j.candidate_required_location||"").toLowerCase().includes(loc.toLowerCase()) || loc.toLowerCase()==="remote")
-        .slice((page-1)*PAGE_SIZE, page*PAGE_SIZE)
-        .map(r => normalizeJob({
-          id:r.id,title:r.title,company_name:r.company_name,
-          candidate_required_location:r.candidate_required_location,job_type:r.job_type,
-          description: stripHtml(r.description||""), url:r.url, publication_date:r.publication_date
-        }, { source:"Remotive" }));
-    }
-    async function fetchAdzuna({ q, loc, page }){
-      const url = `/api/adzuna?what=${encodeURIComponent(q)}&where=${encodeURIComponent(loc)}&page=${page}&per_page=${PAGE_SIZE}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Adzuna error");
-      const json = await res.json();
-      return (json.results||[]).map(r => normalizeJob({
-        id:r.id,title:r.title,company:r.company?.display_name,
-        location:r.location?.display_name,contract_type:r.contract_type||r.contract_time,
-        description: stripHtml(r.description||""), redirect_url:r.redirect_url, created:r.created
-      }, { source:"Adzuna" }));
-    }
-    async function fetchJSearch({ q, loc, page }){
-      const url = `/api/jsearch?query=${encodeURIComponent(q+" "+loc)}&page=${page}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("JSearch error");
-      const json = await res.json();
-      return (json.data||[]).map(r => normalizeJob({
-        job_id:r.job_id, job_title:r.job_title, employer_name:r.employer_name,
-        job_city:r.job_city||r.job_country, job_employment_type:r.job_employment_type,
-        job_description:r.job_description, job_apply_link:r.job_apply_link||r.job_posting_url,
-        posted_at: r.job_posted_at_datetime_utc || r.job_posted_at
-      }, { source:"JSearch" }));
-    }
-    const fetchers = { remotive: fetchRemotive, adzuna: fetchAdzuna, jsearch: fetchJSearch };
-
-    function renderJobRow(j){
-      const row = document.createElement('div');
-      row.className = 'rowline wrap';
-      row.innerHTML = `
-        <div>
-          <div style="font-weight:900">${esc(j.title)}</div>
-          <div class="meta">${esc(j.company)} ${j.location? "• "+esc(j.location):""} ${j.type? "• "+esc(j.type):""}</div>
-          <div class="meta">${esc((j.description||"").slice(0,180))}${j.description && j.description.length>180 ? "…" : ""}</div>
-          <div class="meta">Source: ${esc(j.source)}</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <a class="btn btn-primary" href="${j.apply_url}" target="_blank" rel="noopener">Apply</a>
-          <button class="btn btn-line" data-apply>Add to Applications</button>
-          <button class="save-btn" aria-label="Save job">⭐</button>
-        </div>
-      `;
-      // Save ⭐
-      const saveBtn = row.querySelector('.save-btn');
-      const id = j.id;
-      if (isSaved(id)) saveBtn.classList.add('saved');
-      saveBtn.addEventListener('click', ()=>{
-        toggleSave({ id, title:j.title, company:j.company, location:j.location });
-        saveBtn.classList.toggle('saved', isSaved(id));
-      });
-      // Add to Applications (insert into Supabase)
-      row.querySelector('[data-apply]').addEventListener('click', async ()=>{
-        if (!currentUser) return alert('Please log in again.');
-        const { error } = await sb.from('applications').insert([{
-          user_id: currentUser.id,
-          job_title: j.title,
-          company: j.company || null,
-          location: j.location || null,
-          status: 'Applied'
-        }]);
-        if (error) { alert('Could not add: ' + error.message); return; }
-        alert('Added to Applications ✅');
-        loadApplications(); // refresh list
-      });
-      jobsList.appendChild(row);
-    }
-
-    async function loadPage({ q, loc, page }){
-      const active = state.pill === 'all' ? ['remotive','adzuna','jsearch'] : [state.pill];
-      const tasks = active.map(s => fetchers[s]({ q, loc, page }).catch(()=>[]));
-      const chunks = await Promise.all(tasks);
-      const merged = [].concat(...chunks);
-      const seen = new Set(); const out = [];
-      for (const j of merged){ const k = keyFor(j); if (seen.has(k)) continue; seen.add(k); out.push(j); }
-      out.sort((a,b)=> (Date.parse(b.posted_at||0) - Date.parse(a.posted_at||0)));
-      return out;
-    }
-
-    async function runSearch(reset=true){
-      try{
-        if (reset){ state.page = 1; jobsList.innerHTML = '<div class="meta">Loading…</div>'; }
-        const q = (titleInput.value||'').trim() || 'developer';
-        const loc = (locInput.value||'').trim() || 'Jamaica';
-        state.q=q; state.loc=loc;
-        sessionStorage.setItem('dash.q', q);
-        sessionStorage.setItem('dash.loc', loc);
-
-        const results = await loadPage({ q, loc, page: state.page });
-        if (reset) jobsList.innerHTML = '';
-        if (!results.length){ jobsList.innerHTML = '<div class="meta">No jobs found.</div>'; btnMore.style.display='none'; return; }
-
-        results.slice(0, PAGE_SIZE).forEach(renderJobRow);
-        btnMore.style.display = results.length >= PAGE_SIZE ? 'inline-block' : 'none';
-      }catch(e){
-        console.error(e);
-        jobsList.innerHTML = '<div class="meta">Failed to load jobs.</div>';
-        btnMore.style.display='none';
-      }
-    }
-
-    document.getElementById('btnSearch').addEventListener('click', ()=> runSearch(true));
-    document.getElementById('btnMore').addEventListener('click', ()=>{ state.page += 1; runSearch(false); });
-    pills.forEach(p=>{
-      p.addEventListener('click', ()=>{
-        pills.forEach(x=>x.classList.remove('active'));
-        p.classList.add('active');
-        state.pill = p.dataset.src;
-        runSearch(true);
-      });
-    });
-
-    // === Saved ⭐
-    let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || "[]");
-    const savedList = document.getElementById('savedList');
-    const savedEmpty = document.getElementById('savedEmpty');
-    function isSaved(id){ return savedJobs.some(j=>j.id===id); }
-    function toggleSave(job){
-      const idx = savedJobs.findIndex(j=>j.id===job.id);
-      if (idx>=0) savedJobs.splice(idx,1); else savedJobs.push(job);
-      localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
-      renderSaved();
-    }
-    function renderSaved(){
-      savedList.innerHTML = "";
-      if (!savedJobs.length){ savedEmpty.style.display='block'; return; }
-      savedEmpty.style.display='none';
-      savedJobs.forEach(job=>{
-        const row = document.createElement('div');
-        row.className='rowline';
-        row.innerHTML = `<div><div style="font-weight:900">${esc(job.title)}</div><div class="meta">${esc(job.company)} ${job.location? "• "+esc(job.location):""}</div></div>
-                         <button class="save-btn saved" aria-label="Unsave">⭐</button>`;
-        row.querySelector('.save-btn').addEventListener('click', ()=> toggleSave(job));
-        savedList.appendChild(row);
-      });
-    }
-    renderSaved();
-
-    // === Applications tab ===
-    const appsList = document.getElementById('appsList');
-
-    function badge(status){
-      const s = (status||'Applied').toLowerCase();
-      if (s.includes('interview')) return 'b-interview';
-      if (s.includes('offer')) return 'b-offer';
-      if (s.includes('reject')) return 'b-rejected';
-      return 'b-applied';
-    }
-
-    async function loadApplications(){
-      if (!currentUser) { appsList.innerHTML = '<div class="meta">Loading…</div>'; return; }
-      const { data, error } = await sb.from('applications')
-        .select('*').eq('user_id', currentUser.id).order('applied_at', { ascending:false });
-      if (error){ appsList.innerHTML = `<div class="meta">❌ ${error.message}</div>`; return; }
-
-      if (!data || data.length===0){
-        appsList.innerHTML = `<div class="meta">No applications yet. Use “Add to Applications” in the Jobs tab.</div>`;
-        return;
-      }
-
-      appsList.innerHTML = '';
-      data.forEach(a=>{
-        const row = document.createElement('div');
-        row.className = 'rowline wrap';
-        row.innerHTML = `
-          <div>
-            <div style="font-weight:900">${esc(a.job_title)}</div>
-            <div class="meta">${esc(a.company||'')} ${a.location? '• '+esc(a.location):''} • ${a.applied_at ? new Date(a.applied_at).toLocaleDateString() : ''}</div>
-            <div style="margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-              <span class="badge ${badge(a.status)}">${esc(a.status||'Applied')}</span>
-              <label class="meta">Update:
-                <select data-status="${a.id}" style="margin-left:6px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink);padding:6px 8px">
-                  <option ${a.status==='Applied'?'selected':''}>Applied</option>
-                  <option ${a.status==='Interview'?'selected':''}>Interview</option>
-                  <option ${a.status==='Offer'?'selected':''}>Offer</option>
-                  <option ${a.status==='Rejected'?'selected':''}>Rejected</option>
-                </select>
-              </label>
-            </div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <button class="btn btn-line" data-del="${a.id}">Withdraw</button>
-          </div>
-        `;
-        // Update status
-        row.querySelector('[data-status]').addEventListener('change', async (e)=>{
-          const id = e.target.getAttribute('data-status');
-          const newStatus = e.target.value;
-          const { error } = await sb.from('applications').update({ status:newStatus }).eq('id', id).eq('user_id', currentUser.id);
-          if (error) return alert('Update failed: ' + error.message);
-          loadApplications();
-        });
-        // Delete
-        row.querySelector('[data-del]').addEventListener('click', async ()=>{
-          if (!confirm('Withdraw this application?')) return;
-          const id = row.querySelector('[data-del]').getAttribute('data-del');
-          const { error } = await sb.from('applications').delete().eq('id', id).eq('user_id', currentUser.id);
-          if (error) return alert('Delete failed: ' + error.message);
-          loadApplications();
-        });
-
-        appsList.appendChild(row);
-      });
-    }
-
-    // Note: you can also subscribe for realtime updates later if you like.
-    // sb.channel('apps').on('postgres_changes', { event:'*', schema:'public', table:'applications', filter:`user_id=eq.${currentUser?.id}` }, loadApplications).subscribe();
-
-    // Done.
-  </script>
-</body>
-</html>
+.card p {
+    color: #555;
+}
