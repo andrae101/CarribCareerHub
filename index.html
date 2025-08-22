@@ -1,158 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caribbean.com - Homepage</title>
-<style>
-  :root{
-    --bg: #F3F8FF;
-    --panel: #ffffff;
-    --ink: #0A2458;
-    --muted: #6B7A99;
-    --brand: #1E6CFF;
-    --brand-2: #3FA2FF;
-    --accent: #FFA03B;
-    --radius: 18px;
-    --shadow: 0 10px 30px rgba(16,40,120,0.12);
-    --logo-img: url('./assets/logo.svg'), url('./assets/logo.png');
-  }
-
-  * { box-sizing: border-box; margin:0; padding:0; }
-  body {
-    font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    overflow-x: hidden;
-  }
-
-  /* Header */
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 20px;
-    flex-wrap: wrap;
-  }
-  .brand img {
-    height: 64px;
-    width: auto;
-    content: var(--logo-img);
-  }
-  .brand-name {
-    font-size: 32px;
-    font-weight: 900;
-    color: var(--ink);
-    letter-spacing: 4px;
-    margin-left: 14px;
-  }
-
-  /* Hero Section */
-  .hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 80px 20px;
-    background: linear-gradient(90deg, var(--brand), var(--brand-2));
-    color: #fff;
-    border-radius: var(--radius);
-    margin: 20px auto;
-    max-width: 1100px;
-    box-shadow: var(--shadow);
-    position: relative;
-  }
-  .hero h1 {
-    font-size: clamp(36px, 6vw, 64px);
-    font-weight: 800;
-    margin-bottom: 24px;
-  }
-  .hero p {
-    font-size: 18px;
-    margin-bottom: 32px;
-  }
-
-  /* Login Button */
-  .hero .btn-login {
-    padding: 16px 36px;
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
-    background: linear-gradient(90deg, #FFB44D, #FF8A00);
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: 0.3s ease;
-  }
-  .hero .btn-login:hover {
-    opacity: 0.9;
-  }
-
-  /* Optional Map Placeholder */
-  .map-section {
-    margin-top: 60px;
-    display: flex;
-    justify-content: center;
-  }
-  .map-placeholder {
-    width: 90%;
-    max-width: 800px;
-    height: 300px;
-    background: url('./assets/map.svg') no-repeat center/contain;
-    border-radius: var(--radius);
-    opacity: 0.75;
-  }
-
-  /* AI Help Popup Placeholder */
-  .ai-help {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--brand);
-    color: #fff;
-    padding: 14px 18px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: 700;
-    box-shadow: var(--shadow);
-    transition: 0.2s ease;
-  }
-  .ai-help:hover { opacity: 0.9; }
-
-  /* Responsive */
-  @media(max-width: 768px){
-    .hero h1 { font-size: clamp(28px, 8vw, 48px); }
-    .hero p { font-size: 16px; }
-    .hero .btn-login { padding: 14px 28px; font-size: 16px; }
-    .map-placeholder { height: 200px; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caribbean Jobs</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Caribbean Jobs Logo">
+        </div>
+        <div class="header-login">
+            <button id="login-btn">Login</button>
+        </div>
+    </header>
 
-  <header class="header">
-    <div class="brand">
-      <img src="./assets/logo.svg" alt="Caribbean Logo">
-      <div class="brand-name">Caribbean</div>
-    </div>
-  </header>
+    <main>
+        <section class="hero">
+            <h1>Welcome to Caribbean Jobs</h1>
+            <p>Your gateway to the best jobs locally and abroad</p>
+            <button id="hero-login-btn">Login</button>
+        </section>
 
-  <section class="hero">
-    <h1>Find Your Dream Job in the Caribbean</h1>
-    <p>Connect with top employers, discover opportunities, and grow your career.</p>
-    <button class="btn-login" onclick="location.href='/dashboard.html'">Login</button>
-  </section>
+        <section class="map-section">
+            <h2>Explore Jobs by Location</h2>
+            <div id="map-placeholder">Map will appear here</div>
+        </section>
+    </main>
 
-  <section class="map-section">
-    <div class="map-placeholder"></div>
-  </section>
+    <footer>
+        <p>&copy; 2025 Caribbean Jobs. All Rights Reserved.</p>
+    </footer>
 
-  <!-- AI Help Chat Placeholder -->
-  <div class="ai-help">AI Help</div>
-
+    <script src="main.js"></script>
 </body>
 </html>
