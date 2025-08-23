@@ -1,59 +1,140 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employee Dashboard - Caribbean Jobs</title>
-  <link rel="stylesheet" href="dashboard.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-</head>
-<body>
-  <header class="dash-header">
-    <div class="dash-logo"><h1>Caribbean Jobs</h1></div>
-    <nav>
-      <button id="logout-btn" class="btn-primary">Logout</button>
-    </nav>
-  </header>
+/* GENERAL RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
 
-  <aside class="sidebar">
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Post Job</a></li>
-      <li><a href="#">Manage Posts</a></li>
-      <li><a href="#">Applications</a></li>
-      <li><a href="#">Company Settings</a></li>
-      <li><a href="#">AI Assistant</a></li>
-    </ul>
-  </aside>
+body {
+    background-color: #f5f5f5;
+    color: #333;
+}
 
-  <main class="dashboard-main">
-    <section class="welcome">
-      <h2>Welcome, [Company Name]</h2>
-      <p>Manage job postings and get AI insights to find top talent faster!</p>
-    </section>
+/* CONTAINER */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-    <section class="dashboard-cards">
-      <div class="card">
-        <h3>Active Job Posts</h3>
-        <ul>
-          <li>Marketing Manager - Posted 3 days ago</li>
-          <li>Software Engineer - Posted 1 week ago</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>New Applications</h3>
-        <ul>
-          <li>John Doe - Marketing Manager</li>
-          <li>Jane Smith - Software Engineer</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>AI Assistance</h3>
-        <p>AI will suggest improvements to your job postings and applicant matches.</p>
-      </div>
-    </section>
-  </main>
+/* HEADER */
+header {
+    background-color: #005f73;
+    color: #fff;
+    padding: 20px 0;
+}
 
-  <script src="../main.js"></script>
-</body>
-</html>
+header .logo {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+header nav ul li {
+    margin-left: 25px;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+header nav ul li a.btn-login {
+    background-color: #0a9396;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+/* HERO SECTION */
+.hero {
+    background: url('hero-bg.jpg') center center/cover no-repeat;
+    color: #fff;
+    text-align: center;
+    padding: 120px 20px;
+}
+
+.hero h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.hero .btn-hero {
+    background-color: #94d2bd;
+    padding: 15px 30px;
+    text-decoration: none;
+    color: #005f73;
+    font-weight: 700;
+    border-radius: 8px;
+}
+
+/* ABOUT SECTION */
+.about {
+    background-color: #e9f1f7;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.about p {
+    font-size: 18px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* MAP SECTION */
+.map {
+    background-color: #fff;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.map-placeholder {
+    background-color: #d9d9d9;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+/* CONTACT SECTION */
+.contact {
+    background-color: #e9f1f7;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.contact h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.contact p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* FOOTER */
+footer {
+    background-color: #005f73;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
