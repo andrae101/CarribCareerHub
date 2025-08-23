@@ -3,56 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caribbean Jobs - Home</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <title>Caribbean Career Hubs</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header / Navbar -->
-    <header class="header">
-        <div class="logo">
-            <h1>Caribbean Jobs</h1>
+    <!-- HEADER -->
+    <header>
+        <div class="container header-container">
+            <h1 class="logo">Caribbean Career Hubs</h1>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#map">Find Jobs</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="login.html" class="btn-login">Login</a></li>
+                </ul>
+            </nav>
         </div>
-        <nav>
-            <button id="login-btn" class="btn-primary">Login</button>
-        </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- HERO SECTION -->
     <section class="hero">
-        <div class="hero-text">
-            <h2>Find Your Dream Job in the Caribbean</h2>
-            <p>Connecting employers and talent across the Caribbean region.</p>
-            <button id="hero-login-btn" class="btn-primary">Login to Dashboard</button>
-        </div>
-        <div class="hero-image">
-            <!-- Optional map or illustration -->
-            <img src="https://via.placeholder.com/500x300" alt="Caribbean map or jobs illustration">
+        <div class="container">
+            <h2>Your Gateway to Careers Across the Caribbean</h2>
+            <p>Connect with top employers, post your CV, and find your dream job today!</p>
+            <a href="login.html" class="btn-hero">Get Started</a>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features">
-        <div class="feature">
-            <h3>For Job Seekers</h3>
-            <p>Manage your profile, CV, and applications easily.</p>
-        </div>
-        <div class="feature">
-            <h3>For Employers</h3>
-            <p>Post jobs, manage applications, and connect with talent.</p>
-        </div>
-        <div class="feature">
-            <h3>AI Assistance</h3>
-            <p>Get intelligent job suggestions and guided support.</p>
+    <!-- ABOUT SECTION -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Caribbean Career Hubs</h2>
+            <p>Caribbean Career Hubs is the premier job portal connecting talent across the Caribbean. Whether you are seeking employment or looking to hire, we make it simple and effective.</p>
         </div>
     </section>
 
-    <!-- Optional Footer -->
+    <!-- MAP / JOB SEARCH SECTION -->
+    <section id="map" class="map">
+        <div class="container">
+            <h2>Find Jobs Near You</h2>
+            <!-- Optional interactive map -->
+            <div class="map-placeholder">
+                <p>Map coming soon...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <p>Email: info@caribbeancareerhubs.com</p>
+            <p>Phone: +1 876 123 4567</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
     <footer>
-        <p>&copy; 2025 Caribbean Jobs. All Rights Reserved.</p>
+        <div class="container">
+            <p>&copy; 2025 Caribbean Career Hubs. All rights reserved.</p>
+        </div>
     </footer>
-
-    <!-- Main JS -->
-    <script src="main.js"></script>
 </body>
 </html>
